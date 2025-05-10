@@ -96,6 +96,61 @@ public class Location {
         private Short postalCode;
         private List<Booking> pickUpLocations;
         private List<Booking> dropOffLocations;
+
+        public Builder setLocationID(int locationID) {
+            this.locationID = locationID;
+            return this;
+        }
+        public Builder setLocationName(String locationName) {
+            this.locationName = locationName;
+            return this;
+        }
+        public Builder setStreetName(String streetName) {
+            this.streetName = streetName;
+            return this;
+        }
+        public Builder setCity(String city) {
+            this.city = city;
+            return this;
+        }
+        public Builder setProvinceOrState(String provinceOrState) {
+            this.provinceOrState = provinceOrState;
+            return this;
+        }
+        public Builder setCountry(String country) {
+            this.country = country;
+            return this;
+        }
+        public Builder setPostalCode(Short postalCode) {
+            this.postalCode = postalCode;
+            return this;
+        }
+        public Builder setPickUpLocations(List<Booking> pickUpLocations) {
+            this.pickUpLocations = pickUpLocations;
+            return this;
+        }
+        public Builder setDropOffLocations(List<Booking> dropOffLocations) {
+            this.dropOffLocations = dropOffLocations;
+            return this;
+        }
+
+        public Builder copy(Location location){
+            this.locationID = location.locationID;
+            this.locationName = location.locationName;
+            this.streetName = location.streetName;
+            this.city = location.city;
+            this.provinceOrState = location.provinceOrState;
+            this.country = location.country;
+            this.postalCode = location.postalCode;
+            this.pickUpLocations = location.pickUpLocations;
+            this.dropOffLocations = location.dropOffLocations;
+            return this;
+        }
+
+        public Location build(){
+            return new Location(this);
+        }
+
     }
 
 }
