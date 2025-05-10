@@ -7,10 +7,9 @@ This application allows you to hire cars for any event, if it is a Matric Dance,
 [![My Skills](https://skillicons.dev/icons?i=react)](https://skillicons.dev)
 ## Creators of the Application:
 The people who created the application are:
-- Sanele Zondi (SaneleZondi)
-- Lisakhanya Zumana (lisazumana03)
-- Bonga Velem (BongaVelem)
-- Imtiyaaz Waggie (ImtiyaazWaggie)
-- Olwethu Tshingo (Olox04)
-- Sibulele Nohamba (NohambaS)
-## Here is our program's UML:
+- Lisakhanya Zumana - 230864821
+- Bonga Velem - 220052379
+- Sibulele Nohamba - 220374686
+- Imtiyaaz Waggie - 219374759
+- Sanele Zondi - 221602011
+- Olwethu Tshingo - 222634383 
