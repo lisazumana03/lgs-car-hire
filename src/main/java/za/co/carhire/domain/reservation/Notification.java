@@ -1,4 +1,4 @@
-package za.co.carhire.domain;
+package za.co.carhire.domain.reservation;
 /* Notification.java
 
      Notification POJO class
@@ -24,12 +24,12 @@ public class Notification {
     public Notification() {
     }
 
-    public Notification(Integer notificationID, Integer userID, String message, Date dateSent, String status) {
-        this.notificationID = notificationID;
-        this.userID = userID;
-        this.message = message;
-        this.dateSent = dateSent;
-        this.status = status;
+    public Notification(Builder builder) {
+        this.notificationID = builder.notificationID;
+        this.userID = builder.userID;
+        this.message = builder.message;
+        this.dateSent = builder.dateSent;
+        this.status = builder.status;
     }
 
     public Integer getNotificationID() {
@@ -99,7 +99,19 @@ public class Notification {
             return this;
         }
 
-        
+        public Builder copy(Notification notification){
+            this.notificationID = notification.notificationID;
+            this.userID = notification.userID;
+            this.message = notification.message;
+            this.dateSent = notification.dateSent;
+            this.status = notification.status;
+            return this;
+
+        }
+
+        public Notification build(){
+            return new Notification(this);
+        }
 
 
     }
