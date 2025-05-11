@@ -1,4 +1,4 @@
-package za.co.carhire.domain;
+package za.co.carhire.domain.vehicle;
 
 // Imtiyaaz Waggie 219374759//
 //date:10/05/2025 /
