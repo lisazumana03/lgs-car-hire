@@ -1,11 +1,14 @@
 package za.co.carhire.domain.reservation;
 
 /*
+Booking.java
+Booking POJO class
 Lisakhanya Zumana - 230864821
 Date: 08 May 2025
  */
 
-import za.co.carhire.domain.Car;
+import za.co.carhire.domain.vehicle.Car;
+import za.co.carhire.domain.authentication.User;
 
 import java.time.LocalDateTime;
 import java.util.Date;
@@ -14,7 +17,7 @@ import java.util.List;
 public class Booking {
     private int bookingID;
     private User user;
-    private List<Car> cars;
+    private Car car;
     private LocalDateTime bookingDateAndTime;
     private Date startDate;
     private Date endDate;
@@ -27,7 +30,7 @@ public class Booking {
     private Booking(Builder builder){
         this.bookingID = builder.bookingID;
         this.user = builder.user;
-        this.cars = builder.cars;
+        this.car = builder.car;
         this.bookingDateAndTime = builder.bookingDateAndTime;
         this.startDate = builder.startDate;
         this.endDate = builder.endDate;
@@ -40,12 +43,12 @@ public class Booking {
         return bookingID;
     }
 
-    public int getUser() {
+    public User getUser() {
         return user;
     }
 
-    public List<Car> getCar() {
-        return cars;
+    public Car getCar() {
+        return car;
     }
 
     public LocalDateTime getBookingDateAndTime() {
@@ -77,7 +80,7 @@ public class Booking {
         return "Booking{" +
                 "bookingID=" + bookingID +
                 ", user=" + user +
-                ", car=" + cars +
+                ", car=" + car +
                 ", bookingDateAndTime=" + bookingDateAndTime +
                 ", startDate=" + startDate +
                 ", endDate=" + endDate +
@@ -89,8 +92,8 @@ public class Booking {
 
     public static class Builder{
         private int bookingID;
-        private int user;
-        private List<Car> cars;
+        private User user;
+        private Car car;
         private LocalDateTime bookingDateAndTime;
         private Date startDate;
         private Date endDate;
@@ -106,8 +109,8 @@ public class Booking {
             this.user = user;
             return this;
         }
-        public Builder setCar(List<Car> cars) {
-            this.cars = cars;
+        public Builder setCar(Car car) {
+            this.car = car;
             return this;
         }
         public Builder setBookingDateAndTime(LocalDateTime bookingDateAndTime) {
@@ -138,7 +141,7 @@ public class Booking {
         public Builder copy(Booking booking){
             this.bookingID = booking.getBookingID();
             this.user = booking.getUser();
-            this.cars = booking.getCar();
+            this.car = booking.getCar();
             this.bookingDateAndTime = booking.getBookingDateAndTime();
             this.startDate = booking.getStartDate();
             this.endDate = booking.getEndDate();

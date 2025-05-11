@@ -1,6 +1,8 @@
 package za.co.carhire.domain.reservation;
 
 /*
+Location.java
+Location POJO class
 Lisakhanya Zumana - 230864821
 Date: 10 May 2025
  */
