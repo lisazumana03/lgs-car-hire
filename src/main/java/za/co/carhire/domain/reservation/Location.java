@@ -16,6 +16,7 @@ public class Location {
     private String provinceOrState;
     private String country;
     private Short postalCode;
+
     private List<Booking> pickUpLocations;
     private List<Booking> dropOffLocations;
 
