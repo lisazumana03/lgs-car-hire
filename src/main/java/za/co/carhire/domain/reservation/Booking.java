@@ -13,7 +13,7 @@ import java.util.List;
 
 public class Booking {
     private int bookingID;
-    private int customerID;
+    private User user;
     private List<Car> cars;
     private LocalDateTime bookingDateAndTime;
     private Date startDate;
@@ -26,7 +26,7 @@ public class Booking {
 
     private Booking(Builder builder){
         this.bookingID = builder.bookingID;
-        this.customerID = builder.customerID;
+        this.user = builder.user;
         this.cars = builder.cars;
         this.bookingDateAndTime = builder.bookingDateAndTime;
         this.startDate = builder.startDate;
@@ -40,8 +40,8 @@ public class Booking {
         return bookingID;
     }
 
-    public int getCustomerID() {
-        return customerID;
+    public int getUser() {
+        return user;
     }
 
     public List<Car> getCar() {
@@ -76,7 +76,7 @@ public class Booking {
     public String toString() {
         return "Booking{" +
                 "bookingID=" + bookingID +
-                ", customerID=" + customerID +
+                ", user=" + user +
                 ", car=" + cars +
                 ", bookingDateAndTime=" + bookingDateAndTime +
                 ", startDate=" + startDate +
@@ -89,7 +89,7 @@ public class Booking {
 
     public static class Builder{
         private int bookingID;
-        private int customerID;
+        private int user;
         private List<Car> cars;
         private LocalDateTime bookingDateAndTime;
         private Date startDate;
@@ -102,8 +102,8 @@ public class Booking {
             this.bookingID = bookingID;
             return this;
         }
-        public Builder setCustomerID(int customerID) {
-            this.customerID = customerID;
+        public Builder setUser(User user) {
+            this.user = user;
             return this;
         }
         public Builder setCar(List<Car> cars) {
@@ -137,7 +137,7 @@ public class Booking {
 
         public Builder copy(Booking booking){
             this.bookingID = booking.getBookingID();
-            this.customerID = booking.getCustomerID();
+            this.user = booking.getUser();
             this.cars = booking.getCar();
             this.bookingDateAndTime = booking.getBookingDateAndTime();
             this.startDate = booking.getStartDate();
