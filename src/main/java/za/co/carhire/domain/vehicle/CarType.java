@@ -8,8 +8,6 @@ public class CarType {
     private int numberOfWheels;
     private int numberOfSeats;
 
-    // Empty constructor
-    public CarType() {}
 
     // Constructor with all fields
     public CarType(int carTypeID, Car car, String type, String fuelType, int numberOfWheels, int numberOfSeats) {
