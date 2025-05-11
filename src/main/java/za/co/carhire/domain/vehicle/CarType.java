@@ -12,10 +12,9 @@ public class CarType {
     private String fuelType;
 
     // Relationship attributes
-    private Car car;  // One-to-one relationship with Car
+    private Car car;
 
-    // Default constructor
-    public CarType() {}
+
 
     // Private constructor for Builder pattern
     private CarType(Builder builder) {
@@ -35,10 +34,39 @@ public class CarType {
     }
 
     // Getters
-    public int getCarTypeID() { return carTypeID; }
-    public String getType() { return type; }
-    public String getFuelType() { return fuelType; }
-    public Car getCar() { return car; }
+
+
+    public int getCarTypeID() {
+        return carTypeID;
+    }
+
+    public void setCarTypeID(int carTypeID) {
+        this.carTypeID = carTypeID;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public String getFuelType() {
+        return fuelType;
+    }
+
+    public void setFuelType(String fuelType) {
+        this.fuelType = fuelType;
+    }
+
+    public Car getCar() {
+        return car;
+    }
+
+    public void setCar(Car car) {
+        this.car = car;
+    }
 
     @Override
     public String toString() {
