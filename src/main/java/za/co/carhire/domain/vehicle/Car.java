@@ -11,8 +11,7 @@ public class Car {
     // Reference to related entities
     private CarType carType;
 
-    // Constructors
-    public Car() {}
+
 
     // Private constructor for Builder
     private Car(Builder builder) {
