@@ -1,5 +1,6 @@
 package za.co.carhire.domain.reservation;
-/* Payment.java
+
+/*Payment.java
  * Payment POJO class
  * Sanele Zondi (221602011)
  * Due Date: 11/05/2025
@@ -7,7 +8,7 @@ package za.co.carhire.domain.reservation;
 
 public class Payment {
     private int paymentID;
-    private int bookingID;
+    private Booking bookingID;
     private double amount;
     private String paymentMethod;
 
@@ -24,7 +25,7 @@ public class Payment {
     public int getPaymentID() {
         return paymentID;
     }
-    public int getBookingID() {
+    public Booking getBookingID() {
         return bookingID;
     }
     public double getAmount() {
@@ -45,7 +46,7 @@ public class Payment {
     }
     public static class Builder {
         private int paymentID;
-        private int bookingID;
+        private Booking bookingID;
         private double amount;
         private String paymentMethod;
 
@@ -53,7 +54,7 @@ public class Payment {
             this.paymentID = paymentID;
             return this;
         }
-        public Builder setBookingID(int bookingID) {
+        public Builder setBookingID(Booking bookingID) {
             this.bookingID = bookingID;
             return this;
         }
