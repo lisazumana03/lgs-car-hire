@@ -1,7 +1,8 @@
 package za.co.carhire.domain.reservation;
 import java.util.Date;
 
-/*
+/* Invoice.java
+ * Invoice POJO class
  * Sanele Zondi (221602011)
  * Due Date: 11/05/2025
  * */

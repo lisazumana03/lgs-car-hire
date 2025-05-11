@@ -1,5 +1,6 @@
 package za.co.carhire.domain.reservation;
-/*
+/* Payment.java
+ * Payment POJO class
  * Sanele Zondi (221602011)
  * Due Date: 11/05/2025
  * */
