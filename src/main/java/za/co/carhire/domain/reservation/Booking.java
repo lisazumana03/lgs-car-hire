@@ -6,6 +6,7 @@ Date: 08 May 2025
  */
 
 import za.co.carhire.domain.vehicle.Car;
+import za.co.carhire.domain.authentication.User;
 
 import java.time.LocalDateTime;
 import java.util.Date;
@@ -40,7 +41,7 @@ public class Booking {
         return bookingID;
     }
 
-    public int getUser() {
+    public User getUser() {
         return user;
     }
 
@@ -89,7 +90,7 @@ public class Booking {
 
     public static class Builder{
         private int bookingID;
-        private int user;
+        private User user;
         private List<Car> cars;
         private LocalDateTime bookingDateAndTime;
         private Date startDate;
