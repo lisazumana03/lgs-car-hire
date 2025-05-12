@@ -33,11 +33,15 @@ public class BookingFactory {
                 .build();
     }
 
-    public static Booking cancelBooking(Booking booking){
-        if (booking == null){
+    public static Booking cancelBooking(int bookingID, User user, LocalDateTime bookingDateAndTime,String bookingStatus){
+        if (Helper.isNullOrEmpty(bookingStatus)){
             return null;
         }
         return new Booking.Builder()
+                .setBookingID(bookingID)
+                .setUser(user)
+                .setBookingDateAndTime(bookingDateAndTime)
+                .setBookingStatus("Booking has been cancelled.")
                 .build();
     }
     public static Booking confirmBooking(Booking booking){
