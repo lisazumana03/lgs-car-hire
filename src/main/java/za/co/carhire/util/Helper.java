@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
 
 public class Helper {
     public static boolean isNullOrEmpty(String s) {
-        return s == null || s.isEmpty() || s.length() == 3;
+        return s == null || s.isEmpty();
     }
     public static boolean isValidPostalCode(short postalCode) {
         if (postalCode < -1 || postalCode > 9999) {
