@@ -27,6 +27,24 @@ public class BookingFactory {
                 .setBookingDateAndTime(bookingDateAndTime)
                 .setStartDate(startDate)
                 .setEndDate(endDate)
+                .setPickupLocation(pickUpLocation)
+                .setDropOffLocation(dropOffLocation)
+                .setBookingStatus("Your booking has been created.")
                 .build();
     }
+
+    public static Booking cancelBooking(Booking booking){
+        if (booking == null){
+            return null;
+        }
+        return new Booking.Builder()
+                .build();
+    }
+    public static Booking confirmBooking(Booking booking){
+        if (booking == null){
+            return null;
+        }
+        return booking;
+    }
+
 }
