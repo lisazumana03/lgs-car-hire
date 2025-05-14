@@ -42,6 +42,17 @@ class BookingFactoryTest {
 
     @Test
     void cancelBooking() {
+        int bookingID = 17;
+        User user = new User();
+
+        LocalDateTime bookingDateAndTime = LocalDateTime.now();
+        
+        String bookingStatus = "Your booking has been cancelled.";
+
+        Booking booking = BookingFactory.cancelBooking(bookingID, user, bookingDateAndTime, bookingStatus);
+
+        System.out.println(booking);
+        assertNotNull(booking);
     }
 
     @Test
