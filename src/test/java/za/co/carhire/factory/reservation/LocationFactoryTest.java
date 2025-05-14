@@ -16,7 +16,7 @@ class LocationFactoryTest {
 
     @Test
     void createLocation() {
-        Location location01 = LocationFactory.createLocation(1, "Beaufort West Rentals", "Donkin Street", "Beaufort West", "Western Cape", "South Africa", (short)6970);
+        Location location01 = LocationFactory.createLocation(1, "Bergsig Rentals", "Donkin Street", "Beaufort West", "Western Cape", "South Africa", (short)6970);
         assertNotNull(location01);
         System.out.println(location01);
 
