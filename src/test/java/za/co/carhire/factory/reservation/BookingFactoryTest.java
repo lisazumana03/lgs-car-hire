@@ -1,5 +1,6 @@
 package za.co.carhire.factory.reservation;
 
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import za.co.carhire.domain.authentication.User;
 import za.co.carhire.domain.reservation.Booking;
@@ -17,6 +18,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class BookingFactoryTest {
 
     @Test
+    @Order(1)
     void createBooking() {
         int bookingID = 15;
         User user = new User();
@@ -41,12 +43,13 @@ class BookingFactoryTest {
     }
 
     @Test
+    @Order(2)
     void cancelBooking() {
         int bookingID = 17;
         User user = new User();
 
         LocalDateTime bookingDateAndTime = LocalDateTime.now();
-        
+
         String bookingStatus = "Your booking has been cancelled.";
 
         Booking booking = BookingFactory.cancelBooking(bookingID, user, bookingDateAndTime, bookingStatus);
@@ -56,6 +59,19 @@ class BookingFactoryTest {
     }
 
     @Test
+    @Order(3)
     void confirmBooking() {
+        int bookingID = 19;
+        User user = new User();
+
+        LocalDateTime bookingDateAndTime = LocalDateTime.now();
+
+        String bookingStatus = "Your booking has been confirmed.";
+
+        Booking booking = BookingFactory.cancelBooking(bookingID, user, bookingDateAndTime, bookingStatus);
+
+        System.out.println(booking);
+        assertNotNull(booking);
     }
+
 }

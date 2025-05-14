@@ -14,7 +14,7 @@ public class Location {
     private int locationID;
     private String locationName;
     private String streetName;
-    private String city;
+    private String cityOrTown;
     private String provinceOrState;
     private String country;
     private Short postalCode;
@@ -22,15 +22,15 @@ public class Location {
     private List<Booking> pickUpLocations;
     private List<Booking> dropOffLocations;
 
-//    public Location(){
-//
-//    }
+    public Location(){
+
+    }
 
     private Location(Builder builder){
         this.locationID = builder.locationID;
         this.locationName = builder.locationName;
         this.streetName = builder.streetName;
-        this.city = builder.city;
+        this.cityOrTown = builder.cityOrTown;
         this.provinceOrState = builder.provinceOrState;
         this.country = builder.country;
         this.postalCode = builder.postalCode;
@@ -50,8 +50,8 @@ public class Location {
         return locationName;
     }
 
-    public String getCity() {
-        return city;
+    public String getCityOrTown() {
+        return cityOrTown;
     }
 
     public String getProvinceOrState() {
@@ -80,7 +80,7 @@ public class Location {
                 "locationID=" + locationID +
                 ", locationName='" + locationName + '\'' +
                 ", streetName='" + streetName + '\'' +
-                ", city='" + city + '\'' +
+                ", cityOrTown='" + cityOrTown + '\'' +
                 ", provinceOrState='" + provinceOrState + '\'' +
                 ", country='" + country + '\'' +
                 ", postalCode=" + postalCode +
@@ -93,7 +93,7 @@ public class Location {
         private int locationID;
         private String locationName;
         private String streetName;
-        private String city;
+        private String cityOrTown;
         private String provinceOrState;
         private String country;
         private Short postalCode;
@@ -112,8 +112,8 @@ public class Location {
             this.streetName = streetName;
             return this;
         }
-        public Builder setCity(String city) {
-            this.city = city;
+        public Builder setCity(String cityOrTown) {
+            this.cityOrTown = cityOrTown;
             return this;
         }
         public Builder setProvinceOrState(String provinceOrState) {
@@ -141,7 +141,7 @@ public class Location {
             this.locationID = location.locationID;
             this.locationName = location.locationName;
             this.streetName = location.streetName;
-            this.city = location.city;
+            this.cityOrTown = location.cityOrTown;
             this.provinceOrState = location.provinceOrState;
             this.country = location.country;
             this.postalCode = location.postalCode;
