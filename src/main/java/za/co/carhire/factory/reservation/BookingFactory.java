@@ -16,7 +16,7 @@ import java.util.Date;
 import java.util.List;
 
 public class BookingFactory {
-    public static Booking createBooking(int bookingID, User user, List<Car>cars, LocalDateTime bookingDateAndTime, Date startDate, Date endDate, Location pickUpLocation, Location dropOffLocation,String bookingStatus){
+    public static Booking createBooking(int bookingID, User user, List<Car>cars, LocalDateTime bookingDateAndTime, Date startDate, Date endDate, Location pickupLocation, Location dropOffLocation, String bookingStatus){
         if(Helper.isNullOrEmpty(bookingStatus)){
             return null;
         }
@@ -27,7 +27,7 @@ public class BookingFactory {
                 .setBookingDateAndTime(bookingDateAndTime)
                 .setStartDate(startDate)
                 .setEndDate(endDate)
-                .setPickupLocation(pickUpLocation)
+                .setPickupLocation(pickupLocation)
                 .setDropOffLocation(dropOffLocation)
                 .setBookingStatus("Your booking has been created.")
                 .build();
@@ -44,11 +44,16 @@ public class BookingFactory {
                 .setBookingStatus("Booking has been cancelled.")
                 .build();
     }
-    public static Booking confirmBooking(Booking booking){
-        if (booking == null){
+    public static Booking confirmBooking(int bookingID, User user, LocalDateTime bookingDateAndTime,String bookingStatus){
+        if(Helper.isNullOrEmpty(bookingStatus)){
             return null;
         }
-        return booking;
+        return new Booking.Builder()
+                .setBookingID(bookingID)
+                .setUser(user)
+                .setBookingDateAndTime(bookingDateAndTime)
+                .setBookingStatus("Booking confirmed")
+                .build();
     }
 
 }
