@@ -3,6 +3,8 @@ package za.ac.cput.domain;
  * Sibulele Gift Nohamba (220374686)
  * Date: 11/05/2025
  * */
+import za.co.carhire.domain.vehicle.Car;
+
 import java.util.Date;
 
 public class Maintenance {
