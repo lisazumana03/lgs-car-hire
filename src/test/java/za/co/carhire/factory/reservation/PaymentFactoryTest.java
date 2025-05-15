@@ -1,5 +1,8 @@
 package za.co.carhire.factory.reservation;
-
+/* PaymentFactoryTest.java
+ * Sanele Zondi (221602011)
+ * Due Date: 18/05/2025
+ * */
 import org.junit.jupiter.api.Test;
 import za.co.carhire.domain.reservation.Booking;
 import za.co.carhire.domain.reservation.Payment;
