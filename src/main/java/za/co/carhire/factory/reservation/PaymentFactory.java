@@ -1,5 +1,9 @@
 package za.co.carhire.factory.reservation;
-
+/* PaymentFactory.java
+ * PaymentFactory class
+ * Sanele Zondi (221602011)
+ * Due Date: 18/05/2025
+ * */
 
 import za.co.carhire.domain.reservation.Booking;
 import za.co.carhire.domain.reservation.Payment;
@@ -39,3 +43,4 @@ public class PaymentFactory {
                 Helper.isValidPaymentMethod(method);
     }
 }
+
