@@ -1,5 +1,9 @@
 package za.co.carhire.factory.reservation;
-
+/* InvoiceFactory.java
+ * InvoiceFactory class
+ * Sanele Zondi (221602011)
+ * Due Date: 18/05/2025
+ * */
 
 import za.co.carhire.domain.reservation.*;
 import za.co.carhire.util.Helper;
