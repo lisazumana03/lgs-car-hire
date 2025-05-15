@@ -29,7 +29,7 @@ public class Helper {
         return true;
     }
     private static final List<String> VALID_PAYMENT_METHODS =
-            List.of("CREDIT CARD", "EFT", "CASH", "BANK TRANSFER");
+            List.of("CREDIT_CARD", "EFT", "CASH", "BANK TRANSFER");
 
     public static boolean isValidPaymentMethod(String method) {
         return !isNullOrEmpty(method) &&
