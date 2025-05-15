@@ -1,5 +1,8 @@
 package za.co.carhire.factory.reservation;
-
+/* InvoiceFactoryTest.java
+ * Sanele Zondi (221602011)
+ * Due Date: 18/05/2025
+ * */
 
 import org.junit.jupiter.api.Test;
 import za.co.carhire.domain.reservation.*;
@@ -9,7 +12,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 class InvoiceFactoryTest {
-    // Test data
+
     private Car testCar = new Car.Builder()
             .setRentalPrice(500.00)
             .build();
