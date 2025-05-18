@@ -1,4 +1,4 @@
-package za.co.carhire.util;
+package za.co.carhire.Util;
 
 import za.co.carhire.domain.reservation.Booking;
 
