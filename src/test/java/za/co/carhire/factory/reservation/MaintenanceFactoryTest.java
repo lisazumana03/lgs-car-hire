@@ -22,7 +22,6 @@ class MaintenanceFactoryTest {
         Date serviceDate = dateFormat.parse("2025-3-12");
         Maintenance maintenance = new Maintenance.Builder()
                 .setMaintenanceID(24)
-                .setCarID(54)
                 .setServiceDate(serviceDate)
                 .setDescription("Minor service")
                 .setCost(350.00)
@@ -31,7 +30,6 @@ class MaintenanceFactoryTest {
                 .build();
 
         assertEquals(24, maintenance.getMaintenanceId());
-        assertEquals(54, maintenance.getCarID());
         assertEquals(serviceDate, maintenance.getServiceDate());
         assertEquals("Minor service", maintenance.getDescription());
         assertEquals(350.00, maintenance.getCost());
