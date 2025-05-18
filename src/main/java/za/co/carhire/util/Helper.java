@@ -28,6 +28,16 @@ public class Helper {
         }
         return true;
     }
+
+    public static boolean isRating(int r){
+        if(r<0 || r>5){
+            return true;
+        }return false;
+    }
+    public static boolean isWithinBoundary(int wb){
+        if(wb<0 || wb>1000000){
+            return true;
+        }return false;
     private static final List<String> VALID_PAYMENT_METHODS =
             List.of("CREDIT_CARD", "EFT", "CASH", "BANK TRANSFER");
 
