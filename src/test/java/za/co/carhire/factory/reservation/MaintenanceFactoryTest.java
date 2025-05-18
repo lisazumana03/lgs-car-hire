@@ -6,7 +6,7 @@ package za.ac.cput.factory;
  * */
 
 import org.junit.jupiter.api.Test;
-import za.ac.cput.domain.Maintenance;
+import za.co.carhire.domain.reservation.Maintenance;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
