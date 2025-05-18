@@ -7,15 +7,9 @@ import za.co.carhire.domain.reservation.Booking;
 import za.co.carhire.domain.vehicle.Car;
 import za.co.carhire.domain.vehicle.CarType;
 
-/**
- * Factory class for creating Car objects
- * Provides various methods to create Car instances with different configurations
- */
 public class CarFactory {
 
-    /**
-     * Creates a basic car with essential information
-     */
+
     public static Car createBasicCar(int carID, String model, String brand, int year, double rentalPrice) {
         return new Car.Builder()
                 .setCarID(carID)
@@ -27,9 +21,7 @@ public class CarFactory {
                 .build();
     }
 
-    /**
-     * Creates a car with all details including type, insurance, and booking
-     */
+
     public static Car createCompleteCar(int carID, String model, String brand, int year,
                                         boolean availability, double rentalPrice,
                                         CarType carType, Insurance insurance, Booking booking) {
@@ -46,9 +38,6 @@ public class CarFactory {
                 .build();
     }
 
-    /**
-     * Creates a car with type but no insurance or booking
-     */
     public static Car createCarWithType(int carID, String model, String brand, int year,
                                         double rentalPrice, CarType carType) {
         return new Car.Builder()
@@ -62,9 +51,7 @@ public class CarFactory {
                 .build();
     }
 
-    /**
-     * Creates a car with insurance but no booking
-     */
+
     public static Car createCarWithInsurance(int carID, String model, String brand, int year,
                                              double rentalPrice, CarType carType, Insurance insurance) {
         return new Car.Builder()
@@ -79,9 +66,7 @@ public class CarFactory {
                 .build();
     }
 
-    /**
-     * Creates a copy of an existing car with a new car ID
-     */
+
     public static Car createCarCopy(Car originalCar, int newCarID) {
         return new Car.Builder()
                 .copy(originalCar)
@@ -89,9 +74,7 @@ public class CarFactory {
                 .build();
     }
 
-    /**
-     * Creates an unavailable car (for maintenance, etc.)
-     */
+
     public static Car createUnavailableCar(int carID, String model, String brand, int year,
                                            double rentalPrice, CarType carType) {
         return new Car.Builder()
