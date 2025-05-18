@@ -1,4 +1,4 @@
-package za.ac.cput.factory;
+package za.co.carhire.factory.reservation;
 
 /*
  * Sibulele Gift Nohamba (220374686)
