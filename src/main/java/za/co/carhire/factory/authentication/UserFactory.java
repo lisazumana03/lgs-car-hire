@@ -1,6 +1,6 @@
 package za.co.carhire.factory.authentication;
 
-import za.co.carhire.Util.validationHelper;
+import za.co.carhire.util.Helper;
 import za.co.carhire.domain.authentication.User;
 /* User.java
 
@@ -12,27 +12,26 @@ import za.co.carhire.domain.authentication.User;
 
 import java.time.LocalDate;
 
-import static javax.swing.text.html.parser.DTDConstants.ID;
-
 public class UserFactory {
 
-    public static User createUser(Long idNumber, String name, String email, String dateOfBirth, String phoneNumber, String password, String licenseNumber) {
-        String userId = validationHelper.generateId();
+    public static User createUser(String idNumber, String name, String email, String dateOfBirth, String phoneNumber, String password, String licenseNumber) {
+        String userId = String.valueOf(Helper.generateId());
 
 
-        if (validationHelper.isEmptyOrNull(name) ||
-                !validationHelper.isValidEmail(email) ||
-                validationHelper.isValidDate(dateOfBirth)||
-                validationHelper.isEmptyOrNull(phoneNumber) ||
-                validationHelper.isEmptyOrNull(password) ||
-                validationHelper.isEmptyOrNull(licenseNumber)) {
+        if (Helper.isEmptyOrNull(name) ||
+                Helper.isValidNationalIDNumber(idNumber)||
+                !Helper.isValidEmail(email) ||
+                Helper.isValidDate(dateOfBirth)||
+                Helper.isEmptyOrNull(phoneNumber) ||
+                Helper.isEmptyOrNull(password) ||
+                Helper.isEmptyOrNull(licenseNumber)) {
             return null;
         }
 
 
         return new User.Builder()
                 .setName(name)
-                .setIdNumber(idNumber)
+                .setIdNumber(Long.valueOf(idNumber))
                 .setEmail(email)
                 .setDateOfBirth(LocalDate.parse(dateOfBirth))
                 .setPhoneNumber(phoneNumber)
@@ -43,7 +42,7 @@ public class UserFactory {
 
 
     public static User loginUser(String email, String password) {
-        if (!validationHelper.isValidEmail(email) || validationHelper.isEmptyOrNull(password)) {
+        if (!Helper.isValidEmail(email) || Helper.isEmptyOrNull(password)) {
                 return null;
             }
 
