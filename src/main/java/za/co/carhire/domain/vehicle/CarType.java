@@ -74,6 +74,8 @@ public class CarType {
     }
 
     // Getters and Setters
+
+
     public int getCarTypeID() {
         return carTypeID;
     }

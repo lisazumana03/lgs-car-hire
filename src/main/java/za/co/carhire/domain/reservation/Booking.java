@@ -8,9 +8,11 @@ Date: 08 May 2025
 import za.co.carhire.domain.vehicle.Car;
 import za.co.carhire.domain.authentication.User;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
+
 
 public class Booking {
     private int bookingID;
@@ -19,11 +21,12 @@ public class Booking {
     private LocalDateTime bookingDateAndTime;
     private Date startDate;
     private Date endDate;
+    private Payment payment;
     private Location pickupLocation;
     private Location dropOffLocation;
     private String bookingStatus;
 
-    public Booking(){}
+    public Booking(){}// for JPA implementation coming soon
 
     private Booking(Builder builder){
         this.bookingID = builder.bookingID;
@@ -32,6 +35,7 @@ public class Booking {
         this.bookingDateAndTime = builder.bookingDateAndTime;
         this.startDate = builder.startDate;
         this.endDate = builder.endDate;
+        this.payment = builder.payment;
         this.pickupLocation = builder.pickupLocation;
         this.dropOffLocation = builder.dropOffLocation;
         this.bookingStatus = builder.bookingStatus;
@@ -61,6 +65,10 @@ public class Booking {
         return endDate;
     }
 
+    public Payment getPayment() {
+        return payment;
+    }
+
     public Location getPickupLocation() {
         return pickupLocation;
     }
@@ -82,6 +90,7 @@ public class Booking {
                 ", bookingDateAndTime=" + bookingDateAndTime +
                 ", startDate=" + startDate +
                 ", endDate=" + endDate +
+                ", payment=" + payment +
                 ", pickupLocation=" + pickupLocation +
                 ", dropOffLocation=" + dropOffLocation +
                 ", bookingStatus='" + bookingStatus + '\'' +
@@ -95,6 +104,7 @@ public class Booking {
         private LocalDateTime bookingDateAndTime;
         private Date startDate;
         private Date endDate;
+        private Payment payment;
         private Location pickupLocation;
         private Location dropOffLocation;
         private String bookingStatus;
@@ -123,6 +133,10 @@ public class Booking {
             this.endDate = endDate;
             return this;
         }
+        public Builder setPayment(Payment payment) {
+            this.payment = payment;
+            return this;
+        }
         public Builder setPickupLocation(Location pickupLocation) {
             this.pickupLocation = pickupLocation;
             return this;
@@ -143,6 +157,7 @@ public class Booking {
             this.bookingDateAndTime = booking.getBookingDateAndTime();
             this.startDate = booking.getStartDate();
             this.endDate = booking.getEndDate();
+            this.payment = booking.getPayment();
             this.pickupLocation = booking.getPickupLocation();
             this.dropOffLocation = booking.getDropOffLocation();
             this.bookingStatus = booking.getBookingStatus();
