@@ -1,4 +1,4 @@
-package za.co.carhire.Util;
+package za.co.carhire.util;
 
 import org.apache.commons.validator.routines.EmailValidator;
 import za.co.carhire.domain.reservation.Booking;
