@@ -1,5 +1,11 @@
 package za.co.carhire.domain.authentication;
 
+import jakarta.persistence.*;
+
+import java.time.LocalDate;
+
+import static jakarta.persistence.GenerationType.*;
+
 /* User.java
 
      User POJO class
@@ -7,14 +13,19 @@ package za.co.carhire.domain.authentication;
      Author: Bonga Velem (220052379)
 
      Date: 11 May 2025 */
-
+@Entity
 public class User {
 
-    private Integer userId;
+    @Id
+    protected Integer userId;
+
+    private Long idNumber;
 
     private String name;
 
     private String email;
+
+    private LocalDate dateOfBirth;
 
     private String phoneNumber;
 
@@ -27,8 +38,10 @@ public class User {
 
     public User(Builder builder) {
         this.userId = builder.userId;
+        this.idNumber = builder.idNumber;
         this.name = builder.name;
         this.email = builder.email;
+        this.dateOfBirth = builder.dateOfBirth;
         this.phoneNumber = builder.phoneNumber;
         this.password = builder.password;
         this.licenseNumber = builder.licenseNumber;
@@ -38,12 +51,20 @@ public class User {
         return userId;
     }
 
+    public Long getIdNumber() {
+        return idNumber;
+    }
+
     public String getName() {
         return name;
     }
 
     public String getEmail() {
         return email;
+    }
+
+    public LocalDate getDateOfBirth() {
+        return dateOfBirth;
     }
 
     public String getPhoneNumber() {
@@ -62,22 +83,27 @@ public class User {
     public String toString() {
         return "User{" +
                 "userId=" + userId +
+                ", idNumber=" + idNumber +
                 ", name='" + name + '\'' +
                 ", email='" + email + '\'' +
+                ", dateOfBirth=" + dateOfBirth +
                 ", phoneNumber='" + phoneNumber + '\'' +
                 ", password='" + password + '\'' +
                 ", licenseNumber='" + licenseNumber + '\'' +
                 '}';
     }
 
-
     public static class Builder{
 
         private Integer userId;
 
+        private Long idNumber;
+
         private String name;
 
         private String email;
+
+        private LocalDate dateOfBirth;
 
         private String phoneNumber;
 
@@ -90,6 +116,11 @@ public class User {
             return this;
         }
 
+        public Builder setIdNumber(Long idNumber) {
+            this.idNumber = idNumber;
+            return this;
+        }
+
         public Builder setName(String name) {
             this.name = name;
             return this;
@@ -97,6 +128,11 @@ public class User {
 
         public Builder setEmail(String email) {
             this.email = email;
+            return this;
+        }
+
+        public Builder setDateOfBirth(LocalDate dateOfBirth) {
+            this.dateOfBirth = dateOfBirth;
             return this;
         }
 
@@ -117,8 +153,10 @@ public class User {
 
         public Builder copy(User user){
             this.userId =  user.userId;
+            this.idNumber = user.idNumber;
             this.name = user.name;
             this.email = user.email;
+            this.dateOfBirth = user.dateOfBirth;
             this.phoneNumber = user.phoneNumber;
             this.password = user.password;
             this.licenseNumber = user.licenseNumber;

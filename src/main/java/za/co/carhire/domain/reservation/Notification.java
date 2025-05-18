@@ -7,17 +7,21 @@ package za.co.carhire.domain.reservation;
 
      Date: 11 May 2025 */
 
-import java.util.Date;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
 
+import java.time.LocalDate;
+@Entity
 public class Notification {
 
+    @Id
     private Integer notificationID;
 
     private Integer userID;
 
     private String message;
 
-    private Date dateSent;
+    private LocalDate dateSent;
 
     private String status;
 
@@ -44,7 +48,7 @@ public class Notification {
         return message;
     }
 
-    public Date getDateSent() {
+    public LocalDate getDateSent() {
         return dateSent;
     }
 
@@ -70,7 +74,7 @@ public class Notification {
 
         private String message;
 
-        private Date dateSent;
+        private LocalDate dateSent;
 
         private String status;
 
@@ -89,7 +93,7 @@ public class Notification {
             return this;
         }
 
-        public Builder setDateSent(Date dateSent) {
+        public Builder setDateSent(LocalDate dateSent) {
             this.dateSent = dateSent;
             return this;
         }
