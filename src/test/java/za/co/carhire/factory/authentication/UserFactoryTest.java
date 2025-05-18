@@ -18,9 +18,9 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class UserFactoryTest {
 
-    private static User user1 = UserFactory.createUser(1109093L,"Bonga", "bongavelem@outlook.com", "1999-02-18","079 813 5811","Bruno11", "NPS5232");
+    private static User user1 = UserFactory.createUser("1109093","Bonga", "bongavelem@outlook.com", "1999-02-18","079 813 5811","Bruno11", "NPS5232");
 
-    private static User userfail = UserFactory.createUser(1109093L,"Bonga", "bongavelemoutlook.com", "1999-02-18","079 813 5811","Bruno11", "NPS5232");
+    private static User userfail = UserFactory.createUser("1109093","Bonga", "bongavelemoutlook.com", "1999-02-18","079 813 5811","Bruno11", "NPS5232");
 
 
 

@@ -7,16 +7,16 @@ package za.co.carhire.factory.reservation;
 
      Date: 18 May 2025 */
 
-import za.co.carhire.Util.validationHelper;
+import za.co.carhire.util.Helper;
+import za.co.carhire.util.validationHelper;
 import za.co.carhire.domain.reservation.Notification;
 
 import java.time.LocalDate;
-import java.util.Date;
 
 public class NotificationFactory {
     /*validationHelper.generateId(notificationID)|| validationHelper.generateId(userID) ||*/
     public static Notification createNotification(Integer notificationID, Integer userID, String message, String dateSent, String status){
-        if(  validationHelper.isEmptyOrNull(message)|| validationHelper.isValidDate(dateSent)|| validationHelper.isEmptyOrNull(status)){
+        if(  Helper.isEmptyOrNull(message)|| Helper.isValidDate(dateSent)|| Helper.isEmptyOrNull(status)){
             return null;
         }
         return new Notification.Builder()
