@@ -1,4 +1,4 @@
-package za.co.carhire.factory.reservation;
+package za.co.carhire.factory;
 import za.co.carhire.domain.Review;
 import za.co.carhire.util.Helper;
 

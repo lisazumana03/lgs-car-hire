@@ -1,4 +1,4 @@
-package za.co.carhire.factory.reservation;
+package za.co.carhire.factory;
 
 import org.junit.jupiter.api.Test;
 import za.co.carhire.domain.Review;
