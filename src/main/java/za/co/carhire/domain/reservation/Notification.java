@@ -1,4 +1,4 @@
-package za.co.carhire.domain;
+package za.co.carhire.domain.reservation;
 /* Notification.java
 
      Notification POJO class
@@ -7,29 +7,33 @@ package za.co.carhire.domain;
 
      Date: 11 May 2025 */
 
-import java.util.Date;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
 
+import java.time.LocalDate;
+@Entity
 public class Notification {
 
+    @Id
     private Integer notificationID;
 
     private Integer userID;
 
     private String message;
 
-    private Date dateSent;
+    private LocalDate dateSent;
 
     private String status;
 
     public Notification() {
     }
 
-    public Notification(Integer notificationID, Integer userID, String message, Date dateSent, String status) {
-        this.notificationID = notificationID;
-        this.userID = userID;
-        this.message = message;
-        this.dateSent = dateSent;
-        this.status = status;
+    public Notification(Builder builder) {
+        this.notificationID = builder.notificationID;
+        this.userID = builder.userID;
+        this.message = builder.message;
+        this.dateSent = builder.dateSent;
+        this.status = builder.status;
     }
 
     public Integer getNotificationID() {
@@ -44,7 +48,7 @@ public class Notification {
         return message;
     }
 
-    public Date getDateSent() {
+    public LocalDate getDateSent() {
         return dateSent;
     }
 
@@ -70,7 +74,7 @@ public class Notification {
 
         private String message;
 
-        private Date dateSent;
+        private LocalDate dateSent;
 
         private String status;
 
@@ -89,7 +93,7 @@ public class Notification {
             return this;
         }
 
-        public Builder setDateSent(Date dateSent) {
+        public Builder setDateSent(LocalDate dateSent) {
             this.dateSent = dateSent;
             return this;
         }
@@ -99,7 +103,19 @@ public class Notification {
             return this;
         }
 
-        
+        public Builder copy(Notification notification){
+            this.notificationID = notification.notificationID;
+            this.userID = notification.userID;
+            this.message = notification.message;
+            this.dateSent = notification.dateSent;
+            this.status = notification.status;
+            return this;
+
+        }
+
+        public Notification build(){
+            return new Notification(this);
+        }
 
 
     }

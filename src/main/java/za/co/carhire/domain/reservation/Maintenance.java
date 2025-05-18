@@ -1,4 +1,4 @@
-package za.ac.cput.domain;
+package za.co.carhire.domain.reservation;
 /*
  * Sibulele Gift Nohamba (220374686)
  * Date: 11/05/2025
