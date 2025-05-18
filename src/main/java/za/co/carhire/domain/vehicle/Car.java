@@ -1,9 +1,11 @@
 package za.co.carhire.domain.vehicle;
-
 // Imtiyaaz Waggie 219374759//
 //date:10/05/2025 //
-public class Car {
 
+import za.co.carhire.domain.Insurance;
+import za.co.carhire.domain.reservation.Booking;
+
+public class Car {
     private int carID;
     private String model;
     private String brand;
@@ -13,22 +15,26 @@ public class Car {
 
     // Reference to related entities
     private CarType carType;
+    private Insurance insurance;  // One-to-one with Insurance
+    private Booking booking;      // One-to-one with Booking
 
-
-    // Constructors
+    // Default constructor
     public Car() {}
 
-    public Car(int carID, String model, String brand, int year, boolean availability, double rentalPrice) {
-        this.carID = carID;
-        this.model = model;
-        this.brand = brand;
-        this.year = year;
-        this.availability = availability;
-        this.rentalPrice = rentalPrice;
+    // Private constructor for Builder pattern
+    private Car(Builder builder) {
+        this.carID = builder.carID;
+        this.model = builder.model;
+        this.brand = builder.brand;
+        this.year = builder.year;
+        this.availability = builder.availability;
+        this.rentalPrice = builder.rentalPrice;
+        this.carType = builder.carType;
+        this.insurance = builder.insurance;
+        this.booking = builder.booking;
     }
 
     // Getters and Setters
-
     public int getCarID() {
         return carID;
     }
@@ -85,6 +91,22 @@ public class Car {
         this.carType = carType;
     }
 
+    public Insurance getInsurance() {
+        return insurance;
+    }
+
+    public void setInsurance(Insurance insurance) {
+        this.insurance = insurance;
+    }
+
+    public Booking getBooking() {
+        return booking;
+    }
+
+    public void setBooking(Booking booking) {
+        this.booking = booking;
+    }
+
     // Methods from the diagram
     public boolean checkAvailability() {
         return this.availability;
@@ -103,7 +125,85 @@ public class Car {
                 ", year=" + year +
                 ", availability=" + availability +
                 ", rentalPrice=" + rentalPrice +
+                ", carType=" + (carType != null ? carType.getCarTypeID() : "null") +
+                ", insurance=" + (insurance != null ? insurance.getInsuranceID() : "null") +
+                ", booking=" + (booking != null ? booking.getBookingID() : "null") +
                 '}';
     }
-}
 
+    // Builder class
+    public static class Builder {
+        private int carID;
+        private String model;
+        private String brand;
+        private int year;
+        private boolean availability;
+        private double rentalPrice;
+        private CarType carType;
+        private Insurance insurance;
+        private Booking booking;
+
+        public Builder setCarID(int carID) {
+            this.carID = carID;
+            return this;
+        }
+
+        public Builder setModel(String model) {
+            this.model = model;
+            return this;
+        }
+
+        public Builder setBrand(String brand) {
+            this.brand = brand;
+            return this;
+        }
+
+        public Builder setYear(int year) {
+            this.year = year;
+            return this;
+        }
+
+        public Builder setAvailability(boolean availability) {
+            this.availability = availability;
+            return this;
+        }
+
+        public Builder setRentalPrice(double rentalPrice) {
+            this.rentalPrice = rentalPrice;
+            return this;
+        }
+
+        public Builder setCarType(CarType carType) {
+            this.carType = carType;
+            return this;
+        }
+
+        public Builder setInsurance(Insurance insurance) {
+            this.insurance = insurance;
+            return this;
+        }
+
+        public Builder setBooking(Booking booking) {
+            this.booking = booking;
+            return this;
+        }
+
+        public Builder copy(Car car) {
+            this.carID = car.getCarID();
+            this.model = car.getModel();
+            this.brand = car.getBrand();
+            this.year = car.getYear();
+            this.availability = car.isAvailability();
+            this.rentalPrice = car.getRentalPrice();
+            this.carType = car.getCarType();
+            this.insurance = car.getInsurance();
+            this.booking = car.getBooking();
+            return this;
+        }
+        // The missing build() method
+        public Car build() {
+            return new Car(this);
+        }
+
+    }
+}
