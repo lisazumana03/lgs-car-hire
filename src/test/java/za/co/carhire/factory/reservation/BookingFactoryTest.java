@@ -24,7 +24,7 @@ class BookingFactoryTest {
         User user = new User();
 
         List<Car> cars = new ArrayList<>();
-        cars.add(new Car(3, "Datsun", "Mitsubishi", 2024, false, 2300.0));
+        cars.add(new Car());
 
         LocalDateTime bookingDateAndTime = LocalDateTime.now();
 
