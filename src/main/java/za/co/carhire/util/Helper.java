@@ -1,8 +1,10 @@
 package za.co.carhire.util;
 
+import org.apache.commons.validator.routines.EmailValidator;
 import za.co.carhire.domain.reservation.Booking;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 import java.util.Date;
 import java.util.List;
 
@@ -64,4 +66,37 @@ public class Helper {
     public static long daysBetween(Date start, Date end) {
         return (end.getTime() - start.getTime());
     }
+
+
+    public static boolean isEmptyOrNull(String str) {
+        if (str.isEmpty() ||str == null || str.equalsIgnoreCase("null")) {
+            return true;
+        }
+        return false;
+    }
+    public static boolean isValidDate(String dateString) {
+        if (dateString == null || dateString.trim().isEmpty()) {
+            return false;
+        }
+
+        try {
+            LocalDate.parse(dateString); // Uses format: yyyy-MM-dd
+            return true;
+        } catch (DateTimeParseException e) {
+            return false;
+        }
+    }
+
+
+    // The following method uses a singleton pattern to validate an email address
+    public static boolean isValidEmail(String email) {
+        if (email == null || !email.contains("@")) {
+            return false;
+        }
+
+        EmailValidator validator = EmailValidator.getInstance();
+        return validator.isValid(email);
+    }
+
+
 }
