@@ -9,7 +9,7 @@ import za.co.carhire.domain.authentication.User;
 import za.co.carhire.domain.reservation.Booking;
 import za.co.carhire.domain.reservation.Location;
 import za.co.carhire.domain.vehicle.Car;
-import za.co.carhire.util.Helper;
+import za.co.carhire.Util.Helper;
 
 import java.time.LocalDateTime;
 import java.util.Date;
