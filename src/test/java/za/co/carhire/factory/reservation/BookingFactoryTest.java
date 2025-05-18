@@ -44,7 +44,7 @@ class BookingFactoryTest {
 
     @Test
     @Order(2)
-    void cancelBooking() {
+    void createCancelledBooking() {
         int bookingID = 17;
         User user = new User();
 
@@ -60,7 +60,7 @@ class BookingFactoryTest {
 
     @Test
     @Order(3)
-    void confirmBooking() {
+    void createConfirmedBooking() {
         int bookingID = 19;
         User user = new User();
 
