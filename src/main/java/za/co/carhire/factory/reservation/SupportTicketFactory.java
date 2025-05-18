@@ -1,7 +1,6 @@
 package za.co.carhire.factory.reservation;
 import za.co.carhire.domain.reservation.SupportTicket;
 import za.co.carhire.util.Helper;
-import java.util.Date;
 
 /*
 Olwethu Tshingo - 222634383
@@ -31,7 +30,7 @@ public class SupportTicketFactory {
 
     //Ticket Closure
 
-    public static SupportTicket closeTicket(int ticketID) {
+    public static SupportTicket closeTicket(SupportTicket ticketID) {
         if (Helper.isWithinBoundary(ticketID)) {
             return null;
         }
