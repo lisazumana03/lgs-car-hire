@@ -5,7 +5,7 @@ Lisakhanya Zumana - 230864821
 Date: 08 May 2025
  */
 
-import za.co.carhire.domain.Car;
+import za.co.carhire.domain.vehicle.Car;
 
 import java.time.LocalDateTime;
 import java.util.Date;

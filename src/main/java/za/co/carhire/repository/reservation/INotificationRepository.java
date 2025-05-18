@@ -1,4 +1,7 @@
 package za.co.carhire.repository.reservation;
 
-public interface INotification {
+import org.springframework.data.jpa.repository.JpaRepository;
+import za.co.carhire.domain.reservation.Notification;
+
+public interface INotificationRepository extends JpaRepository<Notification, Integer> {
 }
