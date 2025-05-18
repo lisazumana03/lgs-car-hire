@@ -4,7 +4,7 @@
  * */
 package za.ac.cput.factory;
 
-import za.ac.cput.domain.Maintenance;
+import za.co.carhire.domain.reservation.Maintenance;
 import java.util.Date;
 
 public class MaintenanceFactory {
