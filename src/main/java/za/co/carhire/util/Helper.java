@@ -36,10 +36,12 @@ public class Helper {
             return true;
         }return false;
     }
-    public static boolean isWithinBoundary(int wb){
-        if(wb<0 || wb>1000000){
+    public static boolean isWithinBoundary(int wb) {
+        if (wb < 0 || wb > 1000000) {
             return true;
-        }return false;
+        }
+        return false;
+    }
     private static final List<String> VALID_PAYMENT_METHODS =
             List.of("CREDIT_CARD", "EFT", "CASH", "BANK TRANSFER");
 
@@ -48,7 +50,7 @@ public class Helper {
                 VALID_PAYMENT_METHODS.contains(method.toUpperCase());
     }
 
-    public static boolean isBookingPayable(Booking booking) {
+    public static boolean isBookingPayable(Booking booking){
         try {
             return booking != null &&
                     !isNullOrEmpty(booking.getBookingStatus()) &&

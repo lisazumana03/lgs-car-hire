@@ -9,7 +9,7 @@ import za.co.carhire.domain.authentication.User;
 import za.co.carhire.domain.reservation.Booking;
 import za.co.carhire.domain.reservation.Location;
 import za.co.carhire.domain.vehicle.Car;
-import za.co.carhire.Util.Helper;
+import za.co.carhire.util.Helper;
 
 import java.time.LocalDateTime;
 import java.util.Date;
@@ -18,7 +18,7 @@ import java.util.List;
 public class BookingFactory {
     public static Booking createBooking(int bookingID, User user, List<Car>cars, LocalDateTime bookingDateAndTime, Date startDate, Date endDate, Location pickupLocation, Location dropOffLocation, String bookingStatus){
         if(Helper.isNullOrEmpty(bookingStatus)){
-            return null;
+            return null ;
         }
         return new Booking.Builder()
                 .setBookingID(bookingID)
