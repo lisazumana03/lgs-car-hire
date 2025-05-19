@@ -7,16 +7,14 @@ Lisakhanya Zumana - 230864821
 Date: 10 May 2025
  */
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
 @Entity
+@Table(name = "location")
 public class Location implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -28,7 +26,9 @@ public class Location implements Serializable {
     private String country;
     private Short postalCode;
 
+    @OneToMany(mappedBy = "booking_pickup")
     private List<Booking> pickUpLocations;
+    @OneToMany(mappedBy = "booking_dropoff")
     private List<Booking> dropOffLocations;
 
     public Location(){
