@@ -25,16 +25,16 @@ class InsuranceFactoryTest {
                 .setInsuranceStartDate(insuranceStartDate)
                 .setInsuranceCost(350.00)
                 .setInsuranceProvider("CTU")
-                .setPolicyNumber(37484737263748)
+                .setPolicyNumber(374)
                 .setStatus("New")
                 .setMechanic("Alvin Lewis")
                 .build();
 
         assertEquals(24, insurance.getInsuranceID());
         assertEquals(insuranceStartDate, insurance.getInsuranceStartDate());
-        assertEquals(350.00, insurance.getCost());
+        assertEquals(350.00, insurance.getInsuranceCost());
         assertEquals("CTU", insurance.getInsuranceProvider());
-        assertEquals(37484737263748, insurance.getPolicyNumber());
+        assertEquals(374, insurance.getPolicyNumber());
         assertEquals("New", insurance.getStatus());
         assertEquals("Alvin Lewis", insurance.getMechanic());
         assertTrue(true);

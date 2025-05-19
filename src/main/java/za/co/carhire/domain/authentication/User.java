@@ -15,7 +15,6 @@ import static jakarta.persistence.GenerationType.*;
      Date: 11 May 2025 */
 @Entity
 public class User {
-
     @Id
     protected Integer userId;
 

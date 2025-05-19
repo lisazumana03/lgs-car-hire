@@ -5,6 +5,7 @@ Lisakhanya Zumana - 230864821
 Date: 08 May 2025
  */
 
+import jakarta.persistence.*;
 import za.co.carhire.domain.vehicle.Car;
 import za.co.carhire.domain.authentication.User;
 
@@ -13,16 +14,26 @@ import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 
-
-public class Booking {
+@Entity
+@Table(name = "booking")
+public class Booking implements Serializable {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private int bookingID;
     private User user;
+    @OneToMany(mappedBy = "booking")// showing that one booking can be made for many cars
     private List<Car> cars;
     private LocalDateTime bookingDateAndTime;
     private Date startDate;
     private Date endDate;
+    @ManyToOne
+    @JoinColumn(name = "payment_id")
     private Payment payment;
+    @ManyToOne
+    @JoinColumn(name = "pick_up_location")
     private Location pickupLocation;
+    @ManyToOne
+    @JoinColumn(name = "drop_off_location")
     private Location dropOffLocation;
     private String bookingStatus;
 
