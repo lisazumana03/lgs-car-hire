@@ -1,4 +1,5 @@
 package za.co.carhire.domain.reservation;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 /* Invoice.java
@@ -11,8 +12,8 @@ public class Invoice {
     private int invoiceID;
     private Payment payment;
     private Booking booking;
-    private Date issueDate;
-    private Date dueDate;
+    private LocalDateTime issueDate;
+    private LocalDateTime dueDate;
     private double subTotal;
     private double taxAmount;
     private double totalAmount;
@@ -41,10 +42,10 @@ public class Invoice {
     public Booking getBooking() {
         return booking;
     }
-    public Date getIssueDate() {
+    public LocalDateTime getIssueDate() {
         return issueDate;
     }
-    public Date getDueDate() {
+    public LocalDateTime getDueDate() {
         return dueDate;
     }
     public double getSubTotal() {
@@ -79,8 +80,8 @@ public class Invoice {
         private int invoiceID;
         private Payment payment;
         private Booking booking;
-        private Date issueDate;
-        private Date dueDate;
+        private LocalDateTime issueDate;
+        private LocalDateTime dueDate;
         private double subTotal;
         private double taxAmount;
         private double totalAmount;
@@ -98,11 +99,11 @@ public class Invoice {
             this.booking = booking;
             return this;
         }
-        public Builder setIssueDate(Date issueDate) {
+        public Builder setIssueDate(LocalDateTime issueDate) {
             this.issueDate = issueDate;
             return this;
         }
-        public Builder setDueDate(Date dueDate) {
+        public Builder setDueDate(LocalDateTime dueDate) {
             this.dueDate = dueDate;
             return this;
         }
