@@ -7,7 +7,7 @@ package za.co.carhire.factory.reservation;
 
 import za.co.carhire.domain.reservation.*;
 import za.co.carhire.util.Helper;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 public class InvoiceFactory {
     public static Invoice generateInvoice(Payment payment, Booking booking) {
@@ -22,7 +22,7 @@ public class InvoiceFactory {
         return new Invoice.Builder()
                 .setPayment(payment)
                 .setBooking(booking)
-                .setIssueDate(new Date())
+                .setIssueDate(LocalDateTime.now())
                 .setDueDate(booking.getEndDate())
                 .setSubTotal(subTotal)
                 .setTaxAmount(taxAmount)
@@ -32,7 +32,7 @@ public class InvoiceFactory {
     }
 
     private static double calculateSubTotal(Booking booking) {
-        if (booking.getCar() == null || booking.getCar().isEmpty() ||
+        if (booking == null || booking.getCar() == null || booking.getCar().isEmpty() ||
                 booking.getStartDate() == null || booking.getEndDate() == null) {
             return 0.0;
         }
@@ -45,13 +45,14 @@ public class InvoiceFactory {
                 .filter(car -> car != null && car.getRentalPrice() > 0)
                 .mapToDouble(car -> car.getRentalPrice() * finalDays)
                 .sum();
-        }
+    }
     private static boolean isValid(Payment payment, Booking booking) {
         return payment != null &&
                 booking != null &&
-                payment.getBookingID().equals(booking) &&
-                !payment.getPaymentMethod().equals("REFUND") &&
+                payment.getBooking() != null &&
+                payment.getBooking().getBookingID() == booking.getBookingID() &&
+                !"REFUND".equals(payment.getPaymentMethod()) &&
                 booking.getEndDate() != null &&
-                booking.getEndDate().after(new Date());
+                booking.getEndDate().isAfter(LocalDateTime.now());  // Changed after() to isAfter()
     }
 }
