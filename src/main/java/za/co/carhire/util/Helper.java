@@ -5,6 +5,7 @@ import za.co.carhire.domain.reservation.Booking;
 import za.co.carhire.domain.reservation.SupportTicket;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeParseException;
 import java.util.Date;
 import java.util.List;
@@ -57,7 +58,7 @@ public class Helper {
                     !isNullOrEmpty(booking.getBookingStatus()) &&
                     !booking.getBookingStatus().equalsIgnoreCase("CANCELLED") &&
                     booking.getEndDate() != null &&
-                    booking.getEndDate().after(new Date());
+                    booking.getEndDate().isAfter(LocalDateTime.now());
         } catch (Exception e) {
             return false;
         }

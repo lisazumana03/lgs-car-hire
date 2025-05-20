@@ -33,8 +33,8 @@ class BookingFactoryTest {
 
         LocalDateTime bookingDateAndTime = LocalDateTime.now();
 
-        LocalDateTime startDate = LocalDateTime.now().plusDays(13);
-        LocalDateTime endDate = LocalDateTime.now().plusDays(45);
+        LocalDateTime startDate = LocalDateTime.of(2025, 6, 10, 15, 45);
+        LocalDateTime endDate = LocalDateTime.of(2025, 7, 10, 16, 45);
 
         Location pickupLocation = new Location();
         Location dropOffLocation = new Location();
