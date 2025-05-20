@@ -8,7 +8,7 @@ package za.co.carhire.domain.reservation;
 
 public class Payment {
     private int paymentID;
-    private Booking bookingID;
+    private Booking booking;
     private double amount;
     private String paymentMethod;
 
@@ -16,8 +16,8 @@ public class Payment {
 
     private Payment(){}
     private Payment(Builder builder) {
-        this.bookingID = builder.bookingID;
         this.paymentID = builder.paymentID;
+        this.booking = builder.booking;
         this.amount = builder.amount;
         this.paymentMethod = builder.paymentMethod;
     }
@@ -25,8 +25,8 @@ public class Payment {
     public int getPaymentID() {
         return paymentID;
     }
-    public Booking getBookingID() {
-        return bookingID;
+    public Booking getBooking() {
+        return booking;
     }
     public double getAmount() {
         return amount;
@@ -39,14 +39,13 @@ public class Payment {
     public String toString() {
         return "Payment{" +
                 "paymentID='" + paymentID + '\'' +
-                ", bookingID='" + bookingID + '\'' +
                 ", amount=" + amount +
                 ", paymentMethod='" + paymentMethod + '\'' +
                 '}';
     }
     public static class Builder {
         private int paymentID;
-        private Booking bookingID;
+        private Booking booking;
         private double amount;
         private String paymentMethod;
 
@@ -54,8 +53,8 @@ public class Payment {
             this.paymentID = paymentID;
             return this;
         }
-        public Builder setBookingID(Booking bookingID) {
-            this.bookingID = bookingID;
+        public Builder setBooking(Booking booking) {
+            this.booking = booking;
             return this;
         }
         public Builder setAmount(double amount) {
@@ -68,7 +67,7 @@ public class Payment {
         }
         public Builder copy (Payment payment) {
             this.paymentID = payment.getPaymentID();
-            this.bookingID = payment.getBookingID();
+            this.booking = payment.getBooking();
             this.amount = payment.getAmount();
             this.paymentMethod = payment.getPaymentMethod();
             return this;
