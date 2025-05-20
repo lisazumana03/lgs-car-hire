@@ -7,11 +7,16 @@ package za.co.carhire.factory.reservation;
 import org.junit.jupiter.api.Test;
 import za.co.carhire.domain.reservation.*;
 import za.co.carhire.domain.vehicle.Car;
+
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 class InvoiceFactoryTest {
+    private final LocalDateTime now = LocalDateTime.now();
+    private final LocalDateTime tomorrow = now.plusDays(1);
+    private final LocalDateTime threeDaysLater = now.plusDays(3);
 
     private Car testCar = new Car.Builder()
             .setRentalPrice(500.00)
@@ -20,12 +25,12 @@ class InvoiceFactoryTest {
     private Booking validBooking = new Booking.Builder()
             .setBookingID(1)
             .setCar(List.of(testCar))
-            .setStartDate(new Date())
-            .setEndDate(new Date(System.currentTimeMillis() + 86400000)) // +1 day
+            .setStartDate(now)
+            .setEndDate(tomorrow)
             .build();
 
     private Payment paidPayment = new Payment.Builder()
-            .setBookingID(validBooking)
+            .setBooking(validBooking)
             .setPaymentMethod("EFT")
             .setAmount(575.00) // 500 + 15% tax
             .build();
@@ -41,7 +46,7 @@ class InvoiceFactoryTest {
     @Test
     void rejectUnpaidPayment() {
         Payment unpaid = new Payment.Builder()
-                .setBookingID(validBooking)
+                .setBooking(validBooking)
                 .setPaymentMethod("PENDING")
                 .build();
         assertNull(InvoiceFactory.generateInvoice(unpaid, validBooking));
@@ -55,8 +60,8 @@ class InvoiceFactoryTest {
                         new Car.Builder().setRentalPrice(500.00).build(),
                         new Car.Builder().setRentalPrice(300.00).build()
                 ))
-                .setStartDate(new Date())
-                .setEndDate(new Date(System.currentTimeMillis() + 259200000)) // +3 days
+                .setStartDate(now)
+                .setEndDate(threeDaysLater)
                 .build();
 
         Invoice invoice = InvoiceFactory.generateInvoice(paidPayment, booking);
@@ -69,8 +74,8 @@ class InvoiceFactoryTest {
         // Same-day return
         Booking booking = new Booking.Builder()
                 .setCar(List.of(testCar))
-                .setStartDate(new Date())
-                .setEndDate(new Date()) // Same day
+                .setStartDate(now)
+                .setEndDate(now) // Same day
                 .build();
 
         Invoice invoice = InvoiceFactory.generateInvoice(paidPayment, booking);
