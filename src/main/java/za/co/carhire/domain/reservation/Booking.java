@@ -13,7 +13,6 @@ import za.co.carhire.domain.authentication.User;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -26,8 +25,8 @@ public class Booking implements Serializable {
     @OneToMany(mappedBy = "booking")// showing that one booking can be made for many cars
     private List<Car> cars;
     private LocalDateTime bookingDateAndTime;
-    private Date startDate;
-    private Date endDate;
+    private LocalDateTime startDate;
+    private LocalDateTime endDate;
     @ManyToOne
     @JoinColumn(name = "payment_id")
     private Payment payment;
@@ -70,11 +69,11 @@ public class Booking implements Serializable {
         return bookingDateAndTime;
     }
 
-    public Date getStartDate() {
+    public LocalDateTime getStartDate() {
         return startDate;
     }
 
-    public Date getEndDate() {
+    public LocalDateTime getEndDate() {
         return endDate;
     }
 
@@ -115,8 +114,8 @@ public class Booking implements Serializable {
         private User user;
         private List<Car> cars;
         private LocalDateTime bookingDateAndTime;
-        private Date startDate;
-        private Date endDate;
+        private LocalDateTime startDate;
+        private LocalDateTime endDate;
         private Payment payment;
         private Location pickupLocation;
         private Location dropOffLocation;
@@ -138,11 +137,11 @@ public class Booking implements Serializable {
             this.bookingDateAndTime = bookingDateAndTime;
             return this;
         }
-        public Builder setStartDate(Date startDate) {
+        public Builder setStartDate(LocalDateTime startDate) {
             this.startDate = startDate;
             return this;
         }
-        public Builder setEndDate(Date endDate) {
+        public Builder setEndDate(LocalDateTime endDate) {
             this.endDate = endDate;
             return this;
         }

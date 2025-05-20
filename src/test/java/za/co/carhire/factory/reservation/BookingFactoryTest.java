@@ -33,8 +33,8 @@ class BookingFactoryTest {
 
         LocalDateTime bookingDateAndTime = LocalDateTime.now();
 
-        Date startDate = java.sql.Date.valueOf("2025-05-31");
-        Date endDate = java.sql.Date.valueOf("2025-07-01");
+        LocalDateTime startDate = LocalDateTime.now().plusDays(13);
+        LocalDateTime endDate = LocalDateTime.now().plusDays(45);
 
         Location pickupLocation = new Location();
         Location dropOffLocation = new Location();

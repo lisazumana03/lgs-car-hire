@@ -2,6 +2,7 @@ package za.co.carhire.util;
 
 import org.apache.commons.validator.routines.EmailValidator;
 import za.co.carhire.domain.reservation.Booking;
+import za.co.carhire.domain.reservation.SupportTicket;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;

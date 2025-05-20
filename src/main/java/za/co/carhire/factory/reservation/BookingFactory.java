@@ -12,11 +12,10 @@ import za.co.carhire.domain.vehicle.Car;
 import za.co.carhire.util.Helper;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.List;
 
 public class BookingFactory {
-    public static Booking createBooking(int bookingID, User user, List<Car>cars, LocalDateTime bookingDateAndTime, Date startDate, Date endDate, Location pickupLocation, Location dropOffLocation, String bookingStatus){
+    public static Booking createBooking(int bookingID, User user, List<Car>cars, LocalDateTime bookingDateAndTime, LocalDateTime startDate, LocalDateTime endDate, Location pickupLocation, Location dropOffLocation, String bookingStatus){
         if(Helper.isNullOrEmpty(bookingStatus)){
             return null ;
         }
