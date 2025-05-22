@@ -1,4 +1,4 @@
-package za.co.carhire.factory;
+package za.co.carhire.factory.reservation;
 
 /*
  * Sibulele Gift Nohamba (220374686)
@@ -6,7 +6,7 @@ package za.co.carhire.factory;
  * */
 
 import org.junit.jupiter.api.Test;
-import za.co.carhire.domain.Insurance;
+import za.co.carhire.domain.reservation.Insurance;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;

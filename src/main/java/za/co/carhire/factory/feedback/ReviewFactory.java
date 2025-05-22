@@ -1,5 +1,5 @@
-package za.co.carhire.factory;
-import za.co.carhire.domain.Review;
+package za.co.carhire.factory.feedback;
+import za.co.carhire.domain.feedback.Review;
 import za.co.carhire.util.Helper;
 
 /*

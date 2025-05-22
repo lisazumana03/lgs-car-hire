@@ -1,7 +1,7 @@
-package za.co.carhire.factory;
+package za.co.carhire.factory.feedback;
 
 import org.junit.jupiter.api.Test;
-import za.co.carhire.domain.Review;
+import za.co.carhire.domain.feedback.Review;
 
 import static org.junit.jupiter.api.Assertions.*;
 

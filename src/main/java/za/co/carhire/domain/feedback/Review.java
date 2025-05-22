@@ -1,4 +1,4 @@
-package za.co.carhire.domain;
+package za.co.carhire.domain.feedback;
 
 /*
 Olwethu Tshingo - 222634383

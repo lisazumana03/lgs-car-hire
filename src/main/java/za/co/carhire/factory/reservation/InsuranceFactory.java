@@ -2,10 +2,10 @@
  * Sibulele Gift Nohamba (220374686)
  * Date: 18/05/2025
  * */
-package za.co.carhire.factory;
+package za.co.carhire.factory.reservation;
 
 
-import za.co.carhire.domain.Insurance;
+import za.co.carhire.domain.reservation.Insurance;
 import java.util.Date;
 
 public class InsuranceFactory {

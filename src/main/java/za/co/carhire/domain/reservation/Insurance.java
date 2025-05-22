@@ -1,4 +1,4 @@
-package za.co.carhire.domain;
+package za.co.carhire.domain.reservation;
 
 /*
 Sibulele Gift Nohamba
