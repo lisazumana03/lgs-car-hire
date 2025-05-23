@@ -17,9 +17,7 @@ public class PaymentFactory {
         }
 
         return new Payment.Builder()
-                .setPaymentID(Helper.generateId())
-                .setBookingID(booking)
-                .setAmount(amount)
+                .setPaymentID(Helper.generateId()).setAmount(amount)
                 .setPaymentMethod(method.toUpperCase())
                 .build();
     }

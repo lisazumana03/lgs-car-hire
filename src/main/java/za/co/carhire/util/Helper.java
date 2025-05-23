@@ -67,10 +67,15 @@ public class Helper {
         return (int) (Math.random() * 1000000);
     }
 
-    public static long daysBetween(Date start, Date end) {
-        return (end.getTime() - start.getTime());
+    public static long daysBetween(LocalDateTime start, LocalDateTime end) {
+        if (start == null || end == null) return 0;
+        return java.time.Duration.between(start, end).toDays();
     }
 
+    public static long daysBetween(Date start, Date end) {
+        if (start == null || end == null) return 0;
+        return (end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24);
+    }
 
     public static boolean isEmptyOrNull(String str) {
         if (str.isEmpty() ||str == null || str.equalsIgnoreCase("null")) {
