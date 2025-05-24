@@ -16,7 +16,9 @@ public interface IBookingService {
 
     Booking createBooking(Booking booking);
 
+    Booking readBooking(int bookingID);
+
     Booking updateBooking(Booking booking);
 
-    void deleteBooking(Booking booking);
+    void deleteBooking(int bookingID);
 }

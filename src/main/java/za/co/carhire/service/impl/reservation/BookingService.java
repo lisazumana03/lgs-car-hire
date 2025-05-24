@@ -20,4 +20,29 @@ public class BookingService implements IBookingService {
     @Autowired
     private IBookingRepository bookingRepository;
 
+
+    @Override
+    public Set<Booking> getBookings() {
+        return Set.of();
+    }
+
+    @Override
+    public Booking createBooking(Booking booking) {
+        return this.bookingRepository.save(booking);
+    }
+
+    @Override
+    public Booking readBooking(int bookingID) {
+        return null;
+    }
+
+    @Override
+    public Booking updateBooking(Booking booking) {
+        return null;
+    }
+
+    @Override
+    public void deleteBooking(int bookingID) {
+
+    }
 }
