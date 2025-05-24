@@ -8,17 +8,11 @@ Lisakhanya Zumana (230864821)
 Date: 24/05/2025
  */
 
+import java.util.List;
 import java.util.Set;
 
-public interface IBookingService {
+public interface IBookingService extends IService <Booking, Integer> {
 
     Set<Booking> getBookings();
-
-    Booking createBooking(Booking booking);
-
-    Booking readBooking(int bookingID);
-
-    Booking updateBooking(Booking booking);
-
-    void deleteBooking(int bookingID);
+    List<Booking> getBookingsByStatus(String bookingStatus);
 }

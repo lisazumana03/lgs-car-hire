@@ -5,10 +5,6 @@ import za.co.carhire.service.IService;
 
 import java.util.List;
 
-public interface ILocationService {
-    Location createLocation(Location location);
-    Location readLocation(int locationID);
-    Location updateLocation(Location location);
-    void deleteLocation(int locationID);
+public interface ILocationService extends IService <Location, Integer> {
     List<Location> getLocations();
 }
