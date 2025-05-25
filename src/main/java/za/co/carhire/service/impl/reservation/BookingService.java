@@ -13,6 +13,7 @@ Date: 24/05/2025
 
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class BookingService implements IBookingService {
@@ -22,31 +23,28 @@ public class BookingService implements IBookingService {
 
     @Override
     public Set<Booking> getBookings() {
-        return Set.of();
-    }
-
-    @Override
-    public List<Booking> getBookingsByStatus(String bookingStatus) {
-        return List.of();
+        return bookingRepository.findAll().stream().collect(Collectors.toSet());
     }
 
     @Override
     public Booking create(Booking booking) {
-        return this.bookingRepository.save(booking);
+        return bookingRepository.save(booking);
     }
 
     @Override
-    public Booking read(int bookingId) {
-        return null;
+    public Booking read(int bookingID) {
+        return bookingRepository.findById(bookingID).orElse(null);
     }
 
     @Override
     public Booking update(Booking booking) {
+        if(this.bookingRepository.existsById(booking.getBookingID()))
+            return this.bookingRepository.save(booking);
         return null;
     }
 
     @Override
-    public void delete(Integer integer) {
-
+    public void delete(int bookingID) {
+        bookingRepository.deleteById(bookingID);
     }
 }
