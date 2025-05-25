@@ -15,4 +15,9 @@ public interface IBookingService extends IService <Booking, Integer> {
 
     Set<Booking> getBookings();
     List<Booking> getBookingsByStatus(String bookingStatus);
+
+    Booking create(Booking booking);
+    Booking read(int bookingID);
+    Booking update(Booking booking);
+    boolean delete(int bookingID);
 }

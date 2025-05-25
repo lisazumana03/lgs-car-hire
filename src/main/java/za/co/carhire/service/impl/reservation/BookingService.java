@@ -32,11 +32,11 @@ public class BookingService implements IBookingService {
 
     @Override
     public Booking create(Booking booking) {
-        return null;
+        return this.bookingRepository.save(booking);
     }
 
     @Override
-    public Booking read(Integer integer) {
+    public Booking read(int bookingId) {
         return null;
     }
 
