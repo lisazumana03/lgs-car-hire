@@ -33,7 +33,7 @@ public class PaymentFactory {
                 .build();
     }
 
-    private static boolean isValid(Booking booking, double amount, String method) {
+    public static boolean isValid(Booking booking, double amount, String method) {
         return booking != null &&
                 !Helper.isNullOrEmpty(booking.getBookingStatus()) &&
                 !booking.getBookingStatus().equalsIgnoreCase("CANCELLED") &&

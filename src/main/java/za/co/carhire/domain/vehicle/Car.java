@@ -6,21 +6,46 @@ package za.co.carhire.domain.vehicle;
 import za.co.carhire.domain.reservation.Insurance;
 import za.co.carhire.domain.reservation.Booking;
 
-public class Car {
+import jakarta.persistence.*;
+import java.io.Serializable;
+
+@Entity
+@Table(name = "car")
+public class Car implements Serializable {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private int carID;
+
+    @Column(name = "model")
     private String model;
+
+    @Column(name = "brand")
     private String brand;
+
+    @Column(name = "year")
     private int year;
+
+    @Column(name = "availability")
     private boolean availability;
+
+    @Column(name = "rental_price")
     private double rentalPrice;
 
-    // Reference to related entities
+    // One-to-One relationship with CarType
+    @OneToOne(mappedBy = "car")
     private CarType carType;
-    private Insurance insurance;  // One-to-one with Insurance
-    private Booking booking;      // One-to-one with Booking
 
-    // Default constructor
-    public Car() {}
+    // One-to-One relationship with Insurance
+    @OneToOne
+    @JoinColumn(name = "insurance_id")
+    private Insurance insurance;
+
+    // Many-to-One relationship with Booking (one booking can have many cars)
+    @ManyToOne
+    @JoinColumn(name = "booking_id")
+    private Booking booking;
+
 
     // Private constructor for Builder pattern
     private Car(Builder builder) {

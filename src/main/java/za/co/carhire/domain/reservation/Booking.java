@@ -21,14 +21,15 @@ public class Booking implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int bookingID;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
     private User user;
     @OneToMany(mappedBy = "booking")// showing that one booking can be made for many cars
     private List<Car> cars;
     private LocalDateTime bookingDateAndTime;
     private LocalDateTime startDate;
     private LocalDateTime endDate;
-    @ManyToOne
-    @JoinColumn(name = "payment_id")
+    @OneToOne(mappedBy = "payment", cascade = CascadeType.ALL)
     private Payment payment;
     @ManyToOne
     @JoinColumn(name = "pick_up_location")

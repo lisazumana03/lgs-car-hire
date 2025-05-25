@@ -1,13 +1,31 @@
 package za.co.carhire.domain.vehicle;
+import jakarta.persistence.*;
+import java.io.Serializable;
 
-public class CarType {
+@Entity
+@Table(name = "car_type")
+public class CarType implements Serializable {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private int carTypeID;
-    private Car car;
-    private String type;
-    private String fuelType;
-    private int numberOfWheels;
-    private int numberOfSeats;
 
+    // One-to-One bidirectional relationship with Car
+    @OneToOne
+    @JoinColumn(name = "car_id")
+    private Car car;
+
+    @Column(name = "type")
+    private String type;
+
+    @Column(name = "fuel_type")
+    private String fuelType;
+
+    @Column(name = "number_of_wheels")
+    private int numberOfWheels;
+
+    @Column(name = "number_of_seats")
+    private int numberOfSeats;
 
     // Constructor with all fields
     public CarType(int carTypeID, Car car, String type, String fuelType, int numberOfWheels, int numberOfSeats) {
