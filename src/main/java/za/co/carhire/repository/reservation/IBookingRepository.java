@@ -14,6 +14,11 @@ import za.co.carhire.domain.vehicle.Car;
 import java.util.List;
 import java.util.Optional;
 
+/*
+Lisakhanya Zumana (230864821)
+Date: 25/05/2025
+ */
+
 @Repository
 public interface IBookingRepository extends JpaRepository<Booking, Integer> {
     Optional<Booking> findByPickupLocation(Location pickupLocation);
