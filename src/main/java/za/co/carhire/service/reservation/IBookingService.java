@@ -11,7 +11,7 @@ Date: 24/05/2025
 import java.util.List;
 import java.util.Set;
 
-public interface IBookingService extends IService <Booking, Integer> {
+public interface IBookingService {
 
     Set<Booking> getBookings();
 

@@ -5,7 +5,7 @@ import za.co.carhire.service.IService;
 
 import java.util.List;
 
-public interface ILocationService extends IService <Location, Integer> {
+public interface ILocationService {
     List<Location> getLocations();
 
     Location create(Location location);
