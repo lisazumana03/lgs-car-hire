@@ -15,7 +15,7 @@ import java.time.LocalDate;
 public class UserFactory {
 
     public static User createUser(String idNumber, String name, String email, String dateOfBirth, String phoneNumber, String password, String licenseNumber) {
-        String userId = String.valueOf(Helper.generateId());
+
 
 
         if (Helper.isEmptyOrNull(name) ||
@@ -31,7 +31,7 @@ public class UserFactory {
 
         return new User.Builder()
                 .setName(name)
-                .setIdNumber(Long.valueOf(idNumber))
+                .setIdNumber(Integer.valueOf(idNumber))
                 .setEmail(email)
                 .setDateOfBirth(LocalDate.parse(dateOfBirth))
                 .setPhoneNumber(phoneNumber)
@@ -51,7 +51,10 @@ public class UserFactory {
                     .setPassword(password).build();
         }
 
+    public User buildUser(int i, long l, String johnDoe, String mail, LocalDate of, String number, String pass123, String l123456) {
+        return null;
     }
+}
 
 
 

@@ -4,8 +4,6 @@ import jakarta.persistence.*;
 
 import java.time.LocalDate;
 
-import static jakarta.persistence.GenerationType.*;
-
 /* User.java
 
      User POJO class
@@ -14,22 +12,31 @@ import static jakarta.persistence.GenerationType.*;
 
      Date: 11 May 2025 */
 @Entity
+@Table(name = "Users")
 public class User {
     @Id
-    protected Integer userId;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer userId;
 
-    private Long idNumber;
+    @Column(nullable = false, unique = true)
+    private Integer idNumber;
 
+    @Column(nullable = false)
     private String name;
 
+    @Column(nullable = false)
     private String email;
 
+    @Column(nullable = false)
     private LocalDate dateOfBirth;
 
+    @Column(nullable = false)
     private String phoneNumber;
 
+    @Column(nullable = false)
     private String password;
 
+    @Column
     private String licenseNumber;
 
     public User() {
@@ -50,7 +57,7 @@ public class User {
         return userId;
     }
 
-    public Long getIdNumber() {
+    public Integer getIdNumber() {
         return idNumber;
     }
 
@@ -96,7 +103,7 @@ public class User {
 
         private Integer userId;
 
-        private Long idNumber;
+        private Integer idNumber;
 
         private String name;
 
@@ -115,7 +122,7 @@ public class User {
             return this;
         }
 
-        public Builder setIdNumber(Long idNumber) {
+        public Builder setIdNumber(Integer idNumber) {
             this.idNumber = idNumber;
             return this;
         }

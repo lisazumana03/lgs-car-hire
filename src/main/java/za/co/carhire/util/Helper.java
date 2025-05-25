@@ -2,7 +2,6 @@ package za.co.carhire.util;
 
 import org.apache.commons.validator.routines.EmailValidator;
 import za.co.carhire.domain.reservation.Booking;
-import za.co.carhire.domain.reservation.SupportTicket;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -63,7 +62,7 @@ public class Helper {
             return false;
         }
     }
-    public static int generateId() {
+    public static int generateId(int notificationId) {
         return (int) (Math.random() * 1000000);
     }
 

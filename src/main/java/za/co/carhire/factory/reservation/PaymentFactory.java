@@ -17,7 +17,7 @@ public class PaymentFactory {
         }
 
         return new Payment.Builder()
-                .setPaymentID(Helper.generateId()).setAmount(amount)
+                .setPaymentID(Helper.generateId(notificationId)).setAmount(amount)
                 .setPaymentMethod(method.toUpperCase())
                 .build();
     }

@@ -7,6 +7,8 @@ package za.co.carhire.factory.reservation;
 
      Date: 18 May 2025 */
 
+import za.co.carhire.domain.authentication.User;
+import za.co.carhire.domain.reservation.BookingStatus;
 import za.co.carhire.util.Helper;
 import za.co.carhire.domain.reservation.Notification;
 
@@ -14,13 +16,15 @@ import java.time.LocalDate;
 
 public class NotificationFactory {
     /*validationHelper.generateId(notificationID)|| validationHelper.generateId(userID) ||*/
-    public static Notification createNotification(Integer notificationID, Integer userID, String message, String dateSent, String status){
-        if(  Helper.isEmptyOrNull(message)|| Helper.isValidDate(dateSent)|| Helper.isEmptyOrNull(status)){
+
+    public static Notification createNotification(int notificationId, User user, String message, String dateSent, BookingStatus status){
+        int id = Helper.generateId(notificationId);
+        if(  Helper.isEmptyOrNull(message)|| Helper.isValidDate(dateSent)|| status == null){
             return null;
         }
         return new Notification.Builder()
-                .setNotificationID(notificationID)
-                .setUserID(userID)
+                .setNotificationID(id)
+                .setUserID(user.getUserId())
                 .setMessage(message)
                 .setDateSent(LocalDate.parse(dateSent))
                 .setStatus(status)
