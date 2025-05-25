@@ -18,4 +18,5 @@ public interface IBookingRepository extends JpaRepository<Booking, Long> {
     List<Booking> findByPickupLocation(Location pickupLocation);
     List<Booking> findByDropOffLocation(Location dropOffLocation);
     List<Booking> findBookingByCars(Car car);
+    List<Booking> findById(int bookingID);
 }
