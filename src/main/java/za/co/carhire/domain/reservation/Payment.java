@@ -6,15 +6,25 @@ package za.co.carhire.domain.reservation;
  * Due Date: 11/05/2025
  * */
 
+import jakarta.persistence.*;
+
+@Entity
+@Table(name = "payments")
 public class Payment {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int paymentID;
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "booking_id", nullable = false)
     private Booking booking;
+    @Column(nullable = false)
     private double amount;
+    @Column(name = "payment_method", nullable = false, length = 50)
     private String paymentMethod;
 
 
 
-    private Payment(){}
+    protected Payment(){}
     private Payment(Builder builder) {
         this.paymentID = builder.paymentID;
         this.booking = builder.booking;
@@ -44,7 +54,7 @@ public class Payment {
                 '}';
     }
     public static class Builder {
-        private int paymentID;
+        private Integer paymentID;
         private Booking booking;
         private double amount;
         private String paymentMethod;
