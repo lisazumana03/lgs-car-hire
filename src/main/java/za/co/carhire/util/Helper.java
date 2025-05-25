@@ -21,7 +21,7 @@ public class Helper {
         return true;
     }
     public static boolean isValidPolicyNumber(long policyNumber) {
-        if (policyNumber < 1 || policyNumber > 999999999) {
+        if (policyNumber < 1 || policyNumber > 99999999L) {
             return false;
         }
         return true;
@@ -79,6 +79,13 @@ public class Helper {
 
     public static boolean isEmptyOrNull(String str) {
         if (str.isEmpty() ||str == null || str.equalsIgnoreCase("null")) {
+            return true;
+        }
+        return false;
+    }
+
+    public static boolean isEmptyOrNull(int value) {
+        if (value > 0 || isNullOrEmpty("null")) {
             return true;
         }
         return false;

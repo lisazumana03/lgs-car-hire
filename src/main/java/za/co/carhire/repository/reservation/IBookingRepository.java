@@ -11,11 +11,12 @@ import za.co.carhire.domain.reservation.Booking;
 import za.co.carhire.domain.reservation.Location;
 import za.co.carhire.domain.vehicle.Car;
 
-import java.util.List;
+import java.util.Optional;
 
 @Repository
-public interface IBookingRepository extends JpaRepository<Booking, Long> {
-    List<Booking> findByPickupLocation(Location pickupLocation);
-    List<Booking> findByDropOffLocation(Location dropOffLocation);
-    List<Booking> findBookingByCars(Car car);
+public interface IBookingRepository extends JpaRepository<Booking, Integer> {
+    Optional<Booking> findByPickupLocation(Location pickupLocation);
+    Optional<Booking> findByDropOffLocation(Location dropOffLocation);
+    Optional<Booking> findBookingByCars(Car car);
+    Optional<Booking> findById(int bookingID);
 }
