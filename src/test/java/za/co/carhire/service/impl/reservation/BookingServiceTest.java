@@ -15,6 +15,7 @@ import org.mockito.MockitoAnnotations;
 import za.co.carhire.domain.authentication.User;
 import za.co.carhire.domain.reservation.Booking;
 import za.co.carhire.domain.vehicle.Car;
+import za.co.carhire.factory.reservation.BookingFactory;
 import za.co.carhire.repository.reservation.IBookingRepository;
 
 import java.net.CacheRequest;
@@ -22,6 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.when;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class BookingServiceTest {
@@ -30,14 +32,14 @@ class BookingServiceTest {
     private BookingService bookingService;
 
     @Mock
-    private IBookingRepository IBookingRepository;
+    private IBookingRepository bookingRepository;
 
     private Booking booking01;
-    private Booking booking02;
 
     @BeforeEach
     void setUp() {
-        MockitoAnnotations.initMocks(this);
+        MockitoAnnotations.openMocks(this);
+        booking01 = BookingFactory.createBooking(booking01.getBookingID(), booking01.getUser(), booking01.getCar(), booking01.getBookingDateAndTime(), booking01.getStartDate(), booking01.getEndDate(), booking01.getPickupLocation(), booking01.getDropOffLocation(), booking01.getBookingStatus());
     }
 
     @Test
@@ -46,11 +48,13 @@ class BookingServiceTest {
 
     @Test
     void create() {
-
+        when(bookingRepository.save(booking01)).thenReturn(booking01);
+        assertEquals(booking01, bookingService.create(booking01));
     }
 
     @Test
     void read() {
+
     }
 
     @Test
@@ -59,5 +63,6 @@ class BookingServiceTest {
 
     @Test
     void delete() {
+
     }
 }
