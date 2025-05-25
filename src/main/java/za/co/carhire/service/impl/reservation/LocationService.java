@@ -34,7 +34,7 @@ public class LocationService implements ILocationService {
     }
 
     @Override
-    public void delete(Integer integer) {
+    public void delete(int bookingID) {
 
     }
 }

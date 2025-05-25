@@ -13,7 +13,7 @@ Date: 19/05/2025
 import java.util.List;
 
 @Repository
-public interface ILocationRepository extends JpaRepository<Location, Long> {
+public interface ILocationRepository extends JpaRepository<Location, Integer> {
     List<Location> findByPickupLocation(Location pickupLocation);
     List<Location> findByDropOffLocation(Location dropOffLocation);
     List<Location> findByCar(Car car);

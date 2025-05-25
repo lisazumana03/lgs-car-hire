@@ -11,5 +11,5 @@ public interface ILocationService extends IService <Location, Integer> {
     Location create(Location location);
     Location read(int locationID);
     Location update(Location location);
-    boolean delete(int locationID);
+    void delete(int locationID);
 }
