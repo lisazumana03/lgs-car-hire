@@ -1,6 +1,6 @@
 package za.co.carhire.domain.reservation;
+import jakarta.persistence.*;
 import java.time.LocalDateTime;
-import java.util.Date;
 
 /* Invoice.java
  * Invoice POJO class
@@ -8,18 +8,34 @@ import java.util.Date;
  * Due Date: 11/05/2025
  * */
 
+@Entity
+@Table(name = "invoices")
 public class Invoice {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int invoiceID;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "payment_id", nullable = false)
     private Payment payment;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "booking_id", nullable = false)
     private Booking booking;
+    @Column(name = "issue_date", nullable = false)
     private LocalDateTime issueDate;
+    @Column(name = "due_date", nullable = false)
     private LocalDateTime dueDate;
+    @Column(name = "sub_total", nullable = false)
     private double subTotal;
+    @Column(name = "tax_amount", nullable = false)
     private double taxAmount;
+    @Column(name = "total_amount", nullable = false)
     private double totalAmount;
+    @Column(nullable = false, length = 20)
     private String status;
 
-    private Invoice(){}
+    protected Invoice(){}
 
     private Invoice(Builder builder){
         this.invoiceID = builder.invoiceID;
