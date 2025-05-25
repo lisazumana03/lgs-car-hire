@@ -29,7 +29,13 @@ class BookingFactoryTest {
         User user = new User();
 
         List<Car> cars = new ArrayList<>();
-        cars.add(new Car());
+        Car car = new Car.Builder()
+                .setCarID(12)
+                .setModel("Benz")
+                .setAvailability(true)
+                .setRentalPrice(4500.00)
+                .build();
+        cars.add(car);
 
         LocalDateTime bookingDateAndTime = LocalDateTime.now();
 

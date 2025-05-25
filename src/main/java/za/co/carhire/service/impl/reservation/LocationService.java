@@ -7,6 +7,8 @@ import za.co.carhire.repository.reservation.ILocationRepository;
 import za.co.carhire.service.reservation.ILocationService;
 
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /*
 Lisakhanya Zumana (230864821)
@@ -20,8 +22,8 @@ public class LocationService implements ILocationService {
     private ILocationRepository locationRepository;
 
     @Override
-    public List<Location> getLocations() {
-        return List.of();
+    public Set<Location> getLocations() {
+        return locationRepository.findAll().stream().collect(Collectors.toSet());
     }
 
     @Override
