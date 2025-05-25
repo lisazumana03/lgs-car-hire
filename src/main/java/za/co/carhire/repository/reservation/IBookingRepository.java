@@ -11,6 +11,7 @@ import za.co.carhire.domain.reservation.Booking;
 import za.co.carhire.domain.reservation.Location;
 import za.co.carhire.domain.vehicle.Car;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -19,4 +20,5 @@ public interface IBookingRepository extends JpaRepository<Booking, Integer> {
     Optional<Booking> findByDropOffLocation(Location dropOffLocation);
     Optional<Booking> findBookingByCars(Car car);
     Optional<Booking> findById(int bookingID);
+    List<Booking> findAll();
 }
