@@ -1,18 +1,21 @@
 package za.co.carhire.service.reservation;
 
+/* IInvoiceService.java
+ * Sanele Zondi (221602011)
+ * Due Date: 25/05/2025
+ * */
+
 import za.co.carhire.domain.reservation.Invoice;
 import za.co.carhire.service.IService;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 
 public interface IInvoiceService extends IService<Invoice, Integer> {
-    List<Invoice> getInvoicesByBooking(Integer bookingId);
-    List<Invoice> getInvoicesByStatus(String status);
-    boolean updateInvoiceStatus(Integer invoiceId, String status);
-    Invoice generateInvoice(Integer paymentId, Integer bookingId);
-    List<Invoice> getOverdueInvoices();
-    double calculateSubTotal(Integer bookingId);
-    double calculateTaxAmount(Integer bookingId);
-    double calculateTotalAmount(Integer bookingId);
+    Set<Invoice> getInvoices();
+    Invoice create(Invoice invoice);
+    Invoice read(int invoiceID);
+    Invoice update(Invoice invoice);
+    void delete(int invoiceID);
 }
