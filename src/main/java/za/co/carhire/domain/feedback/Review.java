@@ -5,14 +5,21 @@ Olwethu Tshingo - 222634383
 Date: 10 May 2025
  */
 
-public class Review {
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+
+import java.io.Serializable;
+
+@Entity
+public class Review implements Serializable {
+    @Id
     protected int reviewID;
     protected int userID;
     protected int carID;
     protected int rating;
     protected String comment;
 
-    private Review() {
+    public Review() {
     }
 
     private Review(Builder builder) {
