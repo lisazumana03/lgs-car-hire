@@ -1,6 +1,7 @@
 package za.co.carhire.factory.feedback;
 
 import org.junit.jupiter.api.Test;
+import za.co.carhire.domain.authentication.User;
 import za.co.carhire.domain.feedback.Review;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -9,7 +10,7 @@ public class ReviewFactoryTest {
 
     @Test
     public void testCreateReviewValid() {
-        Review review = ReviewFactory.createReview(1, 101, 201, 4, "Great car, smooth ride.");
+        Review review = ReviewFactory.createReview(1, new User(), 201, 4, "Great car, smooth ride.");
 
         assertNotNull(review);
         assertEquals(1, review.getReviewID());
@@ -19,7 +20,7 @@ public class ReviewFactoryTest {
 
     @Test
     public void testCreateReviewInvalid() {
-        Review review = ReviewFactory.createReview(-1, 101, 201, 4, "Nice");  // Invalid reviewID
+        Review review = ReviewFactory.createReview(-1, new User(), 201, 4, "Nice");  // Invalid reviewID
         assertNull(review);
     }
 

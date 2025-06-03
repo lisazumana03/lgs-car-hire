@@ -1,4 +1,5 @@
 package za.co.carhire.factory.feedback;
+import za.co.carhire.domain.authentication.User;
 import za.co.carhire.domain.feedback.Review;
 import za.co.carhire.util.Helper;
 
@@ -10,9 +11,8 @@ Date: 14 May 2025
 public class ReviewFactory {
 
     //Create Review
-    public static Review createReview(int reviewID,int userID,int carID ,int rating, String comment){
+    public static Review createReview(int reviewID, User user, int carID , int rating, String comment){
         if(Helper.isWithinBoundary(reviewID)||
-                Helper.isWithinBoundary(userID) ||
                 Helper.isWithinBoundary(carID)||
                 Helper.isRating(rating) ||
                 Helper.isNullOrEmpty(comment)){
@@ -20,7 +20,7 @@ public class ReviewFactory {
         }else{
             return new Review.Builder()
                     .setReviewID(reviewID)
-                    .setUserID(userID)
+                    .setUser(user)
                     .setCarID(carID)
                     .setRating(rating)
                     .setComment(comment)
