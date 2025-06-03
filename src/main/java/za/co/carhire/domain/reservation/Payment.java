@@ -14,8 +14,7 @@ public class Payment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int paymentID;
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "booking_id", nullable = false)
+    @OneToOne(mappedBy = "payment")
     private Booking booking;
     @Column(nullable = false)
     private double amount;
