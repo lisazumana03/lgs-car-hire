@@ -5,8 +5,8 @@ Olwethu Tshingo - 222634383
 Date: 10 May 2025
  */
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+import za.co.carhire.domain.authentication.User;
 
 import java.io.Serializable;
 
@@ -14,7 +14,9 @@ import java.io.Serializable;
 public class Review implements Serializable {
     @Id
     protected int reviewID;
-    protected int userID;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    protected User user;
     protected int carID;
     protected int rating;
     protected String comment;
@@ -24,7 +26,7 @@ public class Review implements Serializable {
 
     private Review(Builder builder) {
         this.reviewID = builder.reviewID;
-        this.userID = builder.userID;
+        this.user = builder.user;
         this.carID = builder.carID;
         this.rating = builder.rating;
         this.comment = builder.comment;
@@ -34,8 +36,8 @@ public class Review implements Serializable {
         return reviewID;
     }
 
-    public int getUserID() {
-        return userID;
+    public User getUser() {
+        return user;
     }
 
     public int getCarID() {
@@ -54,7 +56,7 @@ public class Review implements Serializable {
     public String toString() {
         return "Review{" +
                 "reviewID=" + reviewID +
-                ", userID=" + userID +
+                ", userID=" + user +
                 ", carID=" + carID +
                 ", rating=" + rating +
                 ", comment='" + comment + '\'' +
@@ -63,7 +65,7 @@ public class Review implements Serializable {
 
     public static class Builder{
         private int reviewID;
-        private int userID;
+        private User user;
         private int carID;
         private int rating;
         private String comment;
@@ -73,8 +75,8 @@ public class Review implements Serializable {
             return this;
         }
 
-        public Builder setUserID(int userID) {
-            this.userID = userID;
+        public Builder setUserID(User userID) {
+            this.user = userID;
             return this;
         }
 
@@ -96,7 +98,7 @@ public class Review implements Serializable {
         public Review.Builder copy(Review review){
             this.reviewID = review.getReviewID();
             this.carID = review.getCarID();
-            this.userID = review.getUserID();
+            this.user = review.getUser();
             this.rating = review.getRating();
             this.comment = review.getComment();
             return this;
