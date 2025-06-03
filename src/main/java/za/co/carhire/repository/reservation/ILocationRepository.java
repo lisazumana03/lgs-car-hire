@@ -16,9 +16,5 @@ import java.util.List;
 @Repository
 public interface ILocationRepository extends JpaRepository<Location, Integer> {
     List<Location> findByPickUpLocations(List<Booking> pickupLocation);
-
     List<Location> findByDropOffLocations(List<Booking> dropOffLocations);
-
-    List<Location> findByCars(List<Car> cars);
-    List<Location> findByStatus(String bookingStatus);
 }
