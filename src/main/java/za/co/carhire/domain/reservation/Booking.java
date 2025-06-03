@@ -29,7 +29,7 @@ public class Booking implements Serializable {
     private LocalDateTime bookingDateAndTime;
     private LocalDateTime startDate;
     private LocalDateTime endDate;
-    @OneToOne(mappedBy = "booking", cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "payment", cascade = CascadeType.ALL)
     private Payment payment;
     @ManyToOne
     @JoinColumn(name = "pick_up_location")
