@@ -75,8 +75,8 @@ public class Review implements Serializable {
             return this;
         }
 
-        public Builder setUserID(User userID) {
-            this.user = userID;
+        public Builder setUser(User user) {
+            this.user = user;
             return this;
         }
 
