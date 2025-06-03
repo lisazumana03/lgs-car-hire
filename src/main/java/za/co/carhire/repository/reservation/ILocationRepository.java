@@ -2,6 +2,7 @@ package za.co.carhire.repository.reservation;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
+import za.co.carhire.domain.reservation.Booking;
 import za.co.carhire.domain.reservation.Location;
 import za.co.carhire.domain.vehicle.Car;
 
@@ -14,8 +15,10 @@ import java.util.List;
 
 @Repository
 public interface ILocationRepository extends JpaRepository<Location, Integer> {
-    List<Location> findByPickupLocation(Location pickupLocation);
-    List<Location> findByDropOffLocation(Location dropOffLocation);
-    List<Location> findByCar(Car car);
+    List<Location> findByPickUpLocations(List<Booking> pickupLocation);
+
+    List<Location> findByDropOffLocations(List<Booking> dropOffLocations);
+
+    List<Location> findByCars(List<Car> cars);
     List<Location> findByStatus(String bookingStatus);
 }

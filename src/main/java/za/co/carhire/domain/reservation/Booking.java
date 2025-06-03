@@ -19,7 +19,6 @@ import java.util.List;
 @Table(name = "booking")
 public class Booking implements Serializable {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     private int bookingID;
     @ManyToOne
     @JoinColumn(name = "user_id")
@@ -29,13 +28,13 @@ public class Booking implements Serializable {
     private LocalDateTime bookingDateAndTime;
     private LocalDateTime startDate;
     private LocalDateTime endDate;
-    @OneToOne(mappedBy = "payment", cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "booking", cascade = CascadeType.ALL)
     private Payment payment;
     @ManyToOne
-    @JoinColumn(name = "pick_up_location")
+    @JoinColumn(name = "pickup_location_id")
     private Location pickupLocation;
     @ManyToOne
-    @JoinColumn(name = "drop_off_location")
+    @JoinColumn(name = "dropoff_location_id")
     private Location dropOffLocation;
     private String bookingStatus;
 
