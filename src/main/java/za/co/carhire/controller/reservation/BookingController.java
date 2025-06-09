@@ -13,6 +13,7 @@ Date: 25/05/2025
 
 @RestController
 @RequestMapping("/booking")
+@CrossOrigin(origins = "http://localhost:5173/booking")
 public class BookingController {
     @Autowired
     private BookingService bookingService;

@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:5173/main")
-@RequestMapping("/lgs-car-hire")
+@RequestMapping("/api/lgs-car-hire")
 public class HomeController {
     @RequestMapping("/main")
     public String home() {
