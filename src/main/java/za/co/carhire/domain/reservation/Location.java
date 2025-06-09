@@ -27,8 +27,6 @@ public class Location implements Serializable {
     private String country;
     private Short postalCode;
 
-    @OneToMany(mappedBy = "cars")
-    private List<Car> cars;
     @OneToMany(mappedBy = "pickupLocation")
     private List<Booking> pickUpLocations;
     @OneToMany(mappedBy = "dropOffLocation")
@@ -46,7 +44,6 @@ public class Location implements Serializable {
         this.provinceOrState = builder.provinceOrState;
         this.country = builder.country;
         this.postalCode = builder.postalCode;
-        this.cars = builder.cars;
         this.pickUpLocations = builder.pickUpLocations;
         this.dropOffLocations = builder.dropOffLocations;
     }
@@ -77,10 +74,6 @@ public class Location implements Serializable {
 
     public Short getPostalCode() {
         return postalCode;
-    }
-
-    public List<Car> getCars() {
-        return cars;
     }
 
     public List<Booking> getPickUpLocations() {
@@ -114,7 +107,6 @@ public class Location implements Serializable {
         private String provinceOrState;
         private String country;
         private Short postalCode;
-        private List<Car> cars;
         private List<Booking> pickUpLocations;
         private List<Booking> dropOffLocations;
 
@@ -146,10 +138,6 @@ public class Location implements Serializable {
             this.postalCode = postalCode;
             return this;
         }
-        public Builder setCars(List<Car> cars) {
-            this.cars = cars;
-            return this;
-        }
         public Builder setPickUpLocations(List<Booking> pickUpLocations) {
             this.pickUpLocations = pickUpLocations;
             return this;
@@ -167,7 +155,6 @@ public class Location implements Serializable {
             this.provinceOrState = location.provinceOrState;
             this.country = location.country;
             this.postalCode = location.postalCode;
-            this.cars = location.cars;
             this.pickUpLocations = location.pickUpLocations;
             this.dropOffLocations = location.dropOffLocations;
             return this;

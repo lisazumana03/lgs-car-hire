@@ -7,5 +7,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class LGsCarHireSpringMain {
     public static void main(String[] args) {
         SpringApplication.run(LGsCarHireSpringMain.class, args);
+        System.out.println("LG's Car Hire is open for business.");
     }
 }
