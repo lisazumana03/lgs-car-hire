@@ -2,7 +2,7 @@ package za.co.carhire.domain.vehicle;
 // Imtiyaaz Waggie 219374759//
 //date:10/05/2025 //
 
-import za.co.carhire.domain.Insurance;
+import za.co.carhire.domain.reservation.Insurance;
 import za.co.carhire.domain.reservation.Booking;
 
 import jakarta.persistence.*;
@@ -45,6 +45,8 @@ public class Car implements Serializable {
     @JoinColumn(name = "booking_id")
     private Booking booking;
 
+    public Car() {
+    }
 
     // Private constructor for Builder pattern
     private Car(Builder builder) {
