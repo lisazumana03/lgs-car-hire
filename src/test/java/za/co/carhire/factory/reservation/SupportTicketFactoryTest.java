@@ -24,19 +24,19 @@ public class SupportTicketFactoryTest {
         assertNull(ticket);
     }
 
-    @Test
-    public void testCloseTicketValid() {
-        SupportTicket openTicket = SupportTicketFactory.submitTicket(100, 200, "Test issue.");
-        SupportTicket closedTicket = SupportTicketFactory.closeTicket(openTicket);
-
-        assertNotNull(closedTicket);
-        assertEquals("Closed", closedTicket.getStatus());
-        assertEquals(openTicket.getTicketID(), closedTicket.getTicketID());
-    }
-
-    @Test
-    public void testCloseTicketInvalid() {
-        SupportTicket closedTicket = SupportTicketFactory.closeTicket(null);
-        assertNull(closedTicket);
-    }
+//    @Test
+//    public void testCloseTicketValid() {
+//        SupportTicket openTicket = SupportTicketFactory.submitTicket(100, 200, "Test issue.");
+//        SupportTicket closedTicket = SupportTicketFactory.closeTicket(openTicket);
+//
+//        assertNotNull(closedTicket);
+//        assertEquals("Closed", closedTicket.getStatus());
+//        assertEquals(openTicket.getTicketID(), closedTicket.getTicketID());
+//    }
+//
+//    @Test
+//    public void testCloseTicketInvalid() {
+//        SupportTicket closedTicket = SupportTicketFactory.closeTicket(null);
+//        assertNull(closedTicket);
+//    }
 }

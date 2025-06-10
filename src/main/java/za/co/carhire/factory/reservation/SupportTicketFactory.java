@@ -30,7 +30,7 @@ public class SupportTicketFactory {
 
     //Ticket Closure
 
-    public static SupportTicket closeTicket(SupportTicket ticketID) {
+    public static SupportTicket closeTicket(int ticketID) {
         if (Helper.isWithinBoundary(ticketID)) {
             return null;
         }

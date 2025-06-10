@@ -6,12 +6,18 @@ Sibulele Gift Nohamba
 Date: 10/05/2025
  */
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToOne;
 import za.co.carhire.domain.vehicle.Car;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class Insurance {
+@Entity
+public class Insurance implements Serializable {
     // Primary attributes
+    @Id
     private int insuranceID;
     private Date insuranceStartDate;
     private double insuranceCost;
@@ -21,6 +27,7 @@ public class Insurance {
     private String mechanic;
 
     // Relationship with Car
+    @OneToOne
     private Car car;
 
     // Default constructor

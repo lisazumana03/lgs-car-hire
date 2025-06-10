@@ -3,13 +3,19 @@ package za.co.carhire.domain.reservation;
  * Sibulele Gift Nohamba (220374686)
  * Date: 11/05/2025
  * */
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
 import za.co.carhire.domain.vehicle.Car;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class Maintenance {
+@Entity
+public class Maintenance implements Serializable {
     
     // Primary attributes
+    @Id
     private int maintenanceID;
     private Date serviceDate;
     private String description;
@@ -18,6 +24,7 @@ public class Maintenance {
     private String mechanic;
 
     // Relationship with Car
+    @ManyToOne
     private Car car;
     
     // Default constructor
