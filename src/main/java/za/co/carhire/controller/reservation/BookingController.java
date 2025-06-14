@@ -1,6 +1,8 @@
 package za.co.carhire.controller.reservation;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import za.co.carhire.domain.reservation.Booking;
 import za.co.carhire.factory.reservation.BookingFactory;
@@ -19,11 +21,8 @@ public class BookingController {
     private BookingService bookingService;
 
     @PostMapping("/create")
-    public Booking create(@RequestBody Booking booking) {
-        Booking booking1 = BookingFactory.createBooking(booking.getBookingID(), booking.getUser(), booking.getCar(),
-                booking.getBookingDateAndTime(), booking.getStartDate(), booking.getEndDate(),
-                booking.getPickupLocation(), booking.getDropOffLocation(), booking.getBookingStatus());
-        return bookingService.create(booking);
+    public ResponseEntity<Booking> create(@RequestBody Booking booking) {
+        return new ResponseEntity<>(bookingService.create(booking), HttpStatus.CREATED);
     }
     @GetMapping("/read{id}")
     public Booking read(@PathVariable int id){
