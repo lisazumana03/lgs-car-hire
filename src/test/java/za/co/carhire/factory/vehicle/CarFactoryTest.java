@@ -1,7 +1,7 @@
 package za.co.carhire.factory.vehicle;
 
 import org.junit.jupiter.api.Test;
-import za.co.carhire.domain.Insurance;
+import za.co.carhire.domain.reservation.Insurance;
 import za.co.carhire.domain.reservation.Booking;
 import za.co.carhire.domain.vehicle.Car;
 import za.co.carhire.domain.vehicle.CarType;
