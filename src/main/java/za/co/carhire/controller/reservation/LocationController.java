@@ -13,6 +13,7 @@ Date: 25/05/2025
 
 @RestController
 @RequestMapping("/location")
+@CrossOrigin(origins = "http://localhost:3046/create-location")
 public class LocationController {
 
     @Autowired

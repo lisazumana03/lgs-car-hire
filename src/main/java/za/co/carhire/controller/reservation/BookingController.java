@@ -15,7 +15,7 @@ Date: 25/05/2025
 
 @RestController
 @RequestMapping("/booking")
-@CrossOrigin(origins = "http://localhost:5173/booking")
+@CrossOrigin(origins = "http://localhost:3046/make-booking")
 public class BookingController {
     @Autowired
     private BookingService bookingService;
@@ -34,9 +34,10 @@ public class BookingController {
         return bookingService.update(booking);
     }
 
-    @GetMapping("/delete/{id}")
-    public void delete(@PathVariable int id) {
-        bookingService.delete(id);
+    @GetMapping("/cancel{id}")
+    public ResponseEntity<Booking> cancel(@PathVariable int id){
+        bookingService.cancelBooking(id);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
 }
