@@ -12,15 +12,10 @@ import org.junit.jupiter.api.TestMethodOrder;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import za.co.carhire.domain.authentication.User;
 import za.co.carhire.domain.reservation.Booking;
-import za.co.carhire.domain.vehicle.Car;
 import za.co.carhire.factory.reservation.BookingFactory;
 import za.co.carhire.repository.reservation.IBookingRepository;
-
-import java.net.CacheRequest;
-import java.util.ArrayList;
-import java.util.List;
+import za.co.carhire.service.reservation.impl.BookingService;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;

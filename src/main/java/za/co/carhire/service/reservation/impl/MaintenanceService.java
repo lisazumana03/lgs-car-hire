@@ -1,4 +1,4 @@
-package za.co.carhire.service.impl.reservation;
+package za.co.carhire.service.reservation.impl;
 /*
 Sibulele Gift Nohamba
 220374686

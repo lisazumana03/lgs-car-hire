@@ -1,4 +1,4 @@
-package za.co.carhire.service.impl.reservation;
+package za.co.carhire.service.reservation.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,9 +12,7 @@ Lisakhanya Zumana (230864821)
 Date: 24/05/2025
  */
 
-import java.awt.print.Book;
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
