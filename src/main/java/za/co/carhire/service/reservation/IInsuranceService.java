@@ -5,6 +5,12 @@ Sibulele Gift Nohamba
 Date: 24/05/2025
  */
 
-public interface IInsuranceService {
+import za.co.carhire.domain.reservation.Insurance;
 
+import java.util.List;
+
+public interface IInsuranceService {
+    Insurance assignInsurance(Insurance insurance);
+    List<Insurance> getAllInsurances();
+    void deleteInsurance(Insurance insurance);
 }
