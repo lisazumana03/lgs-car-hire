@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Optional;
 @Repository
 public interface IUserRepository extends JpaRepository<User, Integer> {
-    List<User> findUserById(int idNumber);
+    List<User> findUserByIdNumber(Long idNumber);
 
 
 

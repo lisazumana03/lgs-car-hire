@@ -7,6 +7,7 @@ import za.co.carhire.repository.authentication.IUserRepository;
 import za.co.carhire.service.authentication.UserService;
 
 import java.util.List;
+
 @Service
 public class UserServiceImpl implements UserService {
     @Autowired
@@ -45,7 +46,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<User> findByIdNumber(Integer idNumber) {
-        return repository.findUserById(idNumber);
+    public List<User> findByIdNumber(Long idNumber) {
+        return repository.findUserByIdNumber(idNumber);
     }
 }

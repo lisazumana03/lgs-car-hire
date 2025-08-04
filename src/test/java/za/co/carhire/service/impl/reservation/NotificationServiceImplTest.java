@@ -17,28 +17,24 @@ import java.time.LocalDate;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
+
 @SpringBootTest
 class NotificationServiceImplTest {
     private static NotificationServiceImpl service;
-    private static UserFactory userFactory;
-    private static User user = userFactory.buildUser(
-            1001,
-            920123456789L,
+    private static User user = UserFactory.createUser(
+            "920123456789",
             "John Doe",
             "john@example.com",
-            LocalDate.of(1992, 1, 1),
+            "1992-01-01",
             "0711234567",
             "pass123",
-            "L123456"
-    );
+            "L123456");
 
     private static Notification notification = NotificationFactory.createNotification(
-            1,
             user,
             "Welcome to the system",
             LocalDate.now().toString(),
-            BookingStatus.BOOKED
-    );
+            BookingStatus.BOOKED);
 
     @Test
     @Order(1)
@@ -59,7 +55,7 @@ class NotificationServiceImplTest {
     @Test
     @Order(3)
     void findByUserId() {
-        List<Notification> userNotifs = service.findByUserId(1001);
+        List<Notification> userNotifs = service.findByUserId(1001L);
         assertFalse(userNotifs.isEmpty());
         System.out.println("Found by userId: " + userNotifs);
     }
@@ -67,7 +63,7 @@ class NotificationServiceImplTest {
     @Test
     @Order(4)
     void findByUserIdAndStatus() {
-        List<Notification> notifs = service.findByUserIdAndStatus(1001, "BOOKED");
+        List<Notification> notifs = service.findByUserIdAndStatus(1001L, "BOOKED");
         assertFalse(notifs.isEmpty());
         System.out.println("Found by userId and status: " + notifs);
     }

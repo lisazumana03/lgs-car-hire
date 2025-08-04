@@ -15,8 +15,8 @@ import za.co.carhire.domain.reservation.Notification;
 import java.time.LocalDate;
 
 import static org.junit.jupiter.api.Assertions.*;
-class NotificationFactoryTest {
 
+class NotificationFactoryTest {
 
     @Test
     void createNotification() {
@@ -27,11 +27,10 @@ class NotificationFactoryTest {
 
         // Create Notification using the factory
         Notification notification = NotificationFactory.createNotification(
-                12121,                        // notificationID
-                user,                         // User object
-                "Welcome to Our App!",        // message
-                "2025-05-18",                 // dateSent
-                BookingStatus.BOOKED          // status
+                user, // User object
+                "Welcome to Our App!",
+                "2025-05-18",
+                BookingStatus.BOOKED
         );
 
         assertNotNull(notification);

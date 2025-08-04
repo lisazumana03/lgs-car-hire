@@ -11,11 +11,13 @@ import jakarta.persistence.*;
 import za.co.carhire.domain.authentication.User;
 
 import java.time.LocalDate;
+
 @Entity
 @Table(name = "Notifications")
 public class Notification {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer notificationID;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -24,7 +26,6 @@ public class Notification {
 
     @Column(nullable = false)
     private String message;
-
 
     @Column(nullable = false)
     private LocalDate dateSent;
@@ -48,20 +49,40 @@ public class Notification {
         return notificationID;
     }
 
+    public void setNotificationID(Integer notificationID) {
+        this.notificationID = notificationID;
+    }
+
     public User getUser() {
         return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public String getMessage() {
         return message;
     }
 
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
     public LocalDate getDateSent() {
         return dateSent;
     }
 
+    public void setDateSent(LocalDate dateSent) {
+        this.dateSent = dateSent;
+    }
+
     public BookingStatus getStatus() {
         return status;
+    }
+
+    public void setStatus(BookingStatus status) {
+        this.status = status;
     }
 
     @Override
@@ -75,7 +96,7 @@ public class Notification {
                 '}';
     }
 
-    public static class Builder{
+    public static class Builder {
         private Integer notificationID;
 
         private User user;;
@@ -91,8 +112,8 @@ public class Notification {
             return this;
         }
 
-        public Builder setUserID(Integer user) {
-            this.user= user;
+        public Builder setUserID(User user) {
+            this.user = user;
             return this;
         }
 
@@ -111,7 +132,7 @@ public class Notification {
             return this;
         }
 
-        public Builder copy(Notification notification){
+        public Builder copy(Notification notification) {
             this.notificationID = notification.notificationID;
             this.user = notification.user;
             this.message = notification.message;
@@ -121,10 +142,9 @@ public class Notification {
 
         }
 
-        public Notification build(){
+        public Notification build() {
             return new Notification(this);
         }
-
 
     }
 }

@@ -1,7 +1,7 @@
 package za.co.carhire.factory.reservation;
-/* User.java
+/* NotificationFactory.java
 
-     User POJO class
+     NotificationFactory class
 
      Author: Bonga Velem (220052379)
 
@@ -15,23 +15,16 @@ import za.co.carhire.domain.reservation.Notification;
 import java.time.LocalDate;
 
 public class NotificationFactory {
-    /*validationHelper.generateId(notificationID)|| validationHelper.generateId(userID) ||*/
 
-    public static Notification createNotification(int notificationId, User user, String message, String dateSent, BookingStatus status){
-        int id = Helper.generateId(notificationId);
-        if(  Helper.isEmptyOrNull(message)|| Helper.isValidDate(dateSent)|| status == null){
+    public static Notification createNotification(User user, String message, String dateSent, BookingStatus status){
+        if(user == null || Helper.isEmptyOrNull(message) || !Helper.isValidDate(dateSent) || status == null){
             return null;
         }
         return new Notification.Builder()
-                .setNotificationID(id)
-                .setUserID(user.getUserId())
+                .setUserID(user)
                 .setMessage(message)
                 .setDateSent(LocalDate.parse(dateSent))
                 .setStatus(status)
                 .build();
-
-
     }
-
-
 }

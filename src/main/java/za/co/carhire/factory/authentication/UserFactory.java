@@ -19,9 +19,9 @@ public class UserFactory {
 
 
         if (Helper.isEmptyOrNull(name) ||
-                Helper.isValidNationalIDNumber(idNumber)||
+                !Helper.isValidNationalIDNumber(idNumber) ||
                 !Helper.isValidEmail(email) ||
-                Helper.isValidDate(dateOfBirth)||
+                !Helper.isValidDate(dateOfBirth) ||
                 Helper.isEmptyOrNull(phoneNumber) ||
                 Helper.isEmptyOrNull(password) ||
                 Helper.isEmptyOrNull(licenseNumber)) {
@@ -31,7 +31,7 @@ public class UserFactory {
 
         return new User.Builder()
                 .setName(name)
-                .setIdNumber(Integer.valueOf(idNumber))
+                .setIdNumber(Long.valueOf(idNumber))
                 .setEmail(email)
                 .setDateOfBirth(LocalDate.parse(dateOfBirth))
                 .setPhoneNumber(phoneNumber)

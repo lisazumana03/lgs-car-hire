@@ -7,6 +7,7 @@ import za.co.carhire.repository.reservation.INotificationRepository;
 import za.co.carhire.service.reservation.NotificationService;
 
 import java.util.List;
+
 @Service
 public class NotificationServiceImpl implements NotificationService {
 
@@ -46,12 +47,12 @@ public class NotificationServiceImpl implements NotificationService {
     }
 
     @Override
-    public List<Notification> findByUserId(Integer userId) {
-        return repository.findByUserId(userId);
+    public List<Notification> findByUserId(Long userId) {
+        return repository.findByUser_IdNumber(userId);
     }
 
     @Override
-    public List<Notification> findByUserIdAndStatus(Integer userId, String status) {
-        return repository.findByUserIdAndStatus(userId, status);
+    public List<Notification> findByUserIdAndStatus(Long userId, String status) {
+        return repository.findByUser_IdNumberAndStatus(userId, status);
     }
 }
