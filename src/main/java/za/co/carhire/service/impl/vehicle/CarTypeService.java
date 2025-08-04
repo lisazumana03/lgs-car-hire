@@ -15,41 +15,41 @@ import java.util.List;
 import java.util.Set;
 
 @Service
-public abstract class CarTypeService implements ICarTypeService {
+public class CarTypeService implements ICarTypeService {
 
-    @Autowired
-    private ICarTypeRepository carTypeRepository;
+  @Autowired
+  private ICarTypeRepository carTypeRepository;
 
-    @Override
-    public Set<CarType> getCarTypes() {
-        return Set.copyOf(this.carTypeRepository.findAll());
+  @Override
+  public Set<CarType> getCarTypes() {
+    return Set.copyOf(this.carTypeRepository.findAll());
+  }
+
+  @Override
+  public List<CarType> getCarTypesByFuelType(String fuelType) {
+    return this.carTypeRepository.findByFuelType(fuelType).map(List::of).orElse(List.of());
+  }
+
+  @Override
+  public CarType create(CarType carType) {
+    return this.carTypeRepository.save(carType);
+  }
+
+  @Override
+  public CarType read(Integer carTypeId) {
+    return this.carTypeRepository.findById(carTypeId).orElse(null);
+  }
+
+  @Override
+  public CarType update(CarType carType) {
+    if (this.carTypeRepository.existsById(carType.getCarTypeID())) {
+      return this.carTypeRepository.save(carType);
     }
+    return null;
+  }
 
-    @Override
-    public List<CarType> getCarTypesByFuelType(String fuelType) {
-        return this.carTypeRepository.findByFuelType(fuelType).map(List::of).orElse(List.of());
-    }
-
-    @Override
-    public CarType create(CarType carType) {
-        return this.carTypeRepository.save(carType);
-    }
-
-    @Override
-    public CarType read(int carTypeId) {
-        return this.carTypeRepository.findById(carTypeId).orElse(null);
-    }
-
-    @Override
-    public CarType update(CarType carType) {
-        if (this.carTypeRepository.existsById(carType.getCarTypeID())) {
-            return this.carTypeRepository.save(carType);
-        }
-        return null;
-    }
-
-    @Override
-    public void delete(Integer carTypeId) {
-        this.carTypeRepository.deleteById(carTypeId);
-    }
+  @Override
+  public void delete(Integer carTypeId) {
+    this.carTypeRepository.deleteById(carTypeId);
+  }
 }

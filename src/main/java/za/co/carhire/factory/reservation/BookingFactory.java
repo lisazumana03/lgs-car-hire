@@ -15,44 +15,48 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public class BookingFactory {
-    public static Booking createBooking(int bookingID, User user, List<Car>cars, LocalDateTime bookingDateAndTime, LocalDateTime startDate, LocalDateTime endDate, Location pickupLocation, Location dropOffLocation, String bookingStatus){
-        if(Helper.isNullOrEmpty(bookingStatus)){
-            return null ;
-        }
-        return new Booking.Builder()
-                .setBookingID(bookingID)
-                .setUser(user)
-                .setCar(cars)
-                .setBookingDateAndTime(bookingDateAndTime)
-                .setStartDate(startDate)
-                .setEndDate(endDate)
-                .setPickupLocation(pickupLocation)
-                .setDropOffLocation(dropOffLocation)
-                .setBookingStatus("Your booking has been created.")
-                .build();
+  public static Booking createBooking(int bookingID, User user, List<Car> cars, LocalDateTime bookingDateAndTime,
+      LocalDateTime startDate, LocalDateTime endDate, Location pickupLocation, Location dropOffLocation,
+      String bookingStatus) {
+    if (Helper.isNullOrEmpty(bookingStatus)) {
+      return null;
     }
+    return new Booking.Builder()
+        .setBookingID(bookingID)
+        .setUser(user)
+        .setCar(cars)
+        .setBookingDateAndTime(bookingDateAndTime)
+        .setStartDate(startDate)
+        .setEndDate(endDate)
+        .setPickupLocation(pickupLocation)
+        .setDropOffLocation(dropOffLocation)
+        .setBookingStatus("Your booking has been created.")
+        .build();
+  }
 
-    public static Booking cancelBooking(int bookingID, User user, LocalDateTime bookingDateAndTime,String bookingStatus){
-        if (Helper.isNullOrEmpty(bookingStatus)){
-            return null;
-        }
-        return new Booking.Builder()
-                .setBookingID(bookingID)
-                .setUser(user)
-                .setBookingDateAndTime(bookingDateAndTime)
-                .setBookingStatus("Booking has been cancelled.")
-                .build();
+  public static Booking cancelBooking(int bookingID, User user, LocalDateTime bookingDateAndTime,
+      String bookingStatus) {
+    if (Helper.isNullOrEmpty(bookingStatus)) {
+      return null;
     }
-    public static Booking confirmBooking(int bookingID, User user, LocalDateTime bookingDateAndTime,String bookingStatus){
-        if(Helper.isNullOrEmpty(bookingStatus)){
-            return null;
-        }
-        return new Booking.Builder()
-                .setBookingID(bookingID)
-                .setUser(user)
-                .setBookingDateAndTime(bookingDateAndTime)
-                .setBookingStatus("Booking confirmed")
-                .build();
-    }
+    return new Booking.Builder()
+        .setBookingID(bookingID)
+        .setUser(user)
+        .setBookingDateAndTime(bookingDateAndTime)
+        .setBookingStatus("Booking has been cancelled.")
+        .build();
+  }
 
+  public static Booking confirmBooking(int bookingID, User user, LocalDateTime bookingDateAndTime,
+      String bookingStatus) {
+    if (Helper.isNullOrEmpty(bookingStatus)) {
+      return null;
+    }
+    return new Booking.Builder()
+        .setBookingID(bookingID)
+        .setUser(user)
+        .setBookingDateAndTime(bookingDateAndTime)
+        .setBookingStatus("Booking confirmed")
+        .build();
+  }
 }

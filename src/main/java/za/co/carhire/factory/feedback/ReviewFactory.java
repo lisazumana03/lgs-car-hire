@@ -11,9 +11,9 @@ public class ReviewFactory {
 
     //Create Review
     public static Review createReview(int reviewID,int userID,int carID ,int rating, String comment){
-        if(Helper.isWithinBoundary(reviewID)||
+        if(Helper.isWithinBoundary(reviewID) ||
                 Helper.isWithinBoundary(userID) ||
-                Helper.isWithinBoundary(carID)||
+                Helper.isWithinBoundary(carID) ||
                 Helper.isRating(rating) ||
                 Helper.isNullOrEmpty(comment)){
             return null;
@@ -39,4 +39,4 @@ public class ReviewFactory {
                 .setComment("This review has been deleted.")
                 .build();
     }
-    }
+}

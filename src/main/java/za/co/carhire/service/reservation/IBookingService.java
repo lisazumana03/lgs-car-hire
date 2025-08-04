@@ -13,10 +13,13 @@ import java.util.Set;
 
 public interface IBookingService {
 
-    Set<Booking> getBookings();
+  Set<Booking> getBookings();
 
-    Booking create(Booking booking);
-    Booking read(int bookingID);
-    Booking update(Booking booking);
-    void delete(int bookingID);
+  Booking create(Booking booking);
+
+  Booking read(int bookingID);
+
+  Booking update(Booking booking);
+
+  void delete(int bookingID);
 }

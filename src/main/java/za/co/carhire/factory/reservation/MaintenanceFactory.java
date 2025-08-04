@@ -9,32 +9,33 @@ import java.util.Date;
 
 public class MaintenanceFactory {
 
-        public static Maintenance createMaintenance(int maintenanceID, int carID, Date serviceDate, String description, double cost, String status, String mechanic) {
-            if (maintenanceID < 0 || maintenanceID > 100000) {
-                return null;
-            }
-            if(serviceDate==null||serviceDate==null){
-            return null;
-            }
-            if (description==null||description.isEmpty()){
-            return null;
-            }
-            if (cost < 0) {
-            return null;
-            }
-            if (status==null||status.isEmpty()){
-            return null;
-            }
-            if (mechanic==null||mechanic.isEmpty()){
-            return null;
-            }
-            return new Maintenance.Builder()
-                    .setMaintenanceID(maintenanceID)
-                    .setServiceDate(serviceDate)
-                    .setDescription(description)
-                    .setCost(cost)
-                    .setStatus(status)
-                    .setMechanic(mechanic)
-                    .build();
-        }
+  public static Maintenance createMaintenance(int maintenanceID, int carID, Date serviceDate, String description,
+      double cost, String status, String mechanic) {
+    if (maintenanceID < 0 || maintenanceID > 100000) {
+      return null;
+    }
+    if (serviceDate == null) {
+      return null;
+    }
+    if (description == null || description.isEmpty()) {
+      return null;
+    }
+    if (cost < 0) {
+      return null;
+    }
+    if (status == null || status.isEmpty()) {
+      return null;
+    }
+    if (mechanic == null || mechanic.isEmpty()) {
+      return null;
+    }
+    return new Maintenance.Builder()
+        .setMaintenanceID(maintenanceID)
+        .setServiceDate(serviceDate)
+        .setDescription(description)
+        .setCost(cost)
+        .setStatus(status)
+        .setMechanic(mechanic)
+        .build();
+  }
 }

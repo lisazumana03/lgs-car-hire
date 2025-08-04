@@ -1,9 +1,8 @@
 package za.co.carhire.factory.feedback;
 
 import org.junit.jupiter.api.Test;
-import za.co.carhire.domain.feedback.Review;
-
 import static org.junit.jupiter.api.Assertions.*;
+import za.co.carhire.domain.feedback.Review;
 
 public class ReviewFactoryTest {
 
@@ -19,7 +18,7 @@ public class ReviewFactoryTest {
 
     @Test
     public void testCreateReviewInvalid() {
-        Review review = ReviewFactory.createReview(-1, 101, 201, 4, "Nice");  // Invalid reviewID
+        Review review = ReviewFactory.createReview(-1, 101, 201, 4, "Nice"); // Invalid reviewID
         assertNull(review);
     }
 
