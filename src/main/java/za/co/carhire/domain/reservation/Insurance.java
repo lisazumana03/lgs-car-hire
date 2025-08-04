@@ -7,20 +7,38 @@ Date: 10/05/2025
  */
 
 import za.co.carhire.domain.vehicle.Car;
-
+import jakarta.persistence.*;
+import java.io.Serializable;
 import java.util.Date;
 
-public class Insurance {
+@Entity
+@Table(name = "insurance")
+public class Insurance implements Serializable {
     // Primary attributes
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private int insuranceID;
+    
+    @Column(name = "insurance_start_date")
     private Date insuranceStartDate;
+    
+    @Column(name = "insurance_cost")
     private double insuranceCost;
+    
+    @Column(name = "insurance_provider")
     private String insuranceProvider;
+    
+    @Column(name = "status")
     private String status;
+    
+    @Column(name = "policy_number")
     private long policyNumber;
+    
+    @Column(name = "mechanic")
     private String mechanic;
 
     // Relationship with Car
+    @OneToOne(mappedBy = "insurance")
     private Car car;
 
     // Default constructor
@@ -52,15 +70,38 @@ public class Insurance {
         }
     }
 
-    // Getters
+    // Getters and Setters
     public int getInsuranceID() { return insuranceID; }
+    
+    public void setInsuranceID(int insuranceID) { this.insuranceID = insuranceID; }
+    
     public Date getInsuranceStartDate() { return insuranceStartDate; }
+    
+    public void setInsuranceStartDate(Date insuranceStartDate) { this.insuranceStartDate = insuranceStartDate; }
+    
     public double getInsuranceCost() { return insuranceCost; }
+    
+    public void setInsuranceCost(double insuranceCost) { this.insuranceCost = insuranceCost; }
+    
     public String getInsuranceProvider() { return insuranceProvider; }
+    
+    public void setInsuranceProvider(String insuranceProvider) { this.insuranceProvider = insuranceProvider; }
+    
     public String getStatus() { return status; }
+    
+    public void setStatus(String status) { this.status = status; }
+    
     public long getPolicyNumber() { return policyNumber; }
+    
+    public void setPolicyNumber(long policyNumber) { this.policyNumber = policyNumber; }
+    
     public String getMechanic() { return mechanic; }
+    
+    public void setMechanic(String mechanic) { this.mechanic = mechanic; }
+    
     public Car getCar() { return car; }
+    
+    public void setCar(Car car) { this.car = car; }
 
     @Override
     public String toString() {

@@ -9,7 +9,6 @@ import za.co.carhire.domain.reservation.Booking;
 import za.co.carhire.domain.reservation.Payment;
 import za.co.carhire.util.Helper;
 
-
 public class PaymentFactory {
     public static Payment createPayment(Booking booking, double amount, String method) {
         if (!isValid(booking, amount, method)) {
@@ -17,7 +16,9 @@ public class PaymentFactory {
         }
 
         return new Payment.Builder()
-                .setPaymentID(Helper.generateId(notificationId)).setAmount(amount)
+                .setPaymentID((int) (Math.random() * 1000000))
+                .setBooking(booking)
+                .setAmount(amount)
                 .setPaymentMethod(method.toUpperCase())
                 .build();
     }
@@ -41,4 +42,3 @@ public class PaymentFactory {
                 Helper.isValidPaymentMethod(method);
     }
 }
-

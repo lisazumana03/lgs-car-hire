@@ -1,12 +1,13 @@
 package za.co.carhire.factory.vehicle;
 
 import org.junit.jupiter.api.Test;
-import za.co.carhire.domain.Insurance;
+import za.co.carhire.domain.reservation.Insurance;
 import za.co.carhire.domain.reservation.Booking;
 import za.co.carhire.domain.vehicle.Car;
 import za.co.carhire.domain.vehicle.CarType;
 
 import static org.junit.jupiter.api.Assertions.*;
+
 class CarFactoryTest {
 
     @Test
@@ -33,7 +34,6 @@ class CarFactoryTest {
         Car car = CarFactory.createCompleteCar(2, "X5", "BMW", 2023,
                 true, 600.0, carType, insurance, booking);
 
-
         assertNotNull(car);
         assertEquals(2, car.getCarID());
         assertEquals("X5", car.getModel());
@@ -42,12 +42,10 @@ class CarFactoryTest {
         assertEquals(600.0, car.getRentalPrice());
         assertTrue(car.isAvailability());
 
-
         assertEquals(carType, car.getCarType());
         assertEquals(insurance, car.getInsurance());
         assertEquals(booking, car.getBooking());
     }
-
 
     @Test
     void createCarWithType() {
@@ -69,6 +67,7 @@ class CarFactoryTest {
         // Verify relationship with car type
         assertEquals(carType, car.getCarType());
     }
+
     @Test
     void createCarWithInsurance() {
         // Create dependencies
@@ -94,13 +93,10 @@ class CarFactoryTest {
         assertNull(car.getBooking());
     }
 
-
     @Test
     void createCarCopy() {
         // Create original car
         Car originalCar = CarFactory.createBasicCar(5, "Camry", "Toyota", 2023, 350.0);
-
-
 
         // Create copy with new ID
         Car copiedCar = CarFactory.createCarCopy(originalCar, 6);

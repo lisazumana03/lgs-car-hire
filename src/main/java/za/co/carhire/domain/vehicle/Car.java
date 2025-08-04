@@ -46,6 +46,9 @@ public class Car implements Serializable {
     @JoinColumn(name = "booking_id")
     private Booking booking;
 
+    // Default constructor
+    public Car() {
+    }
 
     // Private constructor for Builder pattern
     private Car(Builder builder) {

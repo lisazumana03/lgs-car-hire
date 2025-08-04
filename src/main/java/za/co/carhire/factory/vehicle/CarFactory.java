@@ -10,7 +10,6 @@ import za.co.carhire.domain.vehicle.CarType;
 
 public class CarFactory {
 
-
     public static Car createBasicCar(int carID, String model, String brand, int year, double rentalPrice) {
         return new Car.Builder()
                 .setCarID(carID)
@@ -21,7 +20,6 @@ public class CarFactory {
                 .setAvailability(true) // Default to available
                 .build();
     }
-
 
     public static Car createCompleteCar(int carID, String model, String brand, int year,
                                         boolean availability, double rentalPrice,
@@ -52,7 +50,6 @@ public class CarFactory {
                 .build();
     }
 
-
     public static Car createCarWithInsurance(int carID, String model, String brand, int year,
                                              double rentalPrice, CarType carType, Insurance insurance) {
         return new Car.Builder()
@@ -67,14 +64,12 @@ public class CarFactory {
                 .build();
     }
 
-
     public static Car createCarCopy(Car originalCar, int newCarID) {
         return new Car.Builder()
                 .copy(originalCar)
                 .setCarID(newCarID)
                 .build();
     }
-
 
     public static Car createUnavailableCar(int carID, String model, String brand, int year,
                                            double rentalPrice, CarType carType) {
@@ -88,5 +83,4 @@ public class CarFactory {
                 .setAvailability(false)
                 .build();
     }
-
 }

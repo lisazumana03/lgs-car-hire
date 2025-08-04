@@ -11,8 +11,8 @@ public class SupportTicketFactory {
 
     //Support Submission
     public static SupportTicket submitTicket(int ticketID, int userID, String message){
-        if(Helper.isWithinBoundary(ticketID)||
-           Helper.isWithinBoundary(userID)||
+        if(Helper.isWithinBoundary(ticketID) ||
+           Helper.isWithinBoundary(userID) ||
            Helper.isNullOrEmpty(message)){
             return null;
         }
@@ -23,19 +23,19 @@ public class SupportTicketFactory {
                     .setMessage(message)
                     .setStatus("Open")
                     .setResponse(0)
-//                    .setCreatedAt(new Date())
+                    .setCreatedAt(new java.util.Date())
                     .build();
         }
     }
 
     //Ticket Closure
-
-    public static SupportTicket closeTicket(SupportTicket ticketID) {
-        if (Helper.isWithinBoundary(ticketID)) {
+    public static SupportTicket closeTicket(SupportTicket ticket) {
+        if (ticket == null) {
             return null;
         }
         else{
             return new SupportTicket.Builder()
+                    .copy(ticket)
                     .setStatus("Closed")
                     .build();
         }

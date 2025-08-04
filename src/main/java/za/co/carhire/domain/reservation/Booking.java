@@ -21,22 +21,35 @@ public class Booking implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int bookingID;
+    
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
+    
     @OneToMany(mappedBy = "booking")// showing that one booking can be made for many cars
     private List<Car> cars;
+    
+    @Column(name = "booking_date_and_time")
     private LocalDateTime bookingDateAndTime;
+    
+    @Column(name = "start_date")
     private LocalDateTime startDate;
+    
+    @Column(name = "end_date")
     private LocalDateTime endDate;
-    @OneToOne(mappedBy = "payment", cascade = CascadeType.ALL)
+    
+    @OneToOne(mappedBy = "booking", cascade = CascadeType.ALL)
     private Payment payment;
+    
     @ManyToOne
     @JoinColumn(name = "pick_up_location")
     private Location pickupLocation;
+    
     @ManyToOne
     @JoinColumn(name = "drop_off_location")
     private Location dropOffLocation;
+    
+    @Column(name = "booking_status")
     private String bookingStatus;
 
     public Booking(){}// for JPA implementation coming soon
@@ -58,40 +71,80 @@ public class Booking implements Serializable {
         return bookingID;
     }
 
+    public void setBookingID(int bookingID) {
+        this.bookingID = bookingID;
+    }
+
     public User getUser() {
         return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public List<Car> getCar() {
         return cars;
     }
 
+    public void setCar(List<Car> cars) {
+        this.cars = cars;
+    }
+
     public LocalDateTime getBookingDateAndTime() {
         return bookingDateAndTime;
+    }
+
+    public void setBookingDateAndTime(LocalDateTime bookingDateAndTime) {
+        this.bookingDateAndTime = bookingDateAndTime;
     }
 
     public LocalDateTime getStartDate() {
         return startDate;
     }
 
+    public void setStartDate(LocalDateTime startDate) {
+        this.startDate = startDate;
+    }
+
     public LocalDateTime getEndDate() {
         return endDate;
+    }
+
+    public void setEndDate(LocalDateTime endDate) {
+        this.endDate = endDate;
     }
 
     public Payment getPayment() {
         return payment;
     }
 
+    public void setPayment(Payment payment) {
+        this.payment = payment;
+    }
+
     public Location getPickupLocation() {
         return pickupLocation;
+    }
+
+    public void setPickupLocation(Location pickupLocation) {
+        this.pickupLocation = pickupLocation;
     }
 
     public Location getDropOffLocation() {
         return dropOffLocation;
     }
 
+    public void setDropOffLocation(Location dropOffLocation) {
+        this.dropOffLocation = dropOffLocation;
+    }
+
     public String getBookingStatus() {
         return bookingStatus;
+    }
+
+    public void setBookingStatus(String bookingStatus) {
+        this.bookingStatus = bookingStatus;
     }
 
     @Override
@@ -182,5 +235,5 @@ public class Booking implements Serializable {
         }
 
     }
-    
+
 }

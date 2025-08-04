@@ -5,14 +5,30 @@ Olwethu Tshingo - 222634383
 Date: 11 May 2025
  */
 
+import jakarta.persistence.*;
+import java.io.Serializable;
 import java.util.Date;
 
-public class SupportTicket {
+@Entity
+@Table(name = "support_ticket")
+public class SupportTicket implements Serializable {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     protected int ticketID;
+    
+    @Column(name = "user_id")
     protected int userID;
-    protected  String message;
+    
+    @Column(name = "message")
+    protected String message;
+    
+    @Column(name = "created_at")
     protected Date createdAt;
+    
+    @Column(name = "status")
     protected String status;
+    
+    @Column(name = "response")
     protected int response;
 
     private SupportTicket() {
@@ -31,26 +47,49 @@ public class SupportTicket {
         return ticketID;
     }
 
+    public void setTicketID(int ticketID) {
+        this.ticketID = ticketID;
+    }
+
     public int getUserID(){
         return userID;
+    }
+
+    public void setUserID(int userID) {
+        this.userID = userID;
     }
 
     public String getMessage(){
         return message;
     }
 
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
     public Date getCreatedAT() {
         return createdAt;
+    }
+
+    public void setCreatedAt(Date createdAt) {
+        this.createdAt = createdAt;
     }
 
     public String getStatus(){
         return status;
     }
 
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
     public int getResponse() {
         return response;
     }
 
+    public void setResponse(int response) {
+        this.response = response;
+    }
 
     @Override
     public String toString() {
@@ -67,7 +106,7 @@ public class SupportTicket {
     public static class Builder{
         protected int ticketID;
         protected int userID;
-        protected  String message;
+        protected String message;
         protected Date createdAt;
         protected String status;
         protected int response;
@@ -87,8 +126,9 @@ public class SupportTicket {
             return this;
         }
 
-        public void setCreatedAt(Date createdAt) {
+        public Builder setCreatedAt(Date createdAt) {
             this.createdAt = createdAt;
+            return this;
         }
 
         public Builder setStatus(String status) {
@@ -101,19 +141,18 @@ public class SupportTicket {
             return this;
         }
 
-        public SupportTicket.Builder copy(SupportTicket support){
-            this.ticketID = support.getTicketID();
-            this.userID = support.getUserID();;
-            this.message = support.getMessage();
-            this.createdAt = support.getCreatedAT();
-            this.status = support.getStatus();
-            this.response = support.getResponse();
+        public Builder copy(SupportTicket supportTicket) {
+            this.ticketID = supportTicket.getTicketID();
+            this.userID = supportTicket.getUserID();
+            this.message = supportTicket.getMessage();
+            this.createdAt = supportTicket.getCreatedAT();
+            this.status = supportTicket.getStatus();
+            this.response = supportTicket.getResponse();
             return this;
         }
 
-        public SupportTicket build(){
+        public SupportTicket build() {
             return new SupportTicket(this);
         }
     }
-
 }
