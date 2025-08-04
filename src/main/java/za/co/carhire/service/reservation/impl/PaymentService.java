@@ -14,7 +14,7 @@ import za.co.carhire.service.reservation.IPaymentService;
 import java.util.Set;
 
 @Service
-public abstract class PaymentService implements IPaymentService {
+public class PaymentService implements IPaymentService {
 
     @Autowired
     private IPaymentRepository paymentRepository;
@@ -27,6 +27,11 @@ public abstract class PaymentService implements IPaymentService {
     @Override
     public Payment create(Payment payment) {
         return paymentRepository.save(payment);
+    }
+
+    @Override
+    public Payment read(int paymentID) {
+        return null;
     }
 
     @Override
@@ -43,7 +48,7 @@ public abstract class PaymentService implements IPaymentService {
     }
 
     @Override
-    public void delete(Integer paymentId) {
+    public void delete(int paymentId) {
         paymentRepository.deleteById(paymentId);
     }
 }
