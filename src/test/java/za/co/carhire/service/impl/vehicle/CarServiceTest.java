@@ -8,6 +8,7 @@ import org.mockito.MockitoAnnotations;
 import za.co.carhire.domain.vehicle.Car;
 import za.co.carhire.factory.vehicle.CarFactory;
 import za.co.carhire.repository.vehicle.ICarRepository;
+import za.co.carhire.service.vehicle.impl.CarService;
 
 import java.util.Arrays;
 import java.util.Optional;

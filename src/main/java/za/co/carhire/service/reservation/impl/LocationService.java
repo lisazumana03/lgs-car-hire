@@ -1,4 +1,4 @@
-package za.co.carhire.service.impl.reservation;
+package za.co.carhire.service.reservation.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -6,7 +6,6 @@ import za.co.carhire.domain.reservation.Location;
 import za.co.carhire.repository.reservation.ILocationRepository;
 import za.co.carhire.service.reservation.ILocationService;
 
-import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 

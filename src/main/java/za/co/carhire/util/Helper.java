@@ -52,17 +52,17 @@ public class Helper {
                 VALID_PAYMENT_METHODS.contains(method.toUpperCase());
     }
 
-    public static boolean isBookingPayable(Booking booking){
-        try {
-            return booking != null &&
-                    !isNullOrEmpty(booking.getBookingStatus()) &&
-                    !booking.getBookingStatus().equalsIgnoreCase("CANCELLED") &&
-                    booking.getEndDate() != null &&
-                    booking.getEndDate().isAfter(LocalDateTime.now());
-        } catch (Exception e) {
-            return false;
-        }
-    }
+//    public static boolean isBookingPayable(Booking booking){
+//        try {
+//            return booking != null &&
+//                    !isNullOrEmpty(booking.getBookingStatus()) &&
+//                    !booking.getBookingStatus().equalsIgnoreCase("CANCELLED") &&
+//                    booking.getEndDate() != null &&
+//                    booking.getEndDate().isAfter(LocalDateTime.now());
+//        } catch (Exception e) {
+//            return false;
+//        }
+//    }
     public static int generateId() {
         return (int) (Math.random() * 1000000);
     }

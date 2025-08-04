@@ -7,6 +7,7 @@ Date: 12 May 2025
 
 import za.co.carhire.domain.authentication.User;
 import za.co.carhire.domain.reservation.Booking;
+import za.co.carhire.domain.reservation.BookingStatus;
 import za.co.carhire.domain.reservation.Location;
 import za.co.carhire.domain.vehicle.Car;
 import za.co.carhire.util.Helper;
@@ -28,7 +29,7 @@ public class BookingFactory {
                 .setEndDate(endDate)
                 .setPickupLocation(pickupLocation)
                 .setDropOffLocation(dropOffLocation)
-                .setBookingStatus("Your booking has been created.")
+                .setBookingStatus(BookingStatus.PENDING)
                 .build();
     }
 
@@ -40,7 +41,7 @@ public class BookingFactory {
                 .setBookingID(bookingID)
                 .setUser(user)
                 .setBookingDateAndTime(bookingDateAndTime)
-                .setBookingStatus("Booking has been cancelled.")
+                .setBookingStatus(BookingStatus.CANCELLED)
                 .build();
     }
     public static Booking confirmBooking(int bookingID, User user, LocalDateTime bookingDateAndTime,String bookingStatus){
@@ -51,7 +52,7 @@ public class BookingFactory {
                 .setBookingID(bookingID)
                 .setUser(user)
                 .setBookingDateAndTime(bookingDateAndTime)
-                .setBookingStatus("Booking confirmed")
+                .setBookingStatus(BookingStatus.CONFIRMED)
                 .build();
     }
 

@@ -1,8 +1,9 @@
-package za.co.carhire.service.impl.reservation;
+package za.co.carhire.service.reservation.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import za.co.carhire.domain.reservation.Booking;
+import za.co.carhire.domain.reservation.BookingStatus;
 import za.co.carhire.repository.reservation.IBookingRepository;
 import za.co.carhire.service.reservation.IBookingService;
 
@@ -11,7 +12,7 @@ Lisakhanya Zumana (230864821)
 Date: 24/05/2025
  */
 
-import java.util.List;
+import java.time.LocalDateTime;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -43,8 +44,26 @@ public class BookingService implements IBookingService {
         return null;
     }
 
-    @Override
-    public void delete(int bookingID) {
+    public void delete(int bookingID){
         bookingRepository.deleteById(bookingID);
     }
+
+    @Override
+    public Booking cancelBooking(int bookingID){
+        Booking booking = bookingRepository.findById(bookingID)
+                .orElse(null);
+
+        assert booking != null;
+        if(booking.getBookingStatus() == BookingStatus.CANCELLED){
+            throw new IllegalStateException("You already cancelled this booking!");
+        }
+
+        if(booking.getBookingDateAndTime().isBefore(LocalDateTime.now().plusMinutes(45))){
+            throw new IllegalStateException("You are too late to cancel this booking!");
+        }
+
+        booking.setBookingStatus(BookingStatus.CANCELLED);
+        return bookingRepository.save(booking);
+    }
+
 }

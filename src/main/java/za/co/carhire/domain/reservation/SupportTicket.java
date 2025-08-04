@@ -5,17 +5,23 @@ Olwethu Tshingo - 222634383
 Date: 11 May 2025
  */
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+
+import java.io.Serializable;
 import java.util.Date;
 
-public class SupportTicket {
+@Entity
+public class SupportTicket implements Serializable {
+    @Id
     protected int ticketID;
     protected int userID;
-    protected  String message;
+    protected String message;
     protected Date createdAt;
     protected String status;
     protected int response;
 
-    private SupportTicket() {
+    public SupportTicket() {
     }
 
     private SupportTicket(Builder builder) {

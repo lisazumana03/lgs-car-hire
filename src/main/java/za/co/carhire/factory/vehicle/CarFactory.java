@@ -3,7 +3,7 @@ package za.co.carhire.factory.vehicle;
 // Imtiyaaz Waggie 219374759//
 //date:10/05/2025 //
 
-import za.co.carhire.domain.Insurance;
+import za.co.carhire.domain.reservation.Insurance;
 import za.co.carhire.domain.reservation.Booking;
 import za.co.carhire.domain.vehicle.Car;
 import za.co.carhire.domain.vehicle.CarType;

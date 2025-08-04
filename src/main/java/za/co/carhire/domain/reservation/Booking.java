@@ -36,7 +36,8 @@ public class Booking implements Serializable {
     @ManyToOne
     @JoinColumn(name = "dropoff_location_id")
     private Location dropOffLocation;
-    private String bookingStatus;
+    @Enumerated(EnumType.STRING)
+    private BookingStatus bookingStatus;
 
     public Booking(){}// for JPA implementation coming soon
 
@@ -89,8 +90,12 @@ public class Booking implements Serializable {
         return dropOffLocation;
     }
 
-    public String getBookingStatus() {
+    public BookingStatus getBookingStatus() {
         return bookingStatus;
+    }
+
+    public void setBookingStatus(BookingStatus bookingStatus) {
+        this.bookingStatus = bookingStatus;
     }
 
     @Override
@@ -119,7 +124,7 @@ public class Booking implements Serializable {
         private Payment payment;
         private Location pickupLocation;
         private Location dropOffLocation;
-        private String bookingStatus;
+        private BookingStatus bookingStatus;
 
         public Builder setBookingID(int bookingID) {
             this.bookingID = bookingID;
@@ -157,7 +162,7 @@ public class Booking implements Serializable {
             this.dropOffLocation = dropOffLocation;
             return this;
         }
-        public Builder setBookingStatus(String bookingStatus) {
+        public Builder setBookingStatus(BookingStatus bookingStatus) {
             this.bookingStatus = bookingStatus;
             return this;
         }

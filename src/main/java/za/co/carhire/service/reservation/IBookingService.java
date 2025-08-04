@@ -19,4 +19,6 @@ public interface IBookingService {
     Booking read(int bookingID);
     Booking update(Booking booking);
     void delete(int bookingID);
+
+    Booking cancelBooking(int bookingID);
 }

@@ -7,6 +7,7 @@ Date: 10 May 2025
 
 import jakarta.persistence.*;
 import za.co.carhire.domain.authentication.User;
+import za.co.carhire.domain.vehicle.Car;
 
 import java.io.Serializable;
 
@@ -17,7 +18,9 @@ public class Review implements Serializable {
     @ManyToOne
     @JoinColumn(name = "user_id")
     protected User user;
-    protected int carID;
+    @ManyToOne
+    @JoinColumn(name = "car_id")
+    protected Car car;
     protected int rating;
     protected String comment;
 
@@ -27,7 +30,7 @@ public class Review implements Serializable {
     private Review(Builder builder) {
         this.reviewID = builder.reviewID;
         this.user = builder.user;
-        this.carID = builder.carID;
+        this.car = builder.car;
         this.rating = builder.rating;
         this.comment = builder.comment;
     }
@@ -40,8 +43,8 @@ public class Review implements Serializable {
         return user;
     }
 
-    public int getCarID() {
-        return carID;
+    public Car getCar() {
+        return car;
     }
 
     public int getRating() {
@@ -57,7 +60,7 @@ public class Review implements Serializable {
         return "Review{" +
                 "reviewID=" + reviewID +
                 ", userID=" + user +
-                ", carID=" + carID +
+                ", carID=" + car +
                 ", rating=" + rating +
                 ", comment='" + comment + '\'' +
                 '}';
@@ -66,7 +69,7 @@ public class Review implements Serializable {
     public static class Builder{
         private int reviewID;
         private User user;
-        private int carID;
+        private Car car;
         private int rating;
         private String comment;
 
@@ -80,8 +83,8 @@ public class Review implements Serializable {
             return this;
         }
 
-        public Builder setCarID(int carID) {
-            this.carID = carID;
+        public Builder setCar(Car car) {
+            this.car = car;
             return this;
         }
 
@@ -97,7 +100,7 @@ public class Review implements Serializable {
 
         public Review.Builder copy(Review review){
             this.reviewID = review.getReviewID();
-            this.carID = review.getCarID();
+            this.car = review.getCar();
             this.user = review.getUser();
             this.rating = review.getRating();
             this.comment = review.getComment();

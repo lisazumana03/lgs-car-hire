@@ -1,4 +1,4 @@
-package za.co.carhire.service.impl.vehicle;
+package za.co.carhire.service.vehicle.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Set;
 
 @Service
-public abstract class CarService implements ICarService {
+public class CarService implements ICarService {
 
     @Autowired
     private ICarRepository carRepository;
@@ -36,6 +36,11 @@ public abstract class CarService implements ICarService {
     }
 
     @Override
+    public Car read(Integer integer) {
+        return null;
+    }
+
+    @Override
     public Car read(int carId) {
         return this.carRepository.findById(carId).orElse(null);
     }
@@ -49,7 +54,12 @@ public abstract class CarService implements ICarService {
     }
 
     @Override
-    public void delete(Integer carId) {
+    public void delete(Integer integer) {
+
+    }
+
+    @Override
+    public void delete(int carId) {
         this.carRepository.deleteById(carId);
     }
 }

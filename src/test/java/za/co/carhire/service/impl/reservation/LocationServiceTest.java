@@ -1,6 +1,5 @@
 package za.co.carhire.service.impl.reservation;
 
-import org.hibernate.tool.schema.internal.exec.ScriptTargetOutputToFile;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -9,6 +8,7 @@ import org.mockito.MockitoAnnotations;
 import za.co.carhire.domain.reservation.Location;
 import za.co.carhire.factory.reservation.LocationFactory;
 import za.co.carhire.repository.reservation.ILocationRepository;
+import za.co.carhire.service.reservation.impl.LocationService;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
