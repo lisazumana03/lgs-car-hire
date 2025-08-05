@@ -9,5 +9,5 @@ import za.co.carhire.domain.reservation.Maintenance;
 import za.co.carhire.service.IService;
 
 public interface IMaintenanceService extends IService<Maintenance, Integer> {
-
+    void delete(int maintenanceId);
 }

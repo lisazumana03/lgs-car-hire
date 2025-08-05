@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Set;
 
 @Service
-public abstract class CarTypeService implements ICarTypeService {
+public class CarTypeService implements ICarTypeService {
 
     @Autowired
     private ICarTypeRepository carTypeRepository;
@@ -36,6 +36,11 @@ public abstract class CarTypeService implements ICarTypeService {
     }
 
     @Override
+    public CarType read(Integer integer) {
+        return null;
+    }
+
+    @Override
     public CarType read(int carTypeId) {
         return this.carTypeRepository.findById(carTypeId).orElse(null);
     }
@@ -49,7 +54,7 @@ public abstract class CarTypeService implements ICarTypeService {
     }
 
     @Override
-    public void delete(Integer carTypeId) {
-        this.carTypeRepository.deleteById(carTypeId);
+    public void delete(int carTypeID) {
+        this.carTypeRepository.deleteById(carTypeID);
     }
 }

@@ -32,7 +32,7 @@ public class MaintenanceService implements IMaintenanceService {
     }
 
     @Override
-    public void delete(Integer integer) {
-
+    public void delete(int maintenanceId) {
+        maintenanceRepository.deleteById(maintenanceId);
     }
 }
