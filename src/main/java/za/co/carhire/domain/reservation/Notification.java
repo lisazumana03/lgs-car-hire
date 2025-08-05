@@ -1,15 +1,7 @@
 package za.co.carhire.domain.reservation;
-/* Notification.java
-
-     Notification POJO class
-
-     Author: Bonga Velem (220052379)
-
-     Date: 11 May 2025 */
 
 import jakarta.persistence.*;
 import za.co.carhire.domain.authentication.User;
-
 import java.time.LocalDate;
 
 @Entity
@@ -98,13 +90,9 @@ public class Notification {
 
     public static class Builder {
         private Integer notificationID;
-
-        private User user;;
-
+        private User user;
         private String message;
-
         private LocalDate dateSent;
-
         private BookingStatus status;
 
         public Builder setNotificationID(Integer notificationID) {
@@ -139,12 +127,10 @@ public class Notification {
             this.dateSent = notification.dateSent;
             this.status = notification.status;
             return this;
-
         }
 
         public Notification build() {
             return new Notification(this);
         }
-
     }
 }

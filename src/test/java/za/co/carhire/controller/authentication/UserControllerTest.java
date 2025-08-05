@@ -12,15 +12,6 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-/**
- * Simple Integration tests for UserController
- *
- * This test class uses direct service calls instead of MockMvc for simplicity.
- * It tests the User CRUD operations directly.
- *
- * Author: Bonga Velem (220052379)
- * Date: 18 May 2025
- */
 @SpringBootTest
 class UserControllerTest {
 
@@ -31,13 +22,11 @@ class UserControllerTest {
 
     @BeforeEach
     void setUp() {
-        // Generate unique ID number for each test
         uniqueIdNumber = System.currentTimeMillis() % 1000000000L;
     }
 
     @Test
     void testCreateUser() {
-        // Create user with valid data
         User user = new User.Builder()
                 .setName("John Doe")
                 .setEmail("john@example.com")
@@ -48,10 +37,8 @@ class UserControllerTest {
                 .setLicenseNumber("LIC" + uniqueIdNumber)
                 .build();
 
-        // Save user to database
         User saved = userService.save(user);
 
-        // Assertions
         assertNotNull(saved);
         assertNotNull(saved.getUserId());
         assertEquals("John Doe", saved.getName());
@@ -64,7 +51,6 @@ class UserControllerTest {
 
     @Test
     void testReadUser() {
-        // First create a user
         User user = new User.Builder()
                 .setName("Jane Smith")
                 .setEmail("jane@example.com")
@@ -78,10 +64,8 @@ class UserControllerTest {
         User saved = userService.save(user);
         Integer userId = saved.getUserId();
 
-        // Read the user
         User found = userService.read(userId);
 
-        // Assertions
         assertNotNull(found);
         assertEquals(userId, found.getUserId());
         assertEquals("Jane Smith", found.getName());
@@ -91,7 +75,6 @@ class UserControllerTest {
 
     @Test
     void testUpdateUser() {
-        // First create a user
         User user = new User.Builder()
                 .setName("Original Name")
                 .setEmail("original@example.com")
@@ -105,7 +88,6 @@ class UserControllerTest {
         User saved = userService.save(user);
         Integer userId = saved.getUserId();
 
-        // Create updated user
         User updatedUser = new User.Builder()
                 .setUserId(userId)
                 .setName("Updated Name")
@@ -117,10 +99,8 @@ class UserControllerTest {
                 .setLicenseNumber("LIC" + (uniqueIdNumber + 2))
                 .build();
 
-        // Update the user
         User updated = userService.save(updatedUser);
 
-        // Assertions
         assertNotNull(updated);
         assertEquals(userId, updated.getUserId());
         assertEquals("Updated Name", updated.getName());
@@ -131,7 +111,6 @@ class UserControllerTest {
 
     @Test
     void testDeleteUser() {
-        // First create a user
         User user = new User.Builder()
                 .setName("Delete Test")
                 .setEmail("delete@example.com")
@@ -145,19 +124,15 @@ class UserControllerTest {
         User saved = userService.save(user);
         Integer userId = saved.getUserId();
 
-        // Verify it exists
         assertNotNull(userService.read(userId));
 
-        // Delete the user
         userService.delete(userId);
 
-        // Verify it's deleted
         assertNull(userService.read(userId));
     }
 
     @Test
     void testGetAllUsers() {
-        // Create multiple users
         User user1 = new User.Builder()
                 .setName("First User")
                 .setEmail("first@example.com")
@@ -181,26 +156,22 @@ class UserControllerTest {
         userService.save(user1);
         userService.save(user2);
 
-        // Get all users
         List<User> allUsers = userService.findAll();
 
-        // Assertions
         assertNotNull(allUsers);
         assertTrue(allUsers.size() >= 2);
     }
 
     @Test
     void testUserNotFound() {
-        // Try to read non-existent user
         User notFound = userService.read(99999);
         assertNull(notFound);
     }
 
     @Test
     void testCreateUserWithEmptyName() {
-        // Create user with empty name
         User user = new User.Builder()
-                .setName("") // Empty name
+                .setName("")
                 .setEmail("empty@example.com")
                 .setIdNumber(uniqueIdNumber + 6)
                 .setDateOfBirth(LocalDate.of(1990, 1, 1))
@@ -209,10 +180,8 @@ class UserControllerTest {
                 .setLicenseNumber("LIC" + (uniqueIdNumber + 6))
                 .build();
 
-        // Save user (should work even with empty name)
         User saved = userService.save(user);
 
-        // Assertions
         assertNotNull(saved);
         assertEquals("", saved.getName());
         assertEquals("empty@example.com", saved.getEmail());
@@ -220,10 +189,9 @@ class UserControllerTest {
 
     @Test
     void testCreateUserWithInvalidEmail() {
-        // Create user with invalid email format
         User user = new User.Builder()
                 .setName("Invalid Email User")
-                .setEmail("invalid-email-format") // Invalid email
+                .setEmail("invalid-email-format")
                 .setIdNumber(uniqueIdNumber + 7)
                 .setDateOfBirth(LocalDate.of(1990, 1, 1))
                 .setPhoneNumber("4444444444")
@@ -231,10 +199,8 @@ class UserControllerTest {
                 .setLicenseNumber("LIC" + (uniqueIdNumber + 7))
                 .build();
 
-        // Save user (should work even with invalid email format)
         User saved = userService.save(user);
 
-        // Assertions
         assertNotNull(saved);
         assertEquals("Invalid Email User", saved.getName());
         assertEquals("invalid-email-format", saved.getEmail());
@@ -242,7 +208,6 @@ class UserControllerTest {
 
     @Test
     void testUserBuilderPattern() {
-        // Test the builder pattern functionality
         User user = new User.Builder()
                 .setName("Builder Test")
                 .setEmail("builder@example.com")
@@ -253,7 +218,6 @@ class UserControllerTest {
                 .setLicenseNumber("LIC" + (uniqueIdNumber + 8))
                 .build();
 
-        // Assertions for builder pattern
         assertNotNull(user);
         assertEquals("Builder Test", user.getName());
         assertEquals("builder@example.com", user.getEmail());

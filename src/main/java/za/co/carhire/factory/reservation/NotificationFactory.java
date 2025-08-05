@@ -1,17 +1,9 @@
 package za.co.carhire.factory.reservation;
-/* NotificationFactory.java
-
-     NotificationFactory class
-
-     Author: Bonga Velem (220052379)
-
-     Date: 18 May 2025 */
 
 import za.co.carhire.domain.authentication.User;
 import za.co.carhire.domain.reservation.BookingStatus;
 import za.co.carhire.util.Helper;
 import za.co.carhire.domain.reservation.Notification;
-
 import java.time.LocalDate;
 
 public class NotificationFactory {

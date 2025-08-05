@@ -10,10 +10,12 @@ import java.time.LocalDate;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
+
 @SpringBootTest
 class UserServiceImplTest {
     private static UserServiceImpl service;
-    private static User user = UserFactory.createUser("9207891234567", "John Doe", "john@gmail.com", "1992-01-01", "0821234567", "password123", "LIC1001");
+    private static User user = UserFactory.createUser("9207891234567", "John Doe", "john@gmail.com", "1992-01-01",
+            "0821234567", "password123", "LIC1001");
 
     @Test
     @Order(1)
@@ -30,6 +32,7 @@ class UserServiceImplTest {
         assertNotNull(read);
         System.out.println("Read: " + read);
     }
+
     @Test
     @Order(3)
     void update() {
@@ -68,5 +71,4 @@ class UserServiceImplTest {
         assertNull(service.read(user.getUserId()));
         System.out.println("Deleted user ID: " + user.getUserId());
     }
-
 }

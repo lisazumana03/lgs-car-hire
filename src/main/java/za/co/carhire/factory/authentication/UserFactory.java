@@ -2,22 +2,11 @@ package za.co.carhire.factory.authentication;
 
 import za.co.carhire.util.Helper;
 import za.co.carhire.domain.authentication.User;
-/* User.java
-
-     User POJO class
-
-     Author: Bonga Velem (220052379)
-
-     Date: 18 May 2025 */
-
 import java.time.LocalDate;
 
 public class UserFactory {
 
     public static User createUser(String idNumber, String name, String email, String dateOfBirth, String phoneNumber, String password, String licenseNumber) {
-
-
-
         if (Helper.isEmptyOrNull(name) ||
                 !Helper.isValidNationalIDNumber(idNumber) ||
                 !Helper.isValidEmail(email) ||
@@ -27,7 +16,6 @@ public class UserFactory {
                 Helper.isEmptyOrNull(licenseNumber)) {
             return null;
         }
-
 
         return new User.Builder()
                 .setName(name)
@@ -39,7 +27,6 @@ public class UserFactory {
                 .setLicenseNumber(licenseNumber)
                 .build();
     }
-
 
     public static User loginUser(String email, String password) {
         if (!Helper.isValidEmail(email) || Helper.isEmptyOrNull(password)) {

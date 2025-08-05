@@ -2,10 +2,6 @@ package za.co.carhire.dto;
 
 import java.time.LocalDate;
 
-/**
- * Author: Bonga Velem (220052379)
- * Date: 18 May 2025
- */
 public class UserDTO {
     private Integer userId;
     private Long idNumber;
@@ -14,14 +10,12 @@ public class UserDTO {
     private LocalDate dateOfBirth;
     private String phoneNumber;
     private String licenseNumber;
-    // Note: password is intentionally excluded for security
 
+    public UserDTO() {
+    }
 
-    public UserDTO() {}
-
-
-    public UserDTO(Integer userId, Long idNumber, String name, String email, 
-                   LocalDate dateOfBirth, String phoneNumber, String licenseNumber) {
+    public UserDTO(Integer userId, Long idNumber, String name, String email,
+            LocalDate dateOfBirth, String phoneNumber, String licenseNumber) {
         this.userId = userId;
         this.idNumber = idNumber;
         this.name = name;
@@ -30,7 +24,6 @@ public class UserDTO {
         this.phoneNumber = phoneNumber;
         this.licenseNumber = licenseNumber;
     }
-
 
     public Integer getUserId() {
         return userId;
@@ -100,4 +93,4 @@ public class UserDTO {
                 ", licenseNumber='" + licenseNumber + '\'' +
                 '}';
     }
-} 
+}

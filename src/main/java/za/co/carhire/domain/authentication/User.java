@@ -1,16 +1,8 @@
 package za.co.carhire.domain.authentication;
 
 import jakarta.persistence.*;
-
 import java.time.LocalDate;
 
-/* User.java
-
-     User POJO class
-
-     Author: Bonga Velem (220052379)
-
-     Date: 11 May 2025 */
 @Entity
 @Table(name = "Users")
 public class User {
@@ -132,21 +124,13 @@ public class User {
     }
 
     public static class Builder{
-
         private Integer userId;
-
         private Long idNumber;
-
         private String name;
-
         private String email;
-
         private LocalDate dateOfBirth;
-
         private String phoneNumber;
-
         private String password;
-
         private String licenseNumber;
 
         public Builder setUserId(Integer userId) {
@@ -199,15 +183,10 @@ public class User {
             this.password = user.password;
             this.licenseNumber = user.licenseNumber;
             return this;
-
         }
 
         public User build(){
             return new User(this);
         }
-
-
-
-
     }
 }

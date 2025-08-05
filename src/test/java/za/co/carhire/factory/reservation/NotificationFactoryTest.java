@@ -1,11 +1,4 @@
 package za.co.carhire.factory.reservation;
-/* User.java
-
-     User POJO class
-
-     Author: Bonga Velem (220052379)
-
-     Date: 18 May 2025 */
 
 import org.junit.jupiter.api.Test;
 import za.co.carhire.domain.authentication.User;
@@ -20,14 +13,12 @@ class NotificationFactoryTest {
 
     @Test
     void createNotification() {
-        // Minimal User object (only userId is used)
         User user = new User.Builder()
                 .setUserId(12132)
                 .build();
 
-        // Create Notification using the factory
         Notification notification = NotificationFactory.createNotification(
-                user, // User object
+                user,
                 "Welcome to Our App!",
                 "2025-05-18",
                 BookingStatus.BOOKED

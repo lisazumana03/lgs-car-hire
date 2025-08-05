@@ -16,13 +16,6 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-/**
- * Simple Integration tests for NotificationController using DTOs
- *
- *
- * Author: Bonga Velem (220052379)
- * Date: 18 May 2025
- */
 @SpringBootTest
 class NotificationControllerTest {
 
@@ -40,7 +33,6 @@ class NotificationControllerTest {
 
         @BeforeEach
         void setUp() {
-                // Create a test user for all tests
                 Long uniqueIdNumber = System.currentTimeMillis() % 1000000000L;
                 testUser = new User.Builder()
                                 .setName("Test User")
@@ -52,14 +44,12 @@ class NotificationControllerTest {
                                 .setLicenseNumber("LIC" + uniqueIdNumber)
                                 .build();
 
-                // Save user and get ID
                 User savedUser = userService.save(testUser);
                 userId = savedUser.getUserId();
         }
 
         @Test
         void testCreateNotification() {
-                // Create DTO
                 NotificationDTO dto = new NotificationDTO(
                                 null,
                                 "Test notification message",
@@ -68,13 +58,9 @@ class NotificationControllerTest {
                                 userId,
                                 "Test User");
 
-                // Convert to domain object
                 Notification notification = notificationMapper.toDomain(dto);
-
-                // Save to database
                 Notification saved = notificationService.save(notification);
 
-                // Assertions
                 assertNotNull(saved);
                 assertNotNull(saved.getNotificationID());
                 assertEquals("Test notification message", saved.getMessage());
@@ -84,7 +70,6 @@ class NotificationControllerTest {
 
         @Test
         void testReadNotification() {
-                // First create a notification
                 Notification notification = new Notification.Builder()
                                 .setMessage("Read test message")
                                 .setDateSent(LocalDate.now())
@@ -95,10 +80,8 @@ class NotificationControllerTest {
                 Notification saved = notificationService.save(notification);
                 Integer notificationId = saved.getNotificationID();
 
-                // Read the notification
                 Notification found = notificationService.read(notificationId);
 
-                // Assertions
                 assertNotNull(found);
                 assertEquals(notificationId, found.getNotificationID());
                 assertEquals("Read test message", found.getMessage());
@@ -107,7 +90,6 @@ class NotificationControllerTest {
 
         @Test
         void testUpdateNotification() {
-                // First create a notification
                 Notification notification = new Notification.Builder()
                                 .setMessage("Original message")
                                 .setDateSent(LocalDate.now())
@@ -118,7 +100,6 @@ class NotificationControllerTest {
                 Notification saved = notificationService.save(notification);
                 Integer notificationId = saved.getNotificationID();
 
-                // Create updated DTO
                 NotificationDTO updateDTO = new NotificationDTO(
                                 notificationId,
                                 "Updated message",
@@ -127,13 +108,11 @@ class NotificationControllerTest {
                                 userId,
                                 "Test User");
 
-                // Convert to domain and update
                 Notification updatedNotification = notificationMapper.toDomain(updateDTO);
                 updatedNotification.setNotificationID(notificationId);
 
                 Notification updated = notificationService.save(updatedNotification);
 
-                // Assertions
                 assertNotNull(updated);
                 assertEquals(notificationId, updated.getNotificationID());
                 assertEquals("Updated message", updated.getMessage());
@@ -142,7 +121,6 @@ class NotificationControllerTest {
 
         @Test
         void testDeleteNotification() {
-                // First create a notification
                 Notification notification = new Notification.Builder()
                                 .setMessage("Delete test message")
                                 .setDateSent(LocalDate.now())
@@ -153,13 +131,10 @@ class NotificationControllerTest {
                 Notification saved = notificationService.save(notification);
                 Integer notificationId = saved.getNotificationID();
 
-                // Verify it exists
                 assertNotNull(notificationService.read(notificationId));
 
-                // Delete the notification
                 notificationService.delete(notificationId);
 
-                // Verify it's deleted
                 assertNull(notificationService.read(notificationId));
         }
 
@@ -182,17 +157,14 @@ class NotificationControllerTest {
                 notificationService.save(notification1);
                 notificationService.save(notification2);
 
-                // Get all notifications
                 List<Notification> allNotifications = notificationService.findAll();
 
-                // Assertions
                 assertNotNull(allNotifications);
                 assertTrue(allNotifications.size() >= 2);
         }
 
         @Test
         void testNotificationMapper() {
-                // Test DTO to Domain conversion
                 NotificationDTO dto = new NotificationDTO(
                                 null,
                                 "Mapper test message",
@@ -207,7 +179,6 @@ class NotificationControllerTest {
                 assertEquals("BOOKED", domain.getStatus().toString());
                 assertEquals(userId, domain.getUser().getUserId());
 
-                // Test Domain to DTO conversion
                 NotificationDTO convertedDTO = notificationMapper.toDTO(domain);
                 assertNotNull(convertedDTO);
                 assertEquals("Mapper test message", convertedDTO.getMessage());
@@ -226,19 +197,15 @@ class NotificationControllerTest {
         void testCreateNotificationWithEmptyMessage() {
                 NotificationDTO dto = new NotificationDTO(
                                 null,
-                                "", // Empty message
+                                "",
                                 LocalDate.now(),
                                 "BOOKED",
                                 userId,
                                 "Test User");
 
-                // Convert to domain object
                 Notification notification = notificationMapper.toDomain(dto);
-
-                // Save to database (should work even with empty message)
                 Notification saved = notificationService.save(notification);
 
-                // Assertions
                 assertNotNull(saved);
                 assertEquals("", saved.getMessage());
         }
