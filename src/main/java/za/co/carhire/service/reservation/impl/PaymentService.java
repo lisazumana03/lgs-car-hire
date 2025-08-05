@@ -11,6 +11,7 @@ import za.co.carhire.domain.reservation.*;
 import za.co.carhire.repository.reservation.IPaymentRepository;
 import za.co.carhire.service.reservation.IPaymentService;
 
+import java.util.Optional;
 import java.util.Set;
 
 @Service
@@ -36,7 +37,8 @@ public class PaymentService implements IPaymentService {
 
     @Override
     public Payment read(Integer paymentId) {
-        return paymentRepository.findById(paymentId).orElse(null);
+        Optional<Payment> payment = paymentRepository.findById(paymentId);
+        return payment.orElse(null);
     }
 
     @Override
