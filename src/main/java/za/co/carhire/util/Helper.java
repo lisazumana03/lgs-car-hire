@@ -1,8 +1,7 @@
 package za.co.carhire.util;
 
 import org.apache.commons.validator.routines.EmailValidator;
-import za.co.carhire.domain.reservation.Booking;
-import za.co.carhire.domain.reservation.SupportTicket;
+import za.co.carhire.domain.reservation.BookingStatus;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -11,7 +10,7 @@ import java.util.Date;
 import java.util.List;
 
 public class Helper {
-    public static boolean isNullOrEmpty(String s) {
+    public static boolean isNullOrEmpty(BookingStatus s) {
         return s == null || s.isEmpty();
     }
     public static boolean isValidPostalCode(short postalCode) {

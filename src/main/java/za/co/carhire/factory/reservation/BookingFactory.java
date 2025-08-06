@@ -16,9 +16,9 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public class BookingFactory {
-    public static Booking createBooking(int bookingID, User user, List<Car>cars, LocalDateTime bookingDateAndTime, LocalDateTime startDate, LocalDateTime endDate, Location pickupLocation, Location dropOffLocation, String bookingStatus){
+    public static Booking createBooking(int bookingID, User user, List<Car>cars, LocalDateTime bookingDateAndTime, LocalDateTime startDate, LocalDateTime endDate, Location pickupLocation, Location dropOffLocation, BookingStatus bookingStatus){
         if(Helper.isNullOrEmpty(bookingStatus)){
-            return null ;
+            bookingStatus = BookingStatus.PENDING;
         }
         return new Booking.Builder()
                 .setBookingID(bookingID)
@@ -33,8 +33,8 @@ public class BookingFactory {
                 .build();
     }
 
-    public static Booking cancelBooking(int bookingID, User user, LocalDateTime bookingDateAndTime,String bookingStatus){
-        if (Helper.isNullOrEmpty(bookingStatus)){
+    public static Booking cancelBooking(int bookingID, User user, LocalDateTime bookingDateAndTime,BookingStatus bookingStatus){
+        if(Helper.isNullOrEmpty(bookingStatus)){
             return null;
         }
         return new Booking.Builder()
@@ -44,7 +44,7 @@ public class BookingFactory {
                 .setBookingStatus(BookingStatus.CANCELLED)
                 .build();
     }
-    public static Booking confirmBooking(int bookingID, User user, LocalDateTime bookingDateAndTime,String bookingStatus){
+    public static Booking confirmBooking(int bookingID, User user, LocalDateTime bookingDateAndTime,BookingStatus bookingStatus){
         if(Helper.isNullOrEmpty(bookingStatus)){
             return null;
         }

@@ -34,7 +34,7 @@ class BookingServiceTest {
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
-        booking01 = BookingFactory.createBooking(booking01.getBookingID(), booking01.getUser(), booking01.getCar(), booking01.getBookingDateAndTime(), booking01.getStartDate(), booking01.getEndDate(), booking01.getPickupLocation(), booking01.getDropOffLocation(), booking01);
+        booking01 = BookingFactory.createBooking(booking01.getBookingID(), booking01.getUser(), booking01.getCar(), booking01.getBookingDateAndTime(), booking01.getStartDate(), booking01.getEndDate(), booking01.getPickupLocation(), booking01.getDropOffLocation(), booking01.getBookingStatus());
     }
 
     @Test
