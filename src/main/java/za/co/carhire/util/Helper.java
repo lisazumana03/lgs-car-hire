@@ -11,7 +11,7 @@ import java.util.List;
 
 public class Helper {
     public static boolean isNullOrEmpty(BookingStatus s) {
-        return s == null || s.isEmpty();
+        return s == null;
     }
     public static boolean isValidPostalCode(short postalCode) {
         if (postalCode < -1 || postalCode > 9999) {
@@ -89,6 +89,11 @@ public class Helper {
         }
         return false;
     }
+
+    private static boolean isNullOrEmpty(String aNull) {
+        return false == isEmptyOrNull(aNull);
+    }
+
     public static boolean isValidDate(String dateString) {
         if (dateString == null || dateString.trim().isEmpty()) {
             return false;
