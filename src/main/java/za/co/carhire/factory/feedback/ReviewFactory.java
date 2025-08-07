@@ -6,7 +6,7 @@ import za.co.carhire.util.Helper;
 
 /*
 Olwethu Tshingo - 222634383
-Date: 14 May 2025
+Date: 30 July 2025
  */
 
 public class ReviewFactory {
@@ -15,7 +15,7 @@ public class ReviewFactory {
     public static Review createReview(int reviewID, User user, Car car , int rating, String comment){
         if(Helper.isWithinBoundary(reviewID)||
                 Helper.isRating(rating) ||
-                Helper.isNullOrEmpty(comment)){
+                Helper.isEmptyOrNull(comment)){
             return null;
         }else{
             return new Review.Builder()
