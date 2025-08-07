@@ -90,7 +90,7 @@ public class Helper {
         return false;
     }
 
-    private static boolean isNullOrEmpty(String aNull) {
+    public static boolean isNullOrEmpty(String aNull) {
         return false == isEmptyOrNull(aNull);
     }
 

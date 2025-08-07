@@ -12,5 +12,5 @@ import java.util.List;
 public interface IInsuranceService {
     Insurance assignInsurance(Insurance insurance);
     List<Insurance> getAllInsurances();
-    void deleteInsurance(Insurance insurance);
+    void deleteInsurance(int insuranceId);
 }
