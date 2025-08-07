@@ -11,26 +11,38 @@ public class ReviewFactoryTest {
 
     @Test
     public void testCreateReviewValid() {
-        Review review = ReviewFactory.createReview(1, new User(), new Car(), 4, "Great car, smooth ride.");
+
+        User user = new User();   // Stub user (can be mocked or built if needed)
+        Car car = new Car();      // Stub car
+        int reviewID = 1;
+        int rating = 4;
+        String comment = "Great car, smooth ride.";
+
+        Review review = ReviewFactory.createReview(reviewID, user, car, rating, comment);
 
         assertNotNull(review);
-        assertEquals(1, review.getReviewID());
-        assertEquals(4, review.getRating());
-        assertEquals("Great car, smooth ride.", review.getComment());
+        assertEquals(reviewID, review.getReviewID());
+        assertEquals(user, review.getUser());
+        assertEquals(car, review.getCar());
+        assertEquals(rating, review.getRating());
+        assertEquals(comment, review.getComment());
     }
 
     @Test
     public void testCreateReviewInvalid() {
+
         Review review = ReviewFactory.createReview(-1, new User(), new Car(), 4, "Nice");  // Invalid reviewID
         assertNull(review);
     }
 
     @Test
     public void testDeleteReviewValid() {
-        Review deletedReview = ReviewFactory.deleteReview(1);
+
+        int reviewID = 2;
+        Review deletedReview = ReviewFactory.deleteReview(reviewID);
 
         assertNotNull(deletedReview);
-        assertEquals(1, deletedReview.getReviewID());
+        assertEquals(reviewID, deletedReview.getReviewID());
         assertEquals("This review has been deleted.", deletedReview.getComment());
     }
 
@@ -38,5 +50,7 @@ public class ReviewFactoryTest {
     public void testDeleteReviewInvalid() {
         Review deletedReview = ReviewFactory.deleteReview(-1); // Invalid ID
         assertNull(deletedReview);
+
+
     }
 }
