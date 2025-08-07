@@ -1,11 +1,12 @@
 package za.co.carhire.factory.reservation;
 
+/*
+Olwethu Tshingo - 222634383
+Date: 30 July 2025
+ */
 import org.junit.jupiter.api.Test;
 import za.co.carhire.domain.authentication.User;
-import za.co.carhire.domain.feedback.Review;
 import za.co.carhire.domain.reservation.SupportTicket;
-import za.co.carhire.domain.vehicle.Car;
-import za.co.carhire.factory.feedback.ReviewFactory;
 
 import static org.junit.jupiter.api.Assertions.*;
 
