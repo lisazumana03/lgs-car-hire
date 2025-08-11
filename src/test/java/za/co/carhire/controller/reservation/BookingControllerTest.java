@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
 import za.co.carhire.domain.authentication.User;
 import za.co.carhire.domain.reservation.Booking;
+import za.co.carhire.domain.reservation.BookingStatus;
 import za.co.carhire.domain.reservation.Location;
 import za.co.carhire.domain.reservation.Payment;
 import za.co.carhire.domain.vehicle.Car;
@@ -27,7 +28,7 @@ class BookingControllerTest {
 
     @Autowired
     private TestRestTemplate restTemplate;
-    private String baseUrl = "http://localhost:3045/booking";
+    private final String baseUrl = "http://localhost:3045/booking";
 
     private static Booking booking;
 
@@ -55,7 +56,7 @@ class BookingControllerTest {
                 .setProvinceOrState("Western Cape")
                 .build();
 
-        String bookingStatus = "Pending";
+        BookingStatus bookingStatus = BookingStatus.PENDING;
 
         booking = BookingFactory.createBooking(bookingID, user, cars, bookingDateAndTime, startDate, endDate, pickUpLocation, dropOffLocation, bookingStatus);
     }

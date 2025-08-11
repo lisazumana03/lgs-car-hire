@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Set;
 
 public interface IBookingService extends IService<Booking, Integer> {
+    Booking read(int bookingID);
     Set<Booking> getBookings();
     void delete(int bookingID);
     //Cancel booking logic

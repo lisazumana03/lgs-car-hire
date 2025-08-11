@@ -30,7 +30,7 @@ public class InsuranceService implements IInsuranceService {
     }
 
     @Override
-    public void deleteInsurance(Insurance insurance) {
+    public void deleteInsurance(int insuranceId) {
 
     }
 }

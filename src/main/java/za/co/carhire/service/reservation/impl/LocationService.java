@@ -30,9 +30,8 @@ public class LocationService implements ILocationService {
         return locationRepository.save(location);
     }
 
-
     @Override
-    public Location read(int locationID) {
+    public Location read(Integer locationID) {
         return locationRepository.findById(locationID).orElse(null);
     }
 

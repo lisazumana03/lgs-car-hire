@@ -38,12 +38,18 @@ public class BookingService implements IBookingService {
     }
 
     @Override
+    public Booking read(Integer bookingID) {
+        return bookingRepository.findById(bookingID).orElse(null);
+    }
+
+    @Override
     public Booking update(Booking booking) {
         if(this.bookingRepository.existsById(booking.getBookingID()))
             return this.bookingRepository.save(booking);
         return null;
     }
 
+    @Override
     public void delete(int bookingID){
         bookingRepository.deleteById(bookingID);
     }

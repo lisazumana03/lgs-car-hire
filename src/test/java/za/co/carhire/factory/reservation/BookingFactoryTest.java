@@ -9,9 +9,7 @@ import za.co.carhire.domain.reservation.Location;
 import za.co.carhire.domain.vehicle.Car;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;

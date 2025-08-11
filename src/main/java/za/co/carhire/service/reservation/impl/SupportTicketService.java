@@ -5,6 +5,7 @@ Date: 30 July 2025
  */
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import za.co.carhire.domain.reservation.SupportTicket;
 import za.co.carhire.repository.reservation.ISupportTicketRepository;
 import za.co.carhire.service.reservation.ISupportTicketService;
@@ -13,6 +14,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+@Service
 public class SupportTicketService implements ISupportTicketService {
 
     @Autowired

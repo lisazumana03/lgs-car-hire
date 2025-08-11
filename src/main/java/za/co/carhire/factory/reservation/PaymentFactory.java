@@ -11,16 +11,20 @@ import za.co.carhire.util.Helper;
 
 
 public class PaymentFactory {
-//    public static Payment createPayment(Booking booking, double amount, String method) {
-//        if (!isValid(booking, amount, method)) {
-//            return null;
-//        }
-//
-//        return new Payment.Builder()
-//                .setPaymentID(Helper.generateId()).setAmount(amount)
-//                .setPaymentMethod(method.toUpperCase())
-//                .build();
-//    }
+    public static Payment createPayment(Booking booking, double amount, String method) {
+        if (!isValid(booking, amount, method)) {
+            return null;
+        }
+
+        return new Payment.Builder()
+                .setPaymentID(Helper.generateId()).setAmount(amount)
+                .setPaymentMethod(method.toUpperCase())
+                .build();
+    }
+
+    private static boolean isValid(Booking booking, double amount, String method) {
+        return true;
+    }
 
     public static Payment processRefund(Payment payment) {
         if (payment == null || payment.getPaymentMethod().equalsIgnoreCase("REFUND")) {
