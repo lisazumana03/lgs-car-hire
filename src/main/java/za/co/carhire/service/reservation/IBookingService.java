@@ -11,13 +11,9 @@ Date: 24/05/2025
 import java.util.List;
 import java.util.Set;
 
-public interface IBookingService {
+public interface IBookingService extends IService<Booking, Integer> {
 
     Set<Booking> getBookings();
-
-    Booking create(Booking booking);
-    Booking read(int bookingID);
-    Booking update(Booking booking);
     void delete(int bookingID);
 
     Booking cancelBooking(int bookingID);
