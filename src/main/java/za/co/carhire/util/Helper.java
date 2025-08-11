@@ -76,6 +76,13 @@ public class Helper {
         return (end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24);
     }
 
+    public static boolean isEmptyOrNull(BookingStatus status) {
+        if(status == null || status.equals(BookingStatus.PENDING) || status.equals(BookingStatus.CANCELLED)){
+            return true;
+        }
+        return false;
+    }
+
     public static boolean isEmptyOrNull(String str) {
         if (str.isEmpty() ||str == null || str.equalsIgnoreCase("null")) {
             return true;
