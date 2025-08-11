@@ -10,4 +10,5 @@ import java.util.Set;
 public interface ILocationService extends IService<Location, Integer> {
     Set<Location> getLocations();
     void delete(int locationID);
+
 }
