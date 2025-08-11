@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import za.co.carhire.domain.authentication.User;
 import za.co.carhire.domain.reservation.Booking;
+import za.co.carhire.domain.reservation.BookingStatus;
 import za.co.carhire.domain.reservation.Location;
 import za.co.carhire.domain.vehicle.Car;
 
@@ -45,7 +46,7 @@ class BookingFactoryTest {
         Location pickupLocation = new Location();
         Location dropOffLocation = new Location();
 
-        String bookingStatus = "Your booking has been created.";
+        BookingStatus bookingStatus = BookingStatus.PENDING;
 
         Booking booking = BookingFactory.createBooking(bookingID, user, cars, bookingDateAndTime, startDate, endDate, pickupLocation, dropOffLocation, bookingStatus);
 
@@ -61,7 +62,7 @@ class BookingFactoryTest {
 
         LocalDateTime bookingDateAndTime = LocalDateTime.now();
 
-        String bookingStatus = "Your booking has been cancelled.";
+        BookingStatus bookingStatus = BookingStatus.CANCELLED;
 
         Booking booking = BookingFactory.cancelBooking(bookingID, user, bookingDateAndTime, bookingStatus);
 
@@ -77,7 +78,7 @@ class BookingFactoryTest {
 
         LocalDateTime bookingDateAndTime = LocalDateTime.now();
 
-        String bookingStatus = "Your booking has been confirmed.";
+        BookingStatus bookingStatus = BookingStatus.CONFIRMED;
 
         Booking booking = BookingFactory.cancelBooking(bookingID, user, bookingDateAndTime, bookingStatus);
 
