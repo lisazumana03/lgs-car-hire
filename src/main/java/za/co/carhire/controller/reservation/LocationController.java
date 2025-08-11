@@ -13,7 +13,7 @@ Date: 25/05/2025
 
 @RestController
 @RequestMapping("/location")
-@CrossOrigin(origins = "*")
+//@CrossOrigin(origins = "*")
 public class LocationController {
 
     @Autowired
@@ -28,7 +28,7 @@ public class LocationController {
         return locationService.create(location01);
     }
 
-    @GetMapping("/read{id}")
+    @GetMapping("/read/{id}")
     public Location read(@PathVariable int id){
         return locationService.read(id);
     }
@@ -38,7 +38,7 @@ public class LocationController {
         return locationService.update(location);
     }
 
-    @GetMapping("/delete{id}")
+    @DeleteMapping("/delete/{id}")
     public void delete(@PathVariable int id){
         locationService.delete(id);
     }

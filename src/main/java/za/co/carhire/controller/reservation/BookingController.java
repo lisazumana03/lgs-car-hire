@@ -33,6 +33,12 @@ public class BookingController {
         return bookingService.update(booking);
     }
 
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<Void> delete(@PathVariable int id){
+        bookingService.delete(id);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
     @DeleteMapping("/cancel/{id}")
     public ResponseEntity<Booking> cancel(@PathVariable int id){
         bookingService.cancelBooking(id);
