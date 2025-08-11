@@ -2,11 +2,14 @@ package za.co.carhire.domain.reservation;
 
 /*
 Olwethu Tshingo - 222634383
-Date: 11 May 2025
+Date: 30 2025
  */
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import za.co.carhire.domain.authentication.User;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -15,9 +18,10 @@ import java.util.Date;
 public class SupportTicket implements Serializable {
     @Id
     protected int ticketID;
-    protected int userID;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    protected User user;
     protected String message;
-    protected Date createdAt;
     protected String status;
     protected int response;
 
@@ -26,9 +30,8 @@ public class SupportTicket implements Serializable {
 
     private SupportTicket(Builder builder) {
         this.ticketID = builder.ticketID;
-        this.userID = builder.userID;
+        this.user = builder.user;
         this.message = builder.message;
-        this.createdAt = builder.createdAt;
         this.status = builder.status;
         this.response = builder.response;
     }
@@ -37,16 +40,12 @@ public class SupportTicket implements Serializable {
         return ticketID;
     }
 
-    public int getUserID(){
-        return userID;
+    public User getUser(){
+        return user;
     }
 
     public String getMessage(){
         return message;
-    }
-
-    public Date getCreatedAT() {
-        return createdAt;
     }
 
     public String getStatus(){
@@ -62,9 +61,8 @@ public class SupportTicket implements Serializable {
     public String toString() {
         return "SupportTicket{" +
                 "ticketID=" + ticketID +
-                ", userID=" + userID +
+                ", userID=" + user +
                 ", message='" + message + '\'' +
-                ", createdAt=" + createdAt +
                 ", status='" + status + '\'' +
                 ", response=" + response +
                 '}';
@@ -72,9 +70,8 @@ public class SupportTicket implements Serializable {
 
     public static class Builder{
         protected int ticketID;
-        protected int userID;
-        protected  String message;
-        protected Date createdAt;
+        protected User user;
+        protected String message;
         protected String status;
         protected int response;
 
@@ -83,18 +80,14 @@ public class SupportTicket implements Serializable {
             return this;
         }
 
-        public Builder setUserID(int userID) {
-            this.userID = userID;
+        public Builder setUser(User user) {
+            this.user = user;
             return this;
         }
 
         public Builder setMessage(String message) {
             this.message = message;
             return this;
-        }
-
-        public void setCreatedAt(Date createdAt) {
-            this.createdAt = createdAt;
         }
 
         public Builder setStatus(String status) {
@@ -109,9 +102,8 @@ public class SupportTicket implements Serializable {
 
         public SupportTicket.Builder copy(SupportTicket support){
             this.ticketID = support.getTicketID();
-            this.userID = support.getUserID();;
+            this.user = support.getUser();;
             this.message = support.getMessage();
-            this.createdAt = support.getCreatedAT();
             this.status = support.getStatus();
             this.response = support.getResponse();
             return this;
