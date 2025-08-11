@@ -1,35 +1,34 @@
 package za.co.carhire.domain.authentication;
 
 import jakarta.persistence.*;
-
 import java.time.LocalDate;
 
-import static jakarta.persistence.GenerationType.*;
-
-/* User.java
-
-     User POJO class
-
-     Author: Bonga Velem (220052379)
-
-     Date: 11 May 2025 */
 @Entity
+@Table(name = "Users")
 public class User {
     @Id
-    protected Integer userId;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Integer userId;
 
+    @Column(nullable = false, unique = true)
     private Long idNumber;
 
+    @Column(nullable = false)
     private String name;
 
+    @Column(nullable = false)
     private String email;
 
+    @Column(nullable = false)
     private LocalDate dateOfBirth;
 
+    @Column(nullable = false)
     private String phoneNumber;
 
+    @Column(nullable = false)
     private String password;
 
+    @Column
     private String licenseNumber;
 
     public User() {
@@ -50,32 +49,64 @@ public class User {
         return userId;
     }
 
+    public void setUserId(Integer userId) {
+        this.userId = userId;
+    }
+
     public Long getIdNumber() {
         return idNumber;
+    }
+
+    public void setIdNumber(Long idNumber) {
+        this.idNumber = idNumber;
     }
 
     public String getName() {
         return name;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public String getEmail() {
         return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public LocalDate getDateOfBirth() {
         return dateOfBirth;
     }
 
+    public void setDateOfBirth(LocalDate dateOfBirth) {
+        this.dateOfBirth = dateOfBirth;
+    }
+
     public String getPhoneNumber() {
         return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 
     public String getPassword() {
         return password;
     }
 
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
     public String getLicenseNumber() {
         return licenseNumber;
+    }
+
+    public void setLicenseNumber(String licenseNumber) {
+        this.licenseNumber = licenseNumber;
     }
 
     @Override
@@ -93,21 +124,13 @@ public class User {
     }
 
     public static class Builder{
-
         private Integer userId;
-
         private Long idNumber;
-
         private String name;
-
         private String email;
-
         private LocalDate dateOfBirth;
-
         private String phoneNumber;
-
         private String password;
-
         private String licenseNumber;
 
         public Builder setUserId(Integer userId) {
@@ -160,15 +183,10 @@ public class User {
             this.password = user.password;
             this.licenseNumber = user.licenseNumber;
             return this;
-
         }
 
         public User build(){
             return new User(this);
         }
-
-
-
-
     }
 }
