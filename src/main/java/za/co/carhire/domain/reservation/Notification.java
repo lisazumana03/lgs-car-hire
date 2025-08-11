@@ -1,36 +1,37 @@
 package za.co.carhire.domain.reservation;
-/* Notification.java
 
-     Notification POJO class
-
-     Author: Bonga Velem (220052379)
-
-     Date: 11 May 2025 */
-
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-
+import jakarta.persistence.*;
+import za.co.carhire.domain.authentication.User;
 import java.time.LocalDate;
+
 @Entity
+@Table(name = "Notifications")
 public class Notification {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer notificationID;
 
-    private Integer userID;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 
+    @Column(nullable = false)
     private String message;
 
+    @Column(nullable = false)
     private LocalDate dateSent;
 
-    private String status;
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private BookingStatus status;
 
     public Notification() {
     }
 
     public Notification(Builder builder) {
         this.notificationID = builder.notificationID;
-        this.userID = builder.userID;
+        this.user = builder.user;
         this.message = builder.message;
         this.dateSent = builder.dateSent;
         this.status = builder.status;
@@ -40,51 +41,67 @@ public class Notification {
         return notificationID;
     }
 
-    public Integer getUserID() {
-        return userID;
+    public void setNotificationID(Integer notificationID) {
+        this.notificationID = notificationID;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public String getMessage() {
         return message;
     }
 
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
     public LocalDate getDateSent() {
         return dateSent;
     }
 
-    public String getStatus() {
+    public void setDateSent(LocalDate dateSent) {
+        this.dateSent = dateSent;
+    }
+
+    public BookingStatus getStatus() {
         return status;
+    }
+
+    public void setStatus(BookingStatus status) {
+        this.status = status;
     }
 
     @Override
     public String toString() {
         return "Notification{" +
                 "notificationID=" + notificationID +
-                ", userID=" + userID +
+                ", userID=" + user +
                 ", message='" + message + '\'' +
                 ", dateSent=" + dateSent +
                 ", status='" + status + '\'' +
                 '}';
     }
 
-    public static class Builder{
+    public static class Builder {
         private Integer notificationID;
-
-        private Integer userID;
-
+        private User user;
         private String message;
-
         private LocalDate dateSent;
-
-        private String status;
+        private BookingStatus status;
 
         public Builder setNotificationID(Integer notificationID) {
             this.notificationID = notificationID;
             return this;
         }
 
-        public Builder setUserID(Integer userID) {
-            this.userID = userID;
+        public Builder setUserID(User user) {
+            this.user = user;
             return this;
         }
 
@@ -98,25 +115,22 @@ public class Notification {
             return this;
         }
 
-        public Builder setStatus(String status) {
+        public Builder setStatus(BookingStatus status) {
             this.status = status;
             return this;
         }
 
-        public Builder copy(Notification notification){
+        public Builder copy(Notification notification) {
             this.notificationID = notification.notificationID;
-            this.userID = notification.userID;
+            this.user = notification.user;
             this.message = notification.message;
             this.dateSent = notification.dateSent;
             this.status = notification.status;
             return this;
-
         }
 
-        public Notification build(){
+        public Notification build() {
             return new Notification(this);
         }
-
-
     }
 }
