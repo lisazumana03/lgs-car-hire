@@ -7,6 +7,8 @@ package za.co.carhire.factory.reservation;
 
      Date: 18 May 2025 */
 
+import za.co.carhire.domain.authentication.User;
+import za.co.carhire.domain.reservation.BookingStatus;
 import za.co.carhire.domain.reservation.Notification;
 
 import java.time.LocalDate;
@@ -14,7 +16,7 @@ import java.time.LocalDate;
 import static org.junit.jupiter.api.Assertions.*;
 class NotificationFactoryTest {
 
-    private Notification notification = NotificationFactory.createNotification(12121, 12132, "Welcome to Our App!", "2025-05-18", "Booked");
+    private Notification notification = NotificationFactory.createNotification(12121, new User(), "Welcome to Our App!", "2025-05-18", BookingStatus.CONFIRMED);
 
 
 
