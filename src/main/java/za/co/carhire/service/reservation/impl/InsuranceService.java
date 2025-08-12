@@ -25,12 +25,35 @@ public class InsuranceService implements IInsuranceService {
     }
 
     @Override
-    public List<Insurance> getAllInsurances() {
-        return List.of();
+    public List<Insurance> getAll() {
+        return insuranceRepository.findAll();
     }
 
     @Override
     public void deleteInsurance(int insuranceId) {
+        insuranceRepository.deleteById(insuranceId);
+    }
 
+    @Override
+    public void cancelInsurance(int insuranceId) {
+
+    }
+
+    @Override
+    public Insurance create(Insurance insurance) {
+        return insuranceRepository.save(insurance);
+    }
+
+    @Override
+    public Insurance read(Integer insuranceId) {
+        return insuranceRepository.findById(insuranceId).orElse(null);
+    }
+
+    @Override
+    public Insurance update(Insurance insurance) {
+        if(insurance != null){
+            return insuranceRepository.save(insurance);
+        }
+        return null;
     }
 }

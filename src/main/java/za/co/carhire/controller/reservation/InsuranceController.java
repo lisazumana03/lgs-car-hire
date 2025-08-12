@@ -29,12 +29,12 @@ public class InsuranceController {
     public Insurance update(@RequestBody Insurance insurance){
         return insuranceService.update(insurance);
     }
-    @DeleteMapping('/delete/{id}")
-    public ResponseEntity<void> delete(@PathVariable int id) {
-        insuranceService.delete(id);
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<Void> delete(@PathVariable int id) {
+        insuranceService.deleteInsurance(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
-    @DeleteMapping('/cancel/{id}")
+    @DeleteMapping("/cancel/{id}")
     public ResponseEntity<Insurance> cancel(@PathVariable int id) {
         insuranceService.cancelInsurance(id);
         return new ResponseEntity<>(HttpStatus.OK);
