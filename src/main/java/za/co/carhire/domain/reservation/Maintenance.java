@@ -80,7 +80,9 @@ public class Maintenance implements Serializable {
         return mechanic;
     }
     
-    
+    public void setStatus(String status){
+        this.status = status;
+    }
     
     @Override
     public String toString() {

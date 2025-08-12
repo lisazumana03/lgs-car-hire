@@ -7,9 +7,12 @@ Date: 24/05/2025
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import za.co.carhire.domain.reservation.BookingStatus;
 import za.co.carhire.domain.reservation.Maintenance;
 import za.co.carhire.repository.reservation.IMaintenanceRepository;
 import za.co.carhire.service.reservation.IMaintenanceService;
+
+import java.util.Optional;
 
 @Service
 public class MaintenanceService implements IMaintenanceService {
@@ -34,5 +37,18 @@ public class MaintenanceService implements IMaintenanceService {
     @Override
     public void delete(int maintenanceId) {
         maintenanceRepository.deleteById(maintenanceId);
+    }
+
+    @Override
+    public void cancelMaintenance(int maintenanceId) {
+        Optional<Maintenance> optionalMaintenance = maintenanceRepository.findById(maintenanceId);
+
+        if (optionalMaintenance.isPresent()) {
+            Maintenance maintenance = optionalMaintenance.get();
+            maintenance.setStatus("CANCELLED");
+            maintenanceRepository.save(maintenance);
+        } else {
+            throw new RuntimeException("Maintenance record not found for ID: " + maintenanceId);
+        }
     }
 }

@@ -12,7 +12,7 @@ import za.co.carhire.service.reservation.impl.MaintenanceService;
 
 @RestController
 @RequestMapping("/maintenance")
-@CrossOrigin(origins = "*")
+//@CrossOrigin(origins = "*")
 public class MaintenanceController {
     @Autowired
     private MaintenanceService maintenanceService;
@@ -29,12 +29,13 @@ public class MaintenanceController {
     public Maintenance update(@RequestBody Maintenance maintenance){
         return maintenanceService.update(maintenance);
     }
-    @DeleteMapping('/delete/{id}")
-    public ResponseEntity<void> delete(@PathVariable int id) {
+
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<Void> delete(@PathVariable int id) {
         maintenanceService.delete(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
-    @DeleteMapping('/cancel/{id}")
+    @DeleteMapping("/cancel/{id}")
     public ResponseEntity<Maintenance> cancel(@PathVariable int id) {
         maintenanceService.cancelMaintenance(id);
         return new ResponseEntity<>(HttpStatus.OK);

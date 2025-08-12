@@ -10,4 +10,5 @@ import za.co.carhire.service.IService;
 
 public interface IMaintenanceService extends IService<Maintenance, Integer> {
     void delete(int maintenanceId);
+    void cancelMaintenance(int maintenanceId);
 }
