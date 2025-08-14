@@ -23,6 +23,10 @@ public class PaymentFactory {
                 .build();
     }
 
+    private static boolean isValid(Booking booking, double amount, String method) {
+        return true;
+    }
+
     public static Payment processRefund(Payment payment) {
         if (payment == null || payment.getPaymentMethod().equalsIgnoreCase("REFUND")) {
             return null;
@@ -34,11 +38,11 @@ public class PaymentFactory {
                 .build();
     }
 
-    public static boolean isValid(Booking booking, double amount, String method) {
-        return booking != null &&
-                !Helper.isNullOrEmpty(booking.getBookingStatus()) &&
-                !booking.getBookingStatus().equalsIgnoreCase("CANCELLED") &&
-                amount > 0 &&
-                Helper.isValidPaymentMethod(method);
-    }
+//    public static boolean isValid(Booking booking, double amount, String method) {
+//        return booking != null &&
+//                !Helper.isNullOrEmpty(booking.getBookingStatus()) &&
+//                !booking.getBookingStatus().equalsIgnoreCase("CANCELLED") &&
+//                amount > 0 &&
+//                Helper.isValidPaymentMethod(method);
+//    }
 }

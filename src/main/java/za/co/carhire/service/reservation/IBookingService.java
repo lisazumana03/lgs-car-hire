@@ -11,15 +11,10 @@ Date: 24/05/2025
 import java.util.List;
 import java.util.Set;
 
-public interface IBookingService {
-
-  Set<Booking> getBookings();
-
-  Booking create(Booking booking);
-
-  Booking read(int bookingID);
-
-  Booking update(Booking booking);
-
-  void delete(int bookingID);
+public interface IBookingService extends IService<Booking, Integer> {
+    Booking read(int bookingID);
+    Set<Booking> getBookings();
+    void delete(int bookingID);
+    //Cancel booking logic
+    Booking cancelBooking(int bookingID);
 }

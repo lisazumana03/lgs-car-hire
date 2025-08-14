@@ -5,13 +5,14 @@ package za.co.carhire.factory.reservation;
  * */
 import org.junit.jupiter.api.Test;
 import za.co.carhire.domain.reservation.Booking;
+import za.co.carhire.domain.reservation.BookingStatus;
 import za.co.carhire.domain.reservation.Payment;
 import static org.junit.jupiter.api.Assertions.*;
 
 class PaymentFactoryTest {
     private Booking validBooking = new Booking.Builder()
             .setBookingID(1)
-            .setBookingStatus("CONFIRMED")
+            .setBookingStatus(BookingStatus.CONFIRMED)
             .build();
 
     @Test
@@ -35,7 +36,7 @@ class PaymentFactoryTest {
     @Test
     void rejectCancelledBooking() {
         Booking cancelledBooking = new Booking.Builder()
-                .setBookingStatus("CANCELLED")
+                .setBookingStatus(BookingStatus.CANCELLED)
                 .build();
         assertNull(PaymentFactory.createPayment(cancelledBooking, 1000.00, "CASH"));
     }

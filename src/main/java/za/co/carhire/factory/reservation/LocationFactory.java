@@ -7,6 +7,7 @@ Date: 12 May 2025
 
 import za.co.carhire.domain.reservation.Booking;
 import za.co.carhire.domain.reservation.Location;
+import za.co.carhire.domain.vehicle.Car;
 import za.co.carhire.util.Helper;
 
 import java.util.List;

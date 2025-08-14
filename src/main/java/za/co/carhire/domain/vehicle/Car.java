@@ -1,5 +1,4 @@
 package za.co.carhire.domain.vehicle;
-
 // Imtiyaaz Waggie 219374759//
 //date:10/05/2025 //
 
@@ -46,7 +45,6 @@ public class Car implements Serializable {
     @JoinColumn(name = "booking_id")
     private Booking booking;
 
-    // Default constructor
     public Car() {
     }
 
