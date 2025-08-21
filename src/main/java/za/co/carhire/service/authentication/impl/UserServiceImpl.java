@@ -1,4 +1,4 @@
-package za.co.carhire.service.authentication.Impl;
+package za.co.carhire.service.authentication.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
