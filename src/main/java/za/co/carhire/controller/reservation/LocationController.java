@@ -1,6 +1,7 @@
 package za.co.carhire.controller.reservation;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import za.co.carhire.domain.reservation.Location;
 import za.co.carhire.factory.reservation.LocationFactory;
@@ -20,12 +21,8 @@ public class LocationController {
     private LocationService locationService;
 
     @PostMapping("/create")
-    public Location create(@RequestBody Location location){
-        Location location01 = LocationFactory.createLocation(location.getLocationID(), location.getLocationName(),
-                location.getStreetName(), location.getCityOrTown(), location.getProvinceOrState(),
-                location.getCountry(), location.getPostalCode(),
-                location.getPickUpLocations(), location.getDropOffLocations());
-        return locationService.create(location01);
+    public ResponseEntity<Location> create(@RequestBody Location location){
+        return ResponseEntity.ok(locationService.create(location));
     }
 
     @GetMapping("/read/{id}")
