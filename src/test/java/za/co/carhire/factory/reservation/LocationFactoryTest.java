@@ -26,8 +26,8 @@ class LocationFactoryTest {
         String streetName = "Robert Street";
         String city = "Kommetjie";
         String provinceOrState = "Western Cape";
-        String country = "Germany";
-        Short postalCode = 7345;
+        String country = "South Africa";
+        String postalCode = "7345";
         List<Booking> pickUpLocations = new ArrayList<>();
         pickUpLocations.add(new Booking());
         List<Booking> dropOffLocations = new ArrayList<>();

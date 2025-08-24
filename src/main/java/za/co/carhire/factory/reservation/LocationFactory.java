@@ -13,7 +13,7 @@ import za.co.carhire.util.Helper;
 import java.util.List;
 
 public class LocationFactory {
-    public static Location createLocation(int locationID, String locationName, String streetName, String city, String provinceOrState, String country, Short postalCode, List<Booking>pickUpLocations, List<Booking>dropOffLocations) {
+    public static Location createLocation(int locationID, String locationName, String streetName, String city, String provinceOrState, String country, String postalCode, List<Booking>pickUpLocations, List<Booking>dropOffLocations) {
         if(Helper.isNullOrEmpty(locationName)){
             return null;
         }

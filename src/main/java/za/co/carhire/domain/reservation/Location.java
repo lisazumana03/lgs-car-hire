@@ -1,18 +1,14 @@
 package za.co.carhire.domain.reservation;
 
-/*
-Location.java
-Location POJO class
-Lisakhanya Zumana - 230864821
-Date: 10 May 2025
- */
-
-import jakarta.persistence.*;
-import za.co.carhire.domain.vehicle.Car;
-
 import java.io.Serializable;
-import java.util.Date;
 import java.util.List;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "location")
@@ -25,7 +21,7 @@ public class Location implements Serializable {
     private String cityOrTown;
     private String provinceOrState;
     private String country;
-    private Short postalCode;
+    private String postalCode;
 
     @OneToMany(mappedBy = "pickupLocation")
     private List<Booking> pickUpLocations;
@@ -72,7 +68,7 @@ public class Location implements Serializable {
         return country;
     }
 
-    public Short getPostalCode() {
+    public String getPostalCode() {
         return postalCode;
     }
 
@@ -106,7 +102,7 @@ public class Location implements Serializable {
         private String cityOrTown;
         private String provinceOrState;
         private String country;
-        private Short postalCode;
+        private String postalCode;
         private List<Booking> pickUpLocations;
         private List<Booking> dropOffLocations;
 
@@ -134,7 +130,7 @@ public class Location implements Serializable {
             this.country = country;
             return this;
         }
-        public Builder setPostalCode(Short postalCode) {
+        public Builder setPostalCode(String postalCode) {
             this.postalCode = postalCode;
             return this;
         }
