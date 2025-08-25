@@ -22,6 +22,7 @@ public class Location implements Serializable {
     private String provinceOrState;
     private String country;
     private String postalCode;
+
     @OneToMany(mappedBy = "pickupLocation")
     private List<Booking> pickUpLocations;
     @OneToMany(mappedBy = "dropOffLocation")
