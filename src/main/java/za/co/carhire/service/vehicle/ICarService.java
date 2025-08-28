@@ -6,12 +6,13 @@ import za.co.carhire.service.IService;
 /*
 Imtiyaaz Waggie 219374759
 Date: 25/05/2025
- */
+Updated with additional methods
+*/
 
 import java.util.List;
 import java.util.Set;
 
-public interface ICarService extends IService <Car, Integer> {
+public interface ICarService extends IService<Car, Integer> {
 
     Set<Car> getCars();
 
@@ -21,4 +22,9 @@ public interface ICarService extends IService <Car, Integer> {
     Car read(int carID);
     Car update(Car car);
     void delete(int carID);
+
+    List<Car> getAvailableCars();
+    Car updateAvailability(int carID, boolean available);
+    List<Car> getCarsByPriceRange(double minPrice, double maxPrice);
+    List<Car> getCarsByYear(int year);
 }
