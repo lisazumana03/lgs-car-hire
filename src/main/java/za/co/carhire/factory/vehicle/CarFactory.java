@@ -18,7 +18,7 @@ public class CarFactory {
                 .setBrand(brand)
                 .setYear(year)
                 .setRentalPrice(rentalPrice)
-                .setAvailability(true) // Default to available
+                .setAvailability(true)
                 .build();
     }
 

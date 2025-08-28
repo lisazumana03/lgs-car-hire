@@ -1,7 +1,7 @@
 package za.co.carhire.domain.vehicle;
+
 // Imtiyaaz Waggie 219374759//
 //date:10/05/2025 //
-
 import za.co.carhire.domain.reservation.Insurance;
 import za.co.carhire.domain.reservation.Booking;
 
@@ -14,6 +14,7 @@ public class Car implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "carid")
     private int carID;
 
     @Column(name = "model")
@@ -31,24 +32,20 @@ public class Car implements Serializable {
     @Column(name = "rental_price")
     private double rentalPrice;
 
-    // One-to-One relationship with CarType
-    @OneToOne(mappedBy = "car")
-    private CarType carType;
-
-    // One-to-One relationship with Insurance
-    @OneToOne
-    @JoinColumn(name = "insurance_id")
-    private Insurance insurance;
-
-    // Many-to-One relationship with Booking (one booking can have many cars)
     @ManyToOne
     @JoinColumn(name = "booking_id")
     private Booking booking;
 
+    @OneToOne
+    @JoinColumn(name = "insurance_id")
+    private Insurance insurance;
+
+    @OneToOne(mappedBy = "car", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private CarType carType;
+
     public Car() {
     }
 
-    // Private constructor for Builder pattern
     private Car(Builder builder) {
         this.carID = builder.carID;
         this.model = builder.model;
@@ -61,7 +58,6 @@ public class Car implements Serializable {
         this.booking = builder.booking;
     }
 
-    // Getters and Setters
     public int getCarID() {
         return carID;
     }
@@ -95,6 +91,10 @@ public class Car implements Serializable {
     }
 
     public boolean isAvailability() {
+        return availability;
+    }
+
+    public Boolean getAvailability() {
         return availability;
     }
 
@@ -134,7 +134,6 @@ public class Car implements Serializable {
         this.booking = booking;
     }
 
-    // Methods from the diagram
     public boolean checkAvailability() {
         return this.availability;
     }
@@ -157,8 +156,6 @@ public class Car implements Serializable {
                 ", booking=" + (booking != null ? booking.getBookingID() : "null") +
                 '}';
     }
-
-    // Builder class
     public static class Builder {
         private int carID;
         private String model;
@@ -227,10 +224,9 @@ public class Car implements Serializable {
             this.booking = car.getBooking();
             return this;
         }
-        // The missing build() method
+
         public Car build() {
             return new Car(this);
         }
-
     }
 }
