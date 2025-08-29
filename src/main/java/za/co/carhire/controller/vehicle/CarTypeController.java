@@ -16,11 +16,12 @@ import java.util.stream.Collectors;
 /*
 Imtiyaaz Waggie 219374759
 Date: 25/05/2025
+Updated: 28/08/2025 - Added /api prefix to endpoints
  */
 
 @RestController
-@RequestMapping("/cartype")
-@CrossOrigin(origins = "http://localhost:3046")
+@RequestMapping("/api/cartype") 
+// @CrossOrigin(origins = "http://localhost:3046")
 public class CarTypeController {
     @Autowired
     private ICarTypeService carTypeService;

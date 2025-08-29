@@ -2,6 +2,7 @@ package za.co.carhire.service.vehicle.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import za.co.carhire.domain.vehicle.Car;
 import za.co.carhire.repository.vehicle.ICarRepository;
 import za.co.carhire.service.vehicle.ICarService;
@@ -12,6 +13,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
+@Transactional
 public class CarService implements ICarService {
 
     @Autowired
@@ -23,13 +25,31 @@ public class CarService implements ICarService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Car read(Integer id) {
-        return carRepository.findById(id).orElse(null);
+        Optional<Car> car = carRepository.findById(id);
+        if (car.isPresent()) {
+            Car foundCar = car.get();
+            if (foundCar.getCarType() != null) {
+                foundCar.getCarType().getType(); 
+            }
+            return foundCar;
+        }
+        return null;
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Car read(int carID) {
-        return carRepository.findById(carID).orElse(null);
+        Optional<Car> car = carRepository.findById(carID);
+        if (car.isPresent()) {
+            Car foundCar = car.get();
+            if (foundCar.getCarType() != null) {
+                foundCar.getCarType().getType(); 
+            }
+            return foundCar;
+        }
+        return null;
     }
 
     @Override
@@ -46,22 +66,47 @@ public class CarService implements ICarService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Set<Car> getCars() {
-        return carRepository.findAll().stream().collect(Collectors.toSet());
+        List<Car> cars = carRepository.findAll();
+        cars.forEach(car -> {
+            if (car.getCarType() != null) {
+                car.getCarType().getType(); 
+            }
+        });
+        return cars.stream().collect(Collectors.toSet());
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<Car> getCarsByBrand(String brand) {
-        return carRepository.findAll().stream()
+        List<Car> cars = carRepository.findAll().stream()
                 .filter(car -> car.getBrand() != null && car.getBrand().equalsIgnoreCase(brand))
                 .collect(Collectors.toList());
+        
+        cars.forEach(car -> {
+            if (car.getCarType() != null) {
+                car.getCarType().getType();
+            }
+        });
+        
+        return cars;
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<Car> getAvailableCars() {
-        return carRepository.findAll().stream()
+        List<Car> cars = carRepository.findAll().stream()
                 .filter(Car::isAvailability)
                 .collect(Collectors.toList());
+        
+        cars.forEach(car -> {
+            if (car.getCarType() != null) {
+                car.getCarType().getType();
+            }
+        });
+        
+        return cars;
     }
 
     @Override
@@ -76,16 +121,32 @@ public class CarService implements ICarService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<Car> getCarsByPriceRange(double minPrice, double maxPrice) {
-        return carRepository.findAll().stream()
+        List<Car> cars = carRepository.findAll().stream()
                 .filter(car -> car.getRentalPrice() >= minPrice && car.getRentalPrice() <= maxPrice)
                 .collect(Collectors.toList());
+        cars.forEach(car -> {
+            if (car.getCarType() != null) {
+                car.getCarType().getType();
+            }
+        });
+        
+        return cars;
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<Car> getCarsByYear(int year) {
-        return carRepository.findAll().stream()
+        List<Car> cars = carRepository.findAll().stream()
                 .filter(car -> car.getYear() == year)
                 .collect(Collectors.toList());
+        cars.forEach(car -> {
+            if (car.getCarType() != null) {
+                car.getCarType().getType();
+            }
+        });
+        
+        return cars;
     }
 }

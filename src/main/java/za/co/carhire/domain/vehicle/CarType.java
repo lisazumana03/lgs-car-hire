@@ -9,11 +9,11 @@ public class CarType implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "car_typeid")
+    @Column(name = "car_type_id")
     private int carTypeID;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "car_id", referencedColumnName = "carid") 
+    @JoinColumn(name = "car_id", referencedColumnName = "car_id")
     private Car car;
 
     @Column(name = "type")
