@@ -14,7 +14,7 @@ public class Car implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "carid")
+    @Column(name = "car_id") 
     private int carID;
 
     @Column(name = "model")
@@ -156,7 +156,7 @@ public class Car implements Serializable {
                 ", booking=" + (booking != null ? booking.getBookingID() : "null") +
                 '}';
     }
-
+    
     public static class Builder {
         private int carID;
         private String model;
