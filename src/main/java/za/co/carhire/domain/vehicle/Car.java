@@ -40,7 +40,7 @@ public class Car implements Serializable {
     @JoinColumn(name = "insurance_id")
     private Insurance insurance;
 
-    @OneToOne(mappedBy = "car", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToOne(mappedBy = "car", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private CarType carType;
 
     public Car() {
@@ -156,6 +156,7 @@ public class Car implements Serializable {
                 ", booking=" + (booking != null ? booking.getBookingID() : "null") +
                 '}';
     }
+
     public static class Builder {
         private int carID;
         private String model;

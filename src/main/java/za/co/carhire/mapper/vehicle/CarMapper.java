@@ -8,31 +8,46 @@ import za.co.carhire.dto.vehicle.CarDTO;
  * Mapper class for converting between Car entity and CarDTO
  * Author: Imtiyaaz Waggie 219374759
  * Date: 28/08/2025
+ * Updated: Enhanced to include full CarType mapping
  */
 public class CarMapper {
     
     /**
-     * Convert Car entity to CarDTO
+     * Convert Car entity to CarDTO with full CarType details
      * @param car the entity to convert
-     * @return the DTO representation
+     * @return the DTO representation with complete CarType information
      */
     public static CarDTO toDTO(Car car) {
         if (car == null) {
             return null;
         }
         
-        return new CarDTO.Builder()
+        CarDTO.Builder builder = new CarDTO.Builder()
                 .setCarID(car.getCarID())
                 .setModel(car.getModel())
                 .setBrand(car.getBrand())
                 .setYear(car.getYear())
                 .setAvailability(car.isAvailability())
-                .setRentalPrice(car.getRentalPrice())
-                .setCarTypeID(car.getCarType() != null ? car.getCarType().getCarTypeID() : null)
-                .setCarTypeName(car.getCarType() != null ? car.getCarType().getType() : null)
-                .setInsuranceID(car.getInsurance() != null ? car.getInsurance().getInsuranceID() : null)
-                .setBookingID(car.getBooking() != null ? car.getBooking().getBookingID() : null)
-                .build();
+                .setRentalPrice(car.getRentalPrice());
+        
+        if (car.getCarType() != null) {
+            CarType carType = car.getCarType();
+            builder.setCarTypeID(carType.getCarTypeID())
+                   .setCarTypeName(carType.getType())
+                   .setCarTypeFuelType(carType.getFuelType())
+                   .setCarTypeNumberOfWheels(carType.getNumberOfWheels())
+                   .setCarTypeNumberOfSeats(carType.getNumberOfSeats());
+        }
+        
+        if (car.getInsurance() != null) {
+            builder.setInsuranceID(car.getInsurance().getInsuranceID());
+        }
+        
+        if (car.getBooking() != null) {
+            builder.setBookingID(car.getBooking().getBookingID());
+        }
+        
+        return builder.build();
     }
     
     /**
