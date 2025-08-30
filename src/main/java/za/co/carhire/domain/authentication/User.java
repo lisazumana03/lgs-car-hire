@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "Users")
+@Table(name = "users")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -16,7 +16,7 @@ public class User {
     @Column(nullable = false)
     private String name;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String email;
 
     @Column(nullable = false)
@@ -31,6 +31,10 @@ public class User {
     @Column
     private String licenseNumber;
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private UserRole role = UserRole.CUSTOMER;
+
     public User() {
     }
 
@@ -43,6 +47,15 @@ public class User {
         this.phoneNumber = builder.phoneNumber;
         this.password = builder.password;
         this.licenseNumber = builder.licenseNumber;
+        this.role = builder.role != null ? builder.role : UserRole.CUSTOMER;
+    }
+
+    public boolean isAdmin() {
+        return UserRole.ADMIN.equals(this.role);
+    }
+
+    public boolean isCustomer() {
+        return UserRole.CUSTOMER.equals(this.role);
     }
 
     public Integer getUserId() {
@@ -109,6 +122,14 @@ public class User {
         this.licenseNumber = licenseNumber;
     }
 
+    public UserRole getRole() {
+        return role;
+    }
+
+    public void setRole(UserRole role) {
+        this.role = role;
+    }
+
     @Override
     public String toString() {
         return "User{" +
@@ -118,8 +139,9 @@ public class User {
                 ", email='" + email + '\'' +
                 ", dateOfBirth=" + dateOfBirth +
                 ", phoneNumber='" + phoneNumber + '\'' +
-                ", password='" + password + '\'' +
+                ", password='" + "***" + '\'' +
                 ", licenseNumber='" + licenseNumber + '\'' +
+                ", role=" + role +
                 '}';
     }
 
@@ -132,6 +154,7 @@ public class User {
         private String phoneNumber;
         private String password;
         private String licenseNumber;
+        private UserRole role = UserRole.CUSTOMER;
 
         public Builder setUserId(Integer userId) {
             this.userId = userId;
@@ -173,6 +196,11 @@ public class User {
             return this;
         }
 
+        public Builder setRole(UserRole role) {
+            this.role = role;
+            return this;
+        }
+
         public Builder copy(User user){
             this.userId =  user.userId;
             this.idNumber = user.idNumber;
@@ -182,6 +210,7 @@ public class User {
             this.phoneNumber = user.phoneNumber;
             this.password = user.password;
             this.licenseNumber = user.licenseNumber;
+            this.role = user.role;
             return this;
         }
 

@@ -1,4 +1,4 @@
-package za.co.carhire.dto;
+package za.co.carhire.dto.authentication;
 
 import za.co.carhire.domain.authentication.UserRole;
 import java.time.LocalDate;
