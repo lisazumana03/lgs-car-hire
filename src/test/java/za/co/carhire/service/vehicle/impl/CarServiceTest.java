@@ -1,4 +1,4 @@
-package za.co.carhire.service.impl.vehicle.impl;
+package za.co.carhire.service.vehicle.impl;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

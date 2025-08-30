@@ -1,4 +1,4 @@
-package za.co.carhire.service.impl.feedback;
+package za.co.carhire.service.feedback;
 /*
 Olwethu Tshingo - 222634383
 Date: 30 July 2025

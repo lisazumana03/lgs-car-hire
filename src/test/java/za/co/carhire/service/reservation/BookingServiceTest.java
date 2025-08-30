@@ -1,4 +1,4 @@
-package za.co.carhire.service.impl.reservation;
+package za.co.carhire.service.reservation;
 
 /*
 Lisakhanya Zumana (230864821)
