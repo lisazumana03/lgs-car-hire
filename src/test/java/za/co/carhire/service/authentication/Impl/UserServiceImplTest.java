@@ -1,5 +1,13 @@
 package za.co.carhire.service.authentication.Impl;
+/* UserServiceImplTest.java
 
+     UserServiceImplTest/authentication/service class Test
+
+     Author: Bonga Velem
+
+     Student Number: 220052379
+
+     */
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

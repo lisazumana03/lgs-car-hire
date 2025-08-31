@@ -1,5 +1,13 @@
 package za.co.carhire.factory.reservation;
+/* NotificationFactoryTest.java
 
+     NotificationFactoryest/authentication/factory class Test
+
+     Author: Bonga Velem
+
+     Student Number: 220052379
+
+     */
 import org.junit.jupiter.api.Test;
 import za.co.carhire.domain.authentication.User;
 import za.co.carhire.domain.reservation.BookingStatus;

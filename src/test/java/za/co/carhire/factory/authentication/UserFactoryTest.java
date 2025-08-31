@@ -1,5 +1,13 @@
 package za.co.carhire.factory.authentication;
+/* UserFactoryTest.java
 
+     UserFactoryest/authentication/factory class Test
+
+     Author: Bonga Velem
+
+     Student Number: 220052379
+
+     */
 import org.junit.jupiter.api.*;
 import za.co.carhire.domain.authentication.User;
 

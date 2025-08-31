@@ -54,7 +54,9 @@ public class CarTypeService implements ICarTypeService {
     }
 
     @Override
-    public void delete(int carTypeID) {
-        this.carTypeRepository.deleteById(carTypeID);
+    public void delete(Integer carTypeID) {
+
+            this.carTypeRepository.deleteById(carTypeID);
     }
+
 }

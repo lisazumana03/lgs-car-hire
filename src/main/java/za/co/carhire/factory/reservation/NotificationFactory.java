@@ -1,5 +1,13 @@
 package za.co.carhire.factory.reservation;
+/* NotifricationFactory.java
 
+     NotificationFactory/factory class
+
+     Author: Bonga Velem
+
+     Student Number: 220052379
+
+     */
 import za.co.carhire.domain.authentication.User;
 import za.co.carhire.domain.reservation.BookingStatus;
 import za.co.carhire.util.Helper;

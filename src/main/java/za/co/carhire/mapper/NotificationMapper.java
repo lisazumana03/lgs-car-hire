@@ -1,5 +1,13 @@
 package za.co.carhire.mapper;
+/* NotifricationMapper.java
 
+     NotificationMapper/mapper class
+
+     Author: Bonga Velem
+
+     Student Number: 220052379
+
+     */
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import za.co.carhire.domain.reservation.Notification;

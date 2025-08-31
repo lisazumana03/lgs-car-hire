@@ -1,5 +1,13 @@
 package za.co.carhire.domain.authentication;
+/* User.java
 
+     User domain/authentication class
+
+     Author: Bonga Velem
+
+     Student Number: 220052379
+
+     */
 import jakarta.persistence.*;
 import java.time.LocalDate;
 
