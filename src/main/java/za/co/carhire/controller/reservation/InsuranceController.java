@@ -25,6 +25,10 @@ public class InsuranceController {
     public List<Insurance> getAll(){
         return insuranceService.getAll();
     }
+    @Override
+    public List<Insurance> getAll(){
+        return insuranceRepository.findAll()
+    }
     @GetMapping("/read/{id}")
     public Insurance read(@PathVariable int id){
         return insuranceService.read(id);
