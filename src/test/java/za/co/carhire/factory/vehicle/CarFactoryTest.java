@@ -9,6 +9,7 @@ import za.co.carhire.domain.vehicle.CarType;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+class CarFactoryTest {
 public class CarFactoryTest {
 
     private CarType testCarType;
@@ -58,7 +59,7 @@ public class CarFactoryTest {
         assertEquals(2500.00, car.getRentalPrice());
         assertTrue(car.isAvailability());
     }
-
+  
     @Test
     void testCreateCompleteCar() {
         Car car = CarFactory.createCompleteCar(
@@ -72,6 +73,12 @@ public class CarFactoryTest {
         assertEquals("Fortuner", car.getModel());
         assertEquals("Toyota", car.getBrand());
         assertEquals(2023, car.getYear());
+        assertEquals(600.0, car.getRentalPrice());
+        assertTrue(car.isAvailability());
+
+        assertEquals(carType, car.getCarType());
+        assertEquals(insurance, car.getInsurance());
+        assertEquals(booking, car.getBooking());
         assertFalse(car.isAvailability());
         assertEquals(1500.00, car.getRentalPrice());
         assertNotNull(car.getCarType());
@@ -99,6 +106,12 @@ public class CarFactoryTest {
         assertNull(car.getInsurance());
         assertNull(car.getBooking());
     }
+
+    @Test
+    void createCarWithInsurance() {
+        // Create dependencies
+        CarType carType = CarTypeFactory.createSedan(4);
+        Insurance insurance = new Insurance();
 
     @Test
     void testCreateCarWithType() {
@@ -154,6 +167,7 @@ public class CarFactoryTest {
         assertNull(car.getBooking());
     }
 
+
     @Test
     void testCreateCarWithInsuranceNullInsurance() {
         Car car = CarFactory.createCarWithInsurance(
@@ -168,6 +182,7 @@ public class CarFactoryTest {
         assertTrue(car.isAvailability());
     }
 
+
     @Test
     void testCreateCarCopy() {
         Car originalCar = CarFactory.createCompleteCar(
@@ -176,6 +191,8 @@ public class CarFactoryTest {
                 testCarType, testInsurance, testBooking
         );
 
+        // Create copy with new ID
+        Car copiedCar = CarFactory.createCarCopy(originalCar, 6);
         Car copiedCar = CarFactory.createCarCopy(originalCar, 20);
 
         assertNotNull(copiedCar);

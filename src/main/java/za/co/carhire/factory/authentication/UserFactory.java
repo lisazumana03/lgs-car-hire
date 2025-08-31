@@ -1,5 +1,13 @@
 package za.co.carhire.factory.authentication;
+/* UserFactory.java
 
+     UserFactory/factory class
+
+     Author: Bonga Velem
+
+     Student Number: 220052379
+
+     */
 import za.co.carhire.util.Helper;
 import za.co.carhire.domain.authentication.User;
 import java.time.LocalDate;
@@ -37,6 +45,10 @@ public class UserFactory {
                     .setEmail(email)
                     .setPassword(password).build();
         }
+    
+    public static Integer createUserId() {
+        return Helper.generateId();
+    }
 
     public User buildUser(int i, long l, String johnDoe, String mail, LocalDate of, String number, String pass123, String l123456) {
         return null;

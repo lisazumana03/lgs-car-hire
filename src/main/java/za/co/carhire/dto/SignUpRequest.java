@@ -1,44 +1,38 @@
 package za.co.carhire.dto;
-/* UserDTO.java
 
-     dto/UserDTO class
+import java.time.LocalDate;
+
+/* SignUpRequest.java
+
+     SignUpRequest DTO class for handling user registration requests
 
      Author: Bonga Velem
 
      Student Number: 220052379
 
      */
-import java.time.LocalDate;
 
-public class UserDTO {
-    private Integer userId;
+public class SignUpRequest {
     private Long idNumber;
     private String name;
     private String email;
     private LocalDate dateOfBirth;
     private String phoneNumber;
+    private String password;
     private String licenseNumber;
 
-    public UserDTO() {
+    public SignUpRequest() {
     }
 
-    public UserDTO(Integer userId, Long idNumber, String name, String email,
-            LocalDate dateOfBirth, String phoneNumber, String licenseNumber) {
-        this.userId = userId;
+    public SignUpRequest(Long idNumber, String name, String email, LocalDate dateOfBirth, 
+                        String phoneNumber, String password, String licenseNumber) {
         this.idNumber = idNumber;
         this.name = name;
         this.email = email;
         this.dateOfBirth = dateOfBirth;
         this.phoneNumber = phoneNumber;
+        this.password = password;
         this.licenseNumber = licenseNumber;
-    }
-
-    public Integer getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Integer userId) {
-        this.userId = userId;
     }
 
     public Long getIdNumber() {
@@ -81,6 +75,14 @@ public class UserDTO {
         this.phoneNumber = phoneNumber;
     }
 
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
     public String getLicenseNumber() {
         return licenseNumber;
     }
@@ -91,13 +93,13 @@ public class UserDTO {
 
     @Override
     public String toString() {
-        return "UserDTO{" +
-                "userId=" + userId +
-                ", idNumber=" + idNumber +
+        return "SignUpRequest{" +
+                "idNumber=" + idNumber +
                 ", name='" + name + '\'' +
                 ", email='" + email + '\'' +
                 ", dateOfBirth=" + dateOfBirth +
                 ", phoneNumber='" + phoneNumber + '\'' +
+                ", password='" + password + '\'' +
                 ", licenseNumber='" + licenseNumber + '\'' +
                 '}';
     }

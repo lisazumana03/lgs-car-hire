@@ -1,12 +1,14 @@
 package za.co.carhire.factory.reservation;
-/* User.java
+/* NotificationFactoryTest.java
 
-     User POJO class
+     NotificationFactoryest/authentication/factory class Test
 
-     Author: Bonga Velem (220052379)
+     Author: Bonga Velem
 
-     Date: 18 May 2025 */
+     Student Number: 220052379
 
+     */
+import org.junit.jupiter.api.Test;
 import za.co.carhire.domain.authentication.User;
 import za.co.carhire.domain.reservation.BookingStatus;
 import za.co.carhire.domain.reservation.Notification;
@@ -14,16 +16,23 @@ import za.co.carhire.domain.reservation.Notification;
 import java.time.LocalDate;
 
 import static org.junit.jupiter.api.Assertions.*;
+
 class NotificationFactoryTest {
 
-    private Notification notification = NotificationFactory.createNotification(12121, new User(), "Welcome to Our App!", "2025-05-18", BookingStatus.CONFIRMED);
-
-
-
-    @org.junit.jupiter.api.Test
+    @Test
     void createNotification() {
-        assertNotNull(notification);
+        User user = new User.Builder()
+                .setUserId(12132)
+                .build();
 
-        System.out.println(notification.toString());
+        Notification notification = NotificationFactory.createNotification(
+                user,
+                "Welcome to Our App!",
+                "2025-05-18",
+                BookingStatus.BOOKED
+        );
+
+        assertNotNull(notification);
+        System.out.println(notification);
     }
 }

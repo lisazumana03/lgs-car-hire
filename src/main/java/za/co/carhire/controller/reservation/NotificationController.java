@@ -1,5 +1,13 @@
 package za.co.carhire.controller.reservation;
+/* NotificationController.java
 
+     Notification reservation/Controller class
+
+     Author: Bonga Velem
+
+     Student Number: 220052379
+
+     */
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import za.co.carhire.domain.reservation.Notification;
@@ -8,7 +16,7 @@ import za.co.carhire.mapper.NotificationMapper;
 import za.co.carhire.service.reservation.NotificationService;
 
 import java.util.List;
-
+@CrossOrigin(origins = {"http://localhost:5173", "http://127.0.0.1:5173"})
 @RestController
 @RequestMapping("/api/notifications")
 public class NotificationController {
