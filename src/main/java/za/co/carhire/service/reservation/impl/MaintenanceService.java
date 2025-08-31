@@ -12,6 +12,7 @@ import za.co.carhire.domain.reservation.Maintenance;
 import za.co.carhire.repository.reservation.IMaintenanceRepository;
 import za.co.carhire.service.reservation.IMaintenanceService;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -37,6 +38,10 @@ public class MaintenanceService implements IMaintenanceService {
     @Override
     public void delete(int maintenanceId) {
         maintenanceRepository.deleteById(maintenanceId);
+    }
+
+    public List<Maintenance> getAll(){
+        return maintenanceRepository.findAll();
     }
 
     @Override

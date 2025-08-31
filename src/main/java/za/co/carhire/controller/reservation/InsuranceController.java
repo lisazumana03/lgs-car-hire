@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.*;
 import za.co.carhire.domain.reservation.Insurance;
 import za.co.carhire.service.reservation.impl.InsuranceService;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/insurance")
 @CrossOrigin(origins = "*")
@@ -25,10 +27,7 @@ public class InsuranceController {
     public List<Insurance> getAll(){
         return insuranceService.getAll();
     }
-    @Override
-    public List<Insurance> getAll(){
-        return insuranceRepository.findAll()
-    }
+
     @GetMapping("/read/{id}")
     public Insurance read(@PathVariable int id){
         return insuranceService.read(id);
