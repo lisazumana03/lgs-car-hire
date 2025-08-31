@@ -21,6 +21,10 @@ public class MaintenanceController {
     public ResponseEntity<Maintenance> create(@RequestBody Maintenance maintenance) {
         return new ResponseEntity<>(maintenanceService.create(maintenance), HttpStatus.CREATED);
     }
+    @GetMapping("/all")
+    public List<Maintenance> getAll(){
+        return maintenanceService.getAll();
+    }
     @GetMapping("/read/{id}")
     public Maintenance read(@PathVariable int id){
         return maintenanceService.read(id);
