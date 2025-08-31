@@ -25,6 +25,10 @@ public class MaintenanceController {
     public List<Maintenance> getAll(){
         return maintenanceService.getAll();
     }
+    @Override
+    public List<Maintenance> getAll(){
+        return maintenanceRepository.findAll()
+    }
     @GetMapping("/read/{id}")
     public Maintenance read(@PathVariable int id){
         return maintenanceService.read(id);
