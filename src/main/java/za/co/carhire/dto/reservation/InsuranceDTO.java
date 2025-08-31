@@ -4,9 +4,9 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
- * Data Transfer Object for Insurance entity
- * Author: Imtiyaaz Waggie 219374759
  *
+ * Author: Imtiyaaz Waggie 219374759
+ * Fixed DTO
  */
 public class InsuranceDTO implements Serializable {
 
@@ -18,7 +18,6 @@ public class InsuranceDTO implements Serializable {
     private long policyNumber;
     private String mechanic;
 
-    // Related entity IDs
     private Integer carID;
     private String carBrandModel; // For display purposes
 

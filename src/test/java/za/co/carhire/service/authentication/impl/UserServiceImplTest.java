@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import za.co.carhire.domain.authentication.User;
 import za.co.carhire.factory.authentication.UserFactory;
+import za.co.carhire.service.authentication.impl.UserServiceImpl;
 
 import java.time.LocalDate;
 import java.util.List;

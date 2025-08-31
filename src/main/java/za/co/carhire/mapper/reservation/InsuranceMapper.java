@@ -40,7 +40,7 @@ public class InsuranceMapper {
     }
 
     /**
-     * Convert InsuranceDTO to Insurance entity (without relationships)
+     * Convert InsuranceDTO to Insurance entity
      * @param dto the DTO to convert
      * @return the entity representation
      */
