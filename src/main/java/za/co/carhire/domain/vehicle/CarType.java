@@ -3,6 +3,11 @@ package za.co.carhire.domain.vehicle;
 import jakarta.persistence.*;
 import java.io.Serializable;
 
+/*
+Imtiyaaz Waggie 219374759
+
+ */
+
 @Entity
 @Table(name = "car_type")
 public class CarType implements Serializable {
