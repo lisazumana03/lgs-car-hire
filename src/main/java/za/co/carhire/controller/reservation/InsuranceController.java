@@ -21,6 +21,10 @@ public class InsuranceController {
     public ResponseEntity<Insurance> create(@RequestBody Insurance insurance) {
         return new ResponseEntity<>(insuranceService.create(insurance), HttpStatus.CREATED);
     }
+      @GetMapping("/all")
+    public List<Insurance> getAll(){
+        return insuranceService.getAll();
+    }
     @GetMapping("/read/{id}")
     public Insurance read(@PathVariable int id){
         return insuranceService.read(id);
