@@ -8,51 +8,50 @@ import za.co.carhire.dto.vehicle.CarDTO;
  * Mapper class for converting between Car entity and CarDTO
  * Author: Imtiyaaz Waggie 219374759
  * Date: 28/08/2025
- * Updated: 31/08/2025 - Added image URL mapping
+ * Updated: Enhanced to include full CarType mapping
  */
 public class CarMapper {
-
+    
     /**
-     * Convert Car entity to CarDTO with full CarType details and image URL
+     * Convert Car entity to CarDTO with full CarType details
      * @param car the entity to convert
-     * @return the DTO representation with complete CarType information and image URL
+     * @return the DTO representation with complete CarType information
      */
     public static CarDTO toDTO(Car car) {
         if (car == null) {
             return null;
         }
-
+        
         CarDTO.Builder builder = new CarDTO.Builder()
                 .setCarID(car.getCarID())
                 .setModel(car.getModel())
                 .setBrand(car.getBrand())
                 .setYear(car.getYear())
                 .setAvailability(car.isAvailability())
-                .setRentalPrice(car.getRentalPrice())
-                .setImageUrl(car.getImageUrl());
-
+                .setRentalPrice(car.getRentalPrice());
+        
         if (car.getCarType() != null) {
             CarType carType = car.getCarType();
             builder.setCarTypeID(carType.getCarTypeID())
-                    .setCarTypeName(carType.getType())
-                    .setCarTypeFuelType(carType.getFuelType())
-                    .setCarTypeNumberOfWheels(carType.getNumberOfWheels())
-                    .setCarTypeNumberOfSeats(carType.getNumberOfSeats());
+                   .setCarTypeName(carType.getType())
+                   .setCarTypeFuelType(carType.getFuelType())
+                   .setCarTypeNumberOfWheels(carType.getNumberOfWheels())
+                   .setCarTypeNumberOfSeats(carType.getNumberOfSeats());
         }
-
+        
         if (car.getInsurance() != null) {
             builder.setInsuranceID(car.getInsurance().getInsuranceID());
         }
-
+        
         if (car.getBooking() != null) {
             builder.setBookingID(car.getBooking().getBookingID());
         }
-
+        
         return builder.build();
     }
-
+    
     /**
-     * Convert CarDTO to Car entity with image URL
+     * Convert CarDTO to Car entity
      * @param dto the DTO to convert
      * @return the entity representation
      */
@@ -60,7 +59,7 @@ public class CarMapper {
         if (dto == null) {
             return null;
         }
-
+        
         return new Car.Builder()
                 .setCarID(dto.getCarID())
                 .setModel(dto.getModel())
@@ -68,12 +67,11 @@ public class CarMapper {
                 .setYear(dto.getYear())
                 .setAvailability(dto.isAvailability())
                 .setRentalPrice(dto.getRentalPrice())
-                .setImageUrl(dto.getImageUrl())
                 .build();
     }
-
+    
     /**
-     * Update existing Car entity from CarDTO including image URL
+     * Update existing Car entity from CarDTO
      * @param existingCar the existing entity to update
      * @param dto the DTO with new values
      * @return the updated entity
@@ -82,14 +80,13 @@ public class CarMapper {
         if (existingCar == null || dto == null) {
             return existingCar;
         }
-
+        
         existingCar.setModel(dto.getModel());
         existingCar.setBrand(dto.getBrand());
         existingCar.setYear(dto.getYear());
         existingCar.setAvailability(dto.isAvailability());
         existingCar.setRentalPrice(dto.getRentalPrice());
-        existingCar.setImageUrl(dto.getImageUrl());
-
+        
         return existingCar;
     }
 }

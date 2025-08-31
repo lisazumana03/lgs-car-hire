@@ -11,19 +11,14 @@ Date: 25/05/2025
 import java.util.List;
 import java.util.Set;
 
-public interface ICarTypeService extends IService<CarType, Integer> {
+public interface ICarTypeService extends IService <CarType, Integer> {
 
-  Set<CarType> getCarTypes();
+    Set<CarType> getCarTypes();
 
-  List<CarType> getCarTypesByFuelType(String fuelType);
+    List<CarType> getCarTypesByFuelType(String fuelType);
 
-  CarType create(CarType carType);
-
-  CarType read(Integer carTypeID);
-
-  CarType read(int carTypeId);
-
-  CarType update(CarType carType);
-
-  void delete(int carTypeID);
+    CarType create(CarType carType);
+    CarType read(int carTypeID);
+    CarType update(CarType carType);
+    void delete(int carTypeID);
 }

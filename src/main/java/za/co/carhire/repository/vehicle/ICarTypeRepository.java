@@ -14,15 +14,10 @@ import java.util.Optional;
 
 @Repository
 public interface ICarTypeRepository extends JpaRepository<CarType, Integer> {
-  Optional<CarType> findByCar(Car car);
-
-  Optional<CarType> findByType(String type);
-
-  Optional<CarType> findByFuelType(String fuelType);
-
-  Optional<CarType> findByNumberOfWheels(int numberOfWheels);
-
-  Optional<CarType> findByNumberOfSeats(int numberOfSeats);
-
-  Optional<CarType> findById(int carTypeID);
+    Optional<CarType> findByCar(Car car);
+    Optional<CarType> findByType(String type);
+    Optional<CarType> findByFuelType(String fuelType);
+    Optional<CarType> findByNumberOfWheels(int numberOfWheels);
+    Optional<CarType> findByNumberOfSeats(int numberOfSeats);
+    Optional<CarType> findById(int carTypeID);
 }

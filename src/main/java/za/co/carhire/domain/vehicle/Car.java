@@ -2,8 +2,6 @@ package za.co.carhire.domain.vehicle;
 
 // Imtiyaaz Waggie 219374759//
 //date:10/05/2025 //
-// Updated: 31/08/2025 - Added image URL support
-
 import za.co.carhire.domain.reservation.Insurance;
 import za.co.carhire.domain.reservation.Booking;
 
@@ -15,8 +13,8 @@ import java.io.Serializable;
 public class Car implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "car_id")
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "car_id") 
     private int carID;
 
     @Column(name = "model")
@@ -33,9 +31,6 @@ public class Car implements Serializable {
 
     @Column(name = "rental_price")
     private double rentalPrice;
-
-    @Column(name = "image_url", length = 500)
-    private String imageUrl;
 
     @ManyToOne
     @JoinColumn(name = "booking_id")
@@ -58,7 +53,6 @@ public class Car implements Serializable {
         this.year = builder.year;
         this.availability = builder.availability;
         this.rentalPrice = builder.rentalPrice;
-        this.imageUrl = builder.imageUrl;
         this.carType = builder.carType;
         this.insurance = builder.insurance;
         this.booking = builder.booking;
@@ -116,14 +110,6 @@ public class Car implements Serializable {
         this.rentalPrice = rentalPrice;
     }
 
-    public String getImageUrl() {
-        return imageUrl;
-    }
-
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
-    }
-
     public CarType getCarType() {
         return carType;
     }
@@ -165,13 +151,12 @@ public class Car implements Serializable {
                 ", year=" + year +
                 ", availability=" + availability +
                 ", rentalPrice=" + rentalPrice +
-                ", imageUrl='" + imageUrl + '\'' +
                 ", carType=" + (carType != null ? carType.getCarTypeID() : "null") +
                 ", insurance=" + (insurance != null ? insurance.getInsuranceID() : "null") +
                 ", booking=" + (booking != null ? booking.getBookingID() : "null") +
                 '}';
     }
-
+    
     public static class Builder {
         private int carID;
         private String model;
@@ -179,7 +164,6 @@ public class Car implements Serializable {
         private int year;
         private boolean availability;
         private double rentalPrice;
-        private String imageUrl;
         private CarType carType;
         private Insurance insurance;
         private Booking booking;
@@ -214,11 +198,6 @@ public class Car implements Serializable {
             return this;
         }
 
-        public Builder setImageUrl(String imageUrl) {
-            this.imageUrl = imageUrl;
-            return this;
-        }
-
         public Builder setCarType(CarType carType) {
             this.carType = carType;
             return this;
@@ -241,7 +220,6 @@ public class Car implements Serializable {
             this.year = car.getYear();
             this.availability = car.isAvailability();
             this.rentalPrice = car.getRentalPrice();
-            this.imageUrl = car.getImageUrl();
             this.carType = car.getCarType();
             this.insurance = car.getInsurance();
             this.booking = car.getBooking();

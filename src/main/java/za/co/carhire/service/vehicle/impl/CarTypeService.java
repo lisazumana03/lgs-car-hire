@@ -49,12 +49,11 @@ public class CarTypeService implements ICarTypeService {
         return carTypeRepository.findAll().stream().collect(Collectors.toSet());
     }
 
-
-        public List<CarType> getCarTypesByFuelType (String fuelType){
-            return carTypeRepository.findAll().stream()
-                    .filter(carType -> carType.getFuelType() != null &&
-                            carType.getFuelType().equalsIgnoreCase(fuelType))
-                    .collect(Collectors.toList());
-        }
-
+    @Override
+    public List<CarType> getCarTypesByFuelType(String fuelType) {
+        return carTypeRepository.findAll().stream()
+                .filter(carType -> carType.getFuelType() != null && 
+                       carType.getFuelType().equalsIgnoreCase(fuelType))
+                .collect(Collectors.toList());
+    }
 }
