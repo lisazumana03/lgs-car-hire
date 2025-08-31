@@ -1,5 +1,13 @@
 package za.co.carhire.domain.reservation;
+/* Notifrication.java
 
+     Notification domain/authentication class
+
+     Author: Bonga Velem
+
+     Student Number: 220052379
+
+     */
 import jakarta.persistence.*;
 import za.co.carhire.domain.authentication.User;
 import java.time.LocalDate;

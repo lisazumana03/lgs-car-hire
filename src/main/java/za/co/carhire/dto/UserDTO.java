@@ -1,5 +1,13 @@
 package za.co.carhire.dto;
+/* UserDTO.java
 
+     dto/UserDTO class
+
+     Author: Bonga Velem
+
+     Student Number: 220052379
+
+     */
 import java.time.LocalDate;
 
 public class UserDTO {

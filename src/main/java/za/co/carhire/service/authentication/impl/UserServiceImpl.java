@@ -18,11 +18,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User save(User user) {
-        return repository.save(user);
-    }
-
-    @Override
     public User read(Integer userId) {
         return repository.findById(userId).orElse(null);
     }
@@ -48,5 +43,15 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<User> findByIdNumber(Long idNumber) {
         return repository.findUserByIdNumber(idNumber);
+    }
+
+    @Override
+    public User findByEmailAndPassword(String email, String password) {
+        return repository.findByEmailAndPassword(email, password);
+    }
+
+    @Override
+    public User save(User user) {
+        return repository.save(user);
     }
 }

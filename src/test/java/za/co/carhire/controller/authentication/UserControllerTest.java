@@ -1,4 +1,13 @@
 package za.co.carhire.controller.authentication;
+/* UserControllerTest.java
+
+     UserControllerTest/authentication/factory class Test
+
+     Author: Bonga Velem
+
+     Student Number: 220052379
+
+     */
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

@@ -6,13 +6,9 @@ import za.co.carhire.domain.vehicle.CarType;
 import za.co.carhire.repository.vehicle.ICarTypeRepository;
 import za.co.carhire.service.vehicle.ICarTypeService;
 
-/*
-Imtiyaaz Waggie 219374759
-Date: 25/05/2025
- */
-
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class CarTypeService implements ICarTypeService {
@@ -21,40 +17,47 @@ public class CarTypeService implements ICarTypeService {
     private ICarTypeRepository carTypeRepository;
 
     @Override
-    public Set<CarType> getCarTypes() {
-        return Set.copyOf(this.carTypeRepository.findAll());
-    }
-
-    @Override
-    public List<CarType> getCarTypesByFuelType(String fuelType) {
-        return this.carTypeRepository.findByFuelType(fuelType).map(List::of).orElse(List.of());
-    }
-
-    @Override
     public CarType create(CarType carType) {
-        return this.carTypeRepository.save(carType);
+        return carTypeRepository.save(carType);
     }
 
     @Override
-    public CarType read(Integer integer) {
-        return null;
+    public CarType read(Integer id) {
+        return carTypeRepository.findById(id).orElse(null);
     }
 
     @Override
-    public CarType read(int carTypeId) {
-        return this.carTypeRepository.findById(carTypeId).orElse(null);
+    public CarType read(int carTypeID) {
+        return carTypeRepository.findById(carTypeID).orElse(null);
     }
 
     @Override
     public CarType update(CarType carType) {
-        if (this.carTypeRepository.existsById(carType.getCarTypeID())) {
-            return this.carTypeRepository.save(carType);
+        if (carTypeRepository.existsById(carType.getCarTypeID())) {
+            return carTypeRepository.save(carType);
         }
         return null;
     }
 
     @Override
     public void delete(int carTypeID) {
-        this.carTypeRepository.deleteById(carTypeID);
+        carTypeRepository.deleteById(carTypeID);
     }
+
+    @Override
+    public Set<CarType> getCarTypes() {
+        return carTypeRepository.findAll().stream().collect(Collectors.toSet());
+    }
+
+    @Override
+    public void delete(Integer carTypeID) {
+            this.carTypeRepository.deleteById(carTypeID);
+
+    public List<CarType> getCarTypesByFuelType(String fuelType) {
+        return carTypeRepository.findAll().stream()
+                .filter(carType -> carType.getFuelType() != null && 
+                       carType.getFuelType().equalsIgnoreCase(fuelType))
+                .collect(Collectors.toList());
+    }
+
 }
