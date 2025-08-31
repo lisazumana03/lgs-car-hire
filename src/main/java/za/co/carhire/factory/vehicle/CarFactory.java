@@ -35,7 +35,6 @@ public class CarFactory {
                 .build();
     }
 
-
     public static Car createCompleteCar(int carID, String model, String brand, int year,
                                         boolean availability, double rentalPrice,
                                         CarType carType, Insurance insurance, Booking booking) {
@@ -82,7 +81,6 @@ public class CarFactory {
                 .build();
     }
 
-
     public static Car createCarWithTypeAndImage(int carID, String model, String brand, int year,
                                                 double rentalPrice, String imageUrl, CarType carType) {
         return new Car.Builder()
@@ -111,7 +109,6 @@ public class CarFactory {
                 .build();
     }
 
-
     public static Car createCarWithInsuranceAndImage(int carID, String model, String brand, int year,
                                                      double rentalPrice, String imageUrl,
                                                      CarType carType, Insurance insurance) {
@@ -127,7 +124,6 @@ public class CarFactory {
                 .setAvailability(true)
                 .build();
     }
-
 
     public static Car createCarCopy(Car originalCar, int newCarID) {
         return new Car.Builder()
@@ -149,7 +145,6 @@ public class CarFactory {
                 .build();
     }
 
-
     public static Car createUnavailableCarWithImage(int carID, String model, String brand, int year,
                                                     double rentalPrice, String imageUrl, CarType carType) {
         return new Car.Builder()
@@ -163,5 +158,4 @@ public class CarFactory {
                 .setAvailability(false)
                 .build();
     }
-
 }
