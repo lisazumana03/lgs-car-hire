@@ -6,8 +6,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import za.co.carhire.domain.authentication.User;
 import za.co.carhire.domain.authentication.UserRole;
-import za.co.carhire.dto.authentication.UserDTO;
-import za.co.carhire.mapper.authentication.UserMapper;
+import za.co.carhire.dto.UserDTO;
+import za.co.carhire.mapper.UserMapper;
 import za.co.carhire.service.authentication.UserService;
 
 import java.util.List;
