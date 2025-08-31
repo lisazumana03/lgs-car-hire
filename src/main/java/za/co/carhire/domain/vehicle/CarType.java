@@ -8,7 +8,7 @@ import java.io.Serializable;
 public class CarType implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "car_type_id")
     private int carTypeID;
 
