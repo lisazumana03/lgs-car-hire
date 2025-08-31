@@ -50,10 +50,14 @@ public class CarTypeService implements ICarTypeService {
     }
 
     @Override
+    public void delete(Integer carTypeID) {
+            this.carTypeRepository.deleteById(carTypeID);
+
     public List<CarType> getCarTypesByFuelType(String fuelType) {
         return carTypeRepository.findAll().stream()
-                .filter(carType -> carType.getFuelType() != null &&
-                        carType.getFuelType().equalsIgnoreCase(fuelType))
+                .filter(carType -> carType.getFuelType() != null && 
+                       carType.getFuelType().equalsIgnoreCase(fuelType))
                 .collect(Collectors.toList());
     }
+
 }
