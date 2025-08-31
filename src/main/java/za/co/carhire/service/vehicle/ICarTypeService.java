@@ -25,5 +25,5 @@ public interface ICarTypeService extends IService<CarType, Integer> {
 
   CarType update(CarType carType);
 
-  void delete(Integer carTypeID);
+  void delete(int carTypeID);
 }
