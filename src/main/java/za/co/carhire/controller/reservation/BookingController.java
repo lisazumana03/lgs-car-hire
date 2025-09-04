@@ -14,7 +14,7 @@ Date: 25/05/2025
 
 @RestController
 @RequestMapping("/booking")
-//@CrossOrigin(origins = "*")
+@CrossOrigin(origins = "*")
 public class BookingController {
     @Autowired
     private BookingService bookingService;

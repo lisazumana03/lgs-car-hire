@@ -1,10 +1,10 @@
 package za.co.carhire.domain.reservation;
 
-/*
-Booking.java
-Booking POJO class
-Lisakhanya Zumana - 230864821
-Date: 08 May 2025
+/**
+*Booking.java
+*Booking POJO class
+*Lisakhanya Zumana - 230864821
+*Date: 08 May 2025
  */
 
 import jakarta.persistence.*;
