@@ -13,7 +13,7 @@ import java.util.Set;
 public interface IPaymentService extends IService<Payment, Integer> {
     Set<Payment> getPayments();
     Payment create(Payment payment);
-    Payment read(int paymentID);
+    Payment read(Integer paymentID);
     Payment update(Payment payment);
     void delete(int paymentID);
 }
