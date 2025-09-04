@@ -29,8 +29,8 @@ public class BookingController {
     }
 
     @PutMapping("/update")
-    public Booking update(@RequestBody Booking booking){
-        return bookingService.update(booking);
+    public ResponseEntity<Booking> update(@RequestBody Booking booking){
+        return new ResponseEntity<>(bookingService.update(booking), HttpStatus.OK);
     }
 
     @DeleteMapping("/delete/{id}")

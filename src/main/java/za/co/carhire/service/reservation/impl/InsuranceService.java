@@ -18,7 +18,6 @@ public class InsuranceService implements IInsuranceService {
     @Autowired
     private IInsuranceRepository insuranceRepository;
 
-
     @Override
     public Insurance assignInsurance(Insurance insurance) {
         return null;

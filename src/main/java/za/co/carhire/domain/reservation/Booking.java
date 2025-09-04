@@ -36,6 +36,8 @@ public class Booking implements Serializable {
     @ManyToOne
     @JoinColumn(name = "dropoff_location_id")
     private Location dropOffLocation;
+    @OneToMany
+    private List<Notification> bookingNotifications;
     @Enumerated(EnumType.STRING)
     private BookingStatus bookingStatus;
 
@@ -51,6 +53,7 @@ public class Booking implements Serializable {
         this.payment = builder.payment;
         this.pickupLocation = builder.pickupLocation;
         this.dropOffLocation = builder.dropOffLocation;
+        this.bookingNotifications = builder.bookingNotification;
         this.bookingStatus = builder.bookingStatus;
     }
 
@@ -90,6 +93,10 @@ public class Booking implements Serializable {
         return dropOffLocation;
     }
 
+    public List<Notification> getBookingNotification() {
+        return bookingNotifications;
+    }
+
     public BookingStatus getBookingStatus() {
         return bookingStatus;
     }
@@ -124,6 +131,7 @@ public class Booking implements Serializable {
         private Payment payment;
         private Location pickupLocation;
         private Location dropOffLocation;
+        private List<Notification> bookingNotification;
         private BookingStatus bookingStatus;
 
         public Builder setBookingID(int bookingID) {
@@ -162,6 +170,12 @@ public class Booking implements Serializable {
             this.dropOffLocation = dropOffLocation;
             return this;
         }
+
+        public Builder setBookingNotification(List<Notification> bookingNotification) {
+            this.bookingNotification = bookingNotification;
+            return this;
+        }
+
         public Builder setBookingStatus(BookingStatus bookingStatus) {
             this.bookingStatus = bookingStatus;
             return this;
@@ -177,6 +191,7 @@ public class Booking implements Serializable {
             this.payment = booking.getPayment();
             this.pickupLocation = booking.getPickupLocation();
             this.dropOffLocation = booking.getDropOffLocation();
+            this.bookingNotification = booking.getBookingNotification();
             this.bookingStatus = booking.getBookingStatus();
             return this;
         }

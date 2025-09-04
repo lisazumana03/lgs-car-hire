@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.*;
 import za.co.carhire.domain.reservation.Maintenance;
 import za.co.carhire.service.reservation.impl.MaintenanceService;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/maintenance")
 //@CrossOrigin(origins = "*")
@@ -21,6 +23,11 @@ public class MaintenanceController {
     public ResponseEntity<Maintenance> create(@RequestBody Maintenance maintenance) {
         return new ResponseEntity<>(maintenanceService.create(maintenance), HttpStatus.CREATED);
     }
+    @GetMapping("/all")
+    public List<Maintenance> getAll(){
+        return maintenanceService.getAll();
+    }
+
     @GetMapping("/read/{id}")
     public Maintenance read(@PathVariable int id){
         return maintenanceService.read(id);
