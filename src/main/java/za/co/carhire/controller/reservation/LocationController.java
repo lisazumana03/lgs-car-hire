@@ -8,13 +8,13 @@ import za.co.carhire.service.reservation.impl.LocationService;
 
 import java.util.Set;
 
-/*
+/**
 Lisakhanya Zumana (230864821)
 Date: 25/05/2025
  */
 
 @RestController
-@RequestMapping("/location")
+@RequestMapping("/api/location")
 //@CrossOrigin(origins = "*")
 public class LocationController {
 
