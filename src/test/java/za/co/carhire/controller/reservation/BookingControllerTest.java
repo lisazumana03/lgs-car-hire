@@ -3,7 +3,8 @@ package za.co.carhire.controller.reservation;
 import org.junit.jupiter.api.*;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.mockito.Mock;
+
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.ResponseEntity;
@@ -29,15 +30,13 @@ import static org.mockito.Mockito.*;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class BookingControllerTest {
 
-    @Autowired
     private TestRestTemplate restTemplate;
-    private final String baseUrl = "http://localhost:3045/booking";
 
     @InjectMocks
     private BookingController bookingController;
 
     private static Booking booking;
-    @Autowired
+    @Mock
     private BookingService bookingService;
 
     @BeforeEach
@@ -72,7 +71,7 @@ class BookingControllerTest {
     @Test
     @Order(1)
     void create() {
-        String url = baseUrl + "/create";
+        String url = "/create";
         System.out.println("Post data: " + booking);
         ResponseEntity<Booking> response = restTemplate.postForEntity(url, booking, Booking.class);
         System.out.println("Response: " + response.getBody());
@@ -97,7 +96,7 @@ class BookingControllerTest {
     @Test
     @Order(4)
     void delete() {
-        String url = baseUrl +"delete/"+booking.getBookingID();
+        String url = "delete/"+booking.getBookingID();
         System.out.println("URL: "+url);
         restTemplate.delete(url);
     }
