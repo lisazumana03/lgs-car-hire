@@ -97,8 +97,8 @@ public class Helper {
         return false;
     }
 
-    public static boolean isNullOrEmpty(String aNull) {
-        return false == isEmptyOrNull(aNull);
+    public static boolean isNullOrEmpty(String str) {
+        return isEmptyOrNull(str);
     }
 
     public static boolean isValidDate(String dateString) {

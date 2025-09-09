@@ -105,6 +105,8 @@ public class Booking implements Serializable {
         this.bookingStatus = bookingStatus;
     }
 
+    public void setPayment(Payment payment) { this.payment = payment; }
+
     @Override
     public String toString() {
         return "Booking{" +
