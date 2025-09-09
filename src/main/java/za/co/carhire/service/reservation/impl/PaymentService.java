@@ -34,12 +34,61 @@ public class PaymentService implements IPaymentService {
 
     @Override
     public Set<Payment> getPayments() {
-        return Set.of();
+        return Set.copyOf(paymentRepository.findAll());
     }
 
     @Override
     public Payment create(Payment payment) {
-        return paymentRepository.save(payment);
+        // Ensure the booking exists and doesn't already have a payment
+        if (payment.getBooking() != null) {
+            Optional<Booking> bookingOpt = bookingRepository.findById(payment.getBooking().getBookingID());
+            if (bookingOpt.isEmpty()) {
+                throw new RuntimeException("Booking not found");
+            }
+
+            Booking booking = bookingOpt.get();
+            if (booking.getPayment() != null) {
+                throw new RuntimeException("Booking already has a payment");
+            }
+
+            payment.setBooking(booking);
+        }
+
+        Payment savedPayment = paymentRepository.save(payment);
+
+        // Update the booking with the payment reference
+        if (savedPayment.getBooking() != null) {
+            Booking booking = savedPayment.getBooking();
+            booking.setPayment(savedPayment);
+            bookingRepository.save(booking);
+
+            // ✅ AUTOMATICALLY GENERATE INVOICE AFTER PAYMENT
+            generateInvoice(savedPayment, booking);
+        }
+
+        return savedPayment;
+    }
+
+    public Payment createPayment(int bookingId, double amount, String paymentMethod) {
+        Optional<Booking> bookingOpt = bookingRepository.findById(bookingId);
+        if (bookingOpt.isEmpty()) {
+            throw new RuntimeException("Booking not found with ID: " + bookingId);
+        }
+
+        Booking booking = bookingOpt.get();
+
+        // Check if booking already has a payment
+        if (booking.getPayment() != null) {
+            throw new RuntimeException("Booking already has a payment");
+        }
+
+        // Create payment using factory
+        Payment payment = PaymentFactory.createPayment(booking, amount, paymentMethod);
+        if (payment == null) {
+            throw new RuntimeException("Invalid payment parameters");
+        }
+
+        return create(payment);
     }
 
     @Override
