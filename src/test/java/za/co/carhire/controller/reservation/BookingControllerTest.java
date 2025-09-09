@@ -2,6 +2,7 @@ package za.co.carhire.controller.reservation;
 
 import org.junit.jupiter.api.*;
 import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
@@ -14,12 +15,14 @@ import za.co.carhire.domain.reservation.Location;
 import za.co.carhire.domain.reservation.Payment;
 import za.co.carhire.domain.vehicle.Car;
 import za.co.carhire.factory.reservation.BookingFactory;
+import za.co.carhire.service.reservation.impl.BookingService;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @RunWith(SpringRunner.class)
@@ -30,7 +33,12 @@ class BookingControllerTest {
     private TestRestTemplate restTemplate;
     private final String baseUrl = "http://localhost:3045/booking";
 
+    @InjectMocks
+    private BookingController bookingController;
+
     private static Booking booking;
+    @Autowired
+    private BookingService bookingService;
 
     @BeforeEach
     void setUp() {
@@ -79,6 +87,11 @@ class BookingControllerTest {
     @Test
     @Order(3)
     void update() {
+        when(bookingService.update(booking)).thenReturn(booking);
+        Booking updatedBooking = bookingController.update(booking).getBody();
+        assertNotNull(updatedBooking);
+        assertEquals(booking, updatedBooking);
+        verify(bookingService, times(1)).update(booking);
     }
 
     @Test
