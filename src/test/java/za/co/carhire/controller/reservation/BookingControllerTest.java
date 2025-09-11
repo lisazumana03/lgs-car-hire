@@ -2,7 +2,9 @@ package za.co.carhire.controller.reservation;
 
 import org.junit.jupiter.api.*;
 import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.ResponseEntity;
@@ -14,23 +16,28 @@ import za.co.carhire.domain.reservation.Location;
 import za.co.carhire.domain.reservation.Payment;
 import za.co.carhire.domain.vehicle.Car;
 import za.co.carhire.factory.reservation.BookingFactory;
+import za.co.carhire.service.reservation.impl.BookingService;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @RunWith(SpringRunner.class)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class BookingControllerTest {
 
-    @Autowired
     private TestRestTemplate restTemplate;
-    private final String baseUrl = "http://localhost:3045/booking";
+
+    @InjectMocks
+    private BookingController bookingController;
 
     private static Booking booking;
+    @Mock
+    private BookingService bookingService;
 
     @BeforeEach
     void setUp() {
@@ -64,7 +71,7 @@ class BookingControllerTest {
     @Test
     @Order(1)
     void create() {
-        String url = baseUrl + "/create";
+        String url = "/create";
         System.out.println("Post data: " + booking);
         ResponseEntity<Booking> response = restTemplate.postForEntity(url, booking, Booking.class);
         System.out.println("Response: " + response.getBody());
@@ -79,12 +86,17 @@ class BookingControllerTest {
     @Test
     @Order(3)
     void update() {
+        when(bookingService.update(booking)).thenReturn(booking);
+        Booking updatedBooking = bookingController.update(booking).getBody();
+        assertNotNull(updatedBooking);
+        assertEquals(booking, updatedBooking);
+        verify(bookingService, times(1)).update(booking);
     }
 
     @Test
     @Order(4)
     void delete() {
-        String url = baseUrl +"delete/"+booking.getBookingID();
+        String url = "delete/"+booking.getBookingID();
         System.out.println("URL: "+url);
         restTemplate.delete(url);
     }

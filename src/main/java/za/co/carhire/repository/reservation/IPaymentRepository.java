@@ -10,10 +10,11 @@ import org.springframework.stereotype.Repository;
 import za.co.carhire.domain.reservation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface IPaymentRepository extends JpaRepository<Payment, Integer> {
     List<Payment> findByBooking(Booking booking);
     List<Payment> findByPaymentMethod(String paymentMethod);
-    List<Payment> findById(int paymentID);
+    Optional<Payment> findById(int paymentID);
 }

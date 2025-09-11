@@ -17,24 +17,31 @@ public class Payment implements Serializable {
     private int paymentID;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "booking_id", nullable = false)
+    @JoinColumn(name = "booking_id", nullable = false, unique = true)
     private Booking booking;
 
     @Column(nullable = false)
     private double amount;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "payment_method", nullable = false, length = 50)
-    private String paymentMethod;
+    private PaymentMethod paymentMethod;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "payment_status", nullable = false)
+    private PaymentStatus paymentStatus = PaymentStatus.PENDING;
 
     protected Payment() {
     }
 
     private Payment(Builder builder) {
-        this.paymentID = builder.paymentID != null ? builder.paymentID : 0;
+        this.paymentID = builder.paymentID;
         this.booking = builder.booking;
         this.amount = builder.amount;
         this.paymentMethod = builder.paymentMethod;
+        this.paymentStatus = builder.paymentStatus;
     }
+
 
     public int getPaymentID() {
         return paymentID;
@@ -60,12 +67,20 @@ public class Payment implements Serializable {
         this.amount = amount;
     }
 
-    public String getPaymentMethod() {
+    public PaymentMethod getPaymentMethod() {
         return paymentMethod;
     }
 
-    public void setPaymentMethod(String paymentMethod) {
+    public void setPaymentMethod(PaymentMethod paymentMethod) {
         this.paymentMethod = paymentMethod;
+    }
+
+    public PaymentStatus getPaymentStatus() {
+        return paymentStatus;
+    }
+
+    public void setPaymentStatus(PaymentStatus paymentStatus) {
+        this.paymentStatus = paymentStatus;
     }
 
     @Override
@@ -74,14 +89,16 @@ public class Payment implements Serializable {
                 "paymentID='" + paymentID + '\'' +
                 ", amount=" + amount +
                 ", paymentMethod='" + paymentMethod + '\'' +
+                ", paymentStatus='" + paymentStatus + '\'' +
                 '}';
     }
 
     public static class Builder {
-        private Integer paymentID;
+        private int paymentID;
         private Booking booking;
         private double amount;
-        private String paymentMethod;
+        private PaymentMethod paymentMethod; // Change from String to PaymentMethod
+        private PaymentStatus paymentStatus;
 
         public Builder setPaymentID(int paymentID) {
             this.paymentID = paymentID;
@@ -98,8 +115,13 @@ public class Payment implements Serializable {
             return this;
         }
 
-        public Builder setPaymentMethod(String paymentMethod) {
+        public Builder setPaymentMethod(PaymentMethod paymentMethod) {
             this.paymentMethod = paymentMethod;
+            return this;
+        }
+
+        public Builder setPaymentStatus(PaymentStatus paymentStatus) {
+            this.paymentStatus = paymentStatus;
             return this;
         }
 
@@ -108,6 +130,7 @@ public class Payment implements Serializable {
             this.booking = payment.getBooking();
             this.amount = payment.getAmount();
             this.paymentMethod = payment.getPaymentMethod();
+            this.paymentStatus = payment.getPaymentStatus();
             return this;
         }
 

@@ -1,4 +1,5 @@
 package za.co.carhire.factory.reservation;
+
 /* PaymentFactory.java
  * PaymentFactory class
  * Sanele Zondi (221602011)
@@ -7,42 +8,61 @@ package za.co.carhire.factory.reservation;
 
 import za.co.carhire.domain.reservation.Booking;
 import za.co.carhire.domain.reservation.Payment;
+import za.co.carhire.domain.reservation.PaymentMethod;
+import za.co.carhire.domain.reservation.PaymentStatus;
 import za.co.carhire.util.Helper;
 
 public class PaymentFactory {
-    public static Payment createPayment(Booking booking, double amount, String method) {
+    public static Payment createPayment(Booking booking, double amount, PaymentMethod method) {
         if (!isValid(booking, amount, method)) {
             return null;
         }
 
         return new Payment.Builder()
-                .setPaymentID((int) (Math.random() * 1000000))
                 .setBooking(booking)
                 .setAmount(amount)
-                .setPaymentMethod(method.toUpperCase())
+                .setPaymentMethod(method)
+                .setPaymentStatus(PaymentStatus.PENDING) //default status
                 .build();
     }
 
+    public static Payment createPayment(Booking booking, double amount, String method) {
+        try {
+            PaymentMethod paymentMethod = PaymentMethod.valueOf(method.toUpperCase());
+            return createPayment(booking, amount, paymentMethod);
+        } catch (IllegalArgumentException e) {
+            return null;
+        }
+    }
+
+    // Fixed isValid method for PaymentMethod
+    private static boolean isValid(Booking booking, double amount, PaymentMethod method) {
+        return booking != null &&
+                amount > 0 &&
+                method != null &&
+                booking.getPayment() == null;
+    }
+
+
     private static boolean isValid(Booking booking, double amount, String method) {
-        return true;
+        return booking != null &&
+                amount > 0 &&
+                !Helper.isNullOrEmpty(method) &&
+                booking.getPayment() == null;
     }
 
     public static Payment processRefund(Payment payment) {
-        if (payment == null || payment.getPaymentMethod().equalsIgnoreCase("REFUND")) {
+        if (payment == null) {
             return null;
         }
 
-        return new Payment.Builder()
+        Payment refund = new Payment.Builder()
                 .copy(payment)
-                .setPaymentMethod("REFUND")
+                .setPaymentStatus(PaymentStatus.REFUNDED)
                 .build();
-    }
 
-//    public static boolean isValid(Booking booking, double amount, String method) {
-//        return booking != null &&
-//                !Helper.isNullOrEmpty(booking.getBookingStatus()) &&
-//                !booking.getBookingStatus().equalsIgnoreCase("CANCELLED") &&
-//                amount > 0 &&
-//                Helper.isValidPaymentMethod(method);
-//    }
+        refund.setAmount(-payment.getAmount()); // Negative amount for refund
+        return refund;
+
+    }
 }
