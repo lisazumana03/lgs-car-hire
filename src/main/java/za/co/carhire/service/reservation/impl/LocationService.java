@@ -6,6 +6,7 @@ import za.co.carhire.domain.reservation.Location;
 import za.co.carhire.repository.reservation.ILocationRepository;
 import za.co.carhire.service.reservation.ILocationService;
 
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -46,4 +47,5 @@ public class LocationService implements ILocationService {
     public void delete(int locationID) {
         locationRepository.deleteById(locationID);
     }
+
 }

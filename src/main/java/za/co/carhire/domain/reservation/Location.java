@@ -1,5 +1,11 @@
 package za.co.carhire.domain.reservation;
 
+/***
+ * Lisakhanya Zumana (230864821)
+ * Date: 05/06/2025
+ * Location POJO class
+ */
+
 import java.io.Serializable;
 import java.util.List;
 
@@ -17,6 +23,7 @@ public class Location implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int locationID;
     private String locationName;
+    private int streetNumber;
     private String streetName;
     private String cityOrTown;
     private String provinceOrState;
@@ -35,6 +42,7 @@ public class Location implements Serializable {
     private Location(Builder builder){
         this.locationID = builder.locationID;
         this.locationName = builder.locationName;
+        this.streetNumber = builder.streetNumber;
         this.streetName = builder.streetName;
         this.cityOrTown = builder.cityOrTown;
         this.provinceOrState = builder.provinceOrState;
@@ -46,6 +54,10 @@ public class Location implements Serializable {
 
     public int getLocationID() {
         return locationID;
+    }
+
+    public int getStreetNumber(){
+        return streetNumber;
     }
 
     public String getStreetName() {
@@ -80,6 +92,7 @@ public class Location implements Serializable {
         return dropOffLocations;
     }
 
+
     @Override
     public String toString() {
         return "Location{" +
@@ -98,6 +111,7 @@ public class Location implements Serializable {
     public static class Builder {
         private int locationID;
         private String locationName;
+        private int streetNumber;
         private String streetName;
         private String cityOrTown;
         private String provinceOrState;
@@ -114,6 +128,12 @@ public class Location implements Serializable {
             this.locationName = locationName;
             return this;
         }
+
+        public Builder setStreetNumber(int streetNumber) {
+            this.streetNumber = streetNumber;
+            return this;
+        }
+
         public Builder setStreetName(String streetName) {
             this.streetName = streetName;
             return this;
@@ -146,6 +166,7 @@ public class Location implements Serializable {
         public Builder copy(Location location){
             this.locationID = location.locationID;
             this.locationName = location.locationName;
+            this.streetNumber = location.streetNumber;
             this.streetName = location.streetName;
             this.cityOrTown = location.cityOrTown;
             this.provinceOrState = location.provinceOrState;

@@ -30,7 +30,7 @@ class LocationServiceTest {
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
-        location = LocationFactory.createLocation(location.getLocationID(), location.getLocationName(), location.getStreetName(), location.getCityOrTown(), location.getProvinceOrState(), location.getCountry(), location.getPostalCode(), location.getPickUpLocations(), location.getDropOffLocations());
+        location = LocationFactory.createLocation(location.getLocationID(), location.getLocationName(), location.getStreetNumber(), location.getStreetName(), location.getCityOrTown(), location.getProvinceOrState(), location.getCountry(), location.getPostalCode(), location.getPickUpLocations(), location.getDropOffLocations());
     }
 
     @Test

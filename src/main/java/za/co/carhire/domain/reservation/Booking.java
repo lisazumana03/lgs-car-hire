@@ -1,6 +1,6 @@
 package za.co.carhire.domain.reservation;
 
-/*
+/**
 Booking.java
 Booking POJO class
 Lisakhanya Zumana - 230864821
@@ -42,7 +42,7 @@ public class Booking implements Serializable {
     @Enumerated(EnumType.STRING)
     private BookingStatus bookingStatus;
 
-    public Booking(){}// for JPA implementation coming soon
+    public Booking(){}// for JPA implementation
 
     private Booking(Builder builder){
         this.bookingID = builder.bookingID;
