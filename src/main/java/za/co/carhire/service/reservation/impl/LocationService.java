@@ -48,4 +48,8 @@ public class LocationService implements ILocationService {
         locationRepository.deleteById(locationID);
     }
 
+    public List<Location> getAllLocations() {
+        return locationRepository.findAll();
+    }
+
 }

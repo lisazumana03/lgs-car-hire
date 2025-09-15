@@ -37,6 +37,11 @@ public class LocationController {
         return locationService.update(location);
     }
 
+    @GetMapping("/all")
+    public ResponseEntity<List<Location>> getAll(){
+        return ResponseEntity.ok(locationService.getAllLocations());
+    }
+
     @GetMapping("/location-set")
     public ResponseEntity<Set<Location>> readAll(){
         return ResponseEntity.ok(locationService.getLocations());
