@@ -22,7 +22,7 @@ public class PaymentFactory {
                 .setBooking(booking)
                 .setAmount(amount)
                 .setPaymentMethod(method)
-                .setPaymentStatus(PaymentStatus.PENDING) //default status
+                .setPaymentStatus(PaymentStatus.PENDING)
                 .build();
     }
 
@@ -38,18 +38,11 @@ public class PaymentFactory {
     // Fixed isValid method for PaymentMethod
     private static boolean isValid(Booking booking, double amount, PaymentMethod method) {
         return booking != null &&
+                booking.getPayment() == null &&
                 amount > 0 &&
-                method != null &&
-                booking.getPayment() == null;
+                method != null;
     }
 
-
-    private static boolean isValid(Booking booking, double amount, String method) {
-        return booking != null &&
-                amount > 0 &&
-                !Helper.isNullOrEmpty(method) &&
-                booking.getPayment() == null;
-    }
 
     public static Payment processRefund(Payment payment) {
         if (payment == null) {
