@@ -20,7 +20,6 @@ import java.util.Set;
 import static za.co.carhire.factory.reservation.InvoiceFactory.generateInvoice;
 
 @Service
-@Transactional
 public class PaymentService implements IPaymentService {
 
     @Autowired
@@ -38,8 +37,9 @@ public class PaymentService implements IPaymentService {
     }
 
     @Override
+    @Transactional
     public Payment create(Payment payment) {
-        // Ensure the booking exists and doesn't already have a payment
+
         if (payment.getBooking() != null) {
             Optional<Booking> bookingOpt = bookingRepository.findById(payment.getBooking().getBookingID());
             if (bookingOpt.isEmpty()) {
@@ -62,8 +62,11 @@ public class PaymentService implements IPaymentService {
             booking.setPayment(savedPayment);
             bookingRepository.save(booking);
 
-            // ✅ AUTOMATICALLY GENERATE INVOICE AFTER PAYMENT
-            generateInvoice(savedPayment, booking);
+            // AUTOMATICALLY GENERATE INVOICE AFTER PAYMENT
+            Invoice invoice = InvoiceFactory.generateInvoice(savedPayment, booking);
+            if (invoice != null) {
+                invoiceService.create(invoice);
+            }
         }
 
         return savedPayment;
@@ -97,6 +100,7 @@ public class PaymentService implements IPaymentService {
     }
 
     @Override
+    @Transactional
     public Payment update(Payment payment) {
         if (paymentRepository.existsById(payment.getPaymentID())) {
             return paymentRepository.save(payment);
@@ -104,6 +108,7 @@ public class PaymentService implements IPaymentService {
         return null;
     }
 
+    @Transactional
     public Payment updatePaymentStatus(int paymentId, PaymentStatus status) {
         Optional<Payment> paymentOpt = paymentRepository.findById(paymentId);
         if (paymentOpt.isEmpty()) {
@@ -116,6 +121,7 @@ public class PaymentService implements IPaymentService {
     }
 
     @Override
+    @Transactional
     public void delete(int paymentId) {
         paymentRepository.deleteById(paymentId);
     }

@@ -21,11 +21,7 @@ public class PaymentController {
 
     @PostMapping("/create")
     public ResponseEntity<Payment> create(@RequestBody Payment payment) {
-        try {
             return new ResponseEntity<>(paymentService.create(payment), HttpStatus.CREATED);
-        } catch (RuntimeException e) {
-            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
-        }
     }
 
     @PostMapping("/create/{bookingId}/{amount}/{method}")
@@ -33,11 +29,7 @@ public class PaymentController {
             @PathVariable int bookingId,
             @PathVariable double amount,
             @PathVariable String method) {
-        try {
             return new ResponseEntity<>(paymentService.createPayment(bookingId, amount, method), HttpStatus.CREATED);
-        } catch (RuntimeException e) {
-            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
-        }
     }
 
     @GetMapping("/read/{id}")
@@ -51,22 +43,14 @@ public class PaymentController {
 
     @PutMapping("/update")
     public ResponseEntity<Payment> update(@RequestBody Payment payment) {
-        Payment updatedPayment = paymentService.update(payment);
-        if (updatedPayment != null) {
-            return new ResponseEntity<>(updatedPayment, HttpStatus.OK);
-        }
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(paymentService.update(payment), HttpStatus.OK);
     }
 
     @PutMapping("/update-status/{id}/{status}")
     public ResponseEntity<Payment> updateStatus(
             @PathVariable int id,
             @PathVariable PaymentStatus status) {
-        try {
             return new ResponseEntity<>(paymentService.updatePaymentStatus(id, status), HttpStatus.OK);
-        } catch (RuntimeException e) {
-            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
-        }
     }
 
     @DeleteMapping("/delete/{id}")
