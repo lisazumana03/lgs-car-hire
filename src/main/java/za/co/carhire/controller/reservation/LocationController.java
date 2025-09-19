@@ -16,7 +16,7 @@ Date: 25/05/2025
 
 @RestController
 @RequestMapping("/api/location")
-@CrossOrigin(origins = "*")
+//@CrossOrigin(origins = "*")
 public class LocationController {
 
     @Autowired

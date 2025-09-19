@@ -9,6 +9,8 @@ package za.co.carhire.domain.reservation;
 import java.io.Serializable;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -31,8 +33,10 @@ public class Location implements Serializable {
     private String postalCode;
 
     @OneToMany(mappedBy = "pickupLocation")
+    @JsonIgnore
     private List<Booking> pickUpLocations;
     @OneToMany(mappedBy = "dropOffLocation")
+    @JsonIgnore
     private List<Booking> dropOffLocations;
 
     public Location(){
