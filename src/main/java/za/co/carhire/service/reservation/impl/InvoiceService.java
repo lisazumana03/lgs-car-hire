@@ -7,6 +7,7 @@ package za.co.carhire.service.reservation.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import za.co.carhire.domain.reservation.*;
 import za.co.carhire.repository.reservation.IInvoiceRepository;
 import za.co.carhire.service.reservation.*;
@@ -26,6 +27,7 @@ public class InvoiceService implements IInvoiceService {
     }
 
     @Override
+    @Transactional
     public Invoice create(Invoice invoice) {
         return invoiceRepository.save(invoice);
     }
@@ -42,6 +44,7 @@ public class InvoiceService implements IInvoiceService {
 
 
     @Override
+    @Transactional
     public Invoice update(Invoice invoice) {
         if (invoiceRepository.existsById(invoice.getInvoiceID())) {
             return invoiceRepository.save(invoice);
@@ -49,6 +52,7 @@ public class InvoiceService implements IInvoiceService {
         return null;
     }
     @Override
+    @Transactional
     public void delete(int invoiceId) {
         invoiceRepository.deleteById(invoiceId);
     }

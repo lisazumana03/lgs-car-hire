@@ -51,7 +51,7 @@ public class InvoiceFactory {
                 booking != null &&
                 payment.getBooking() != null &&
                 payment.getBooking().getBookingID() == booking.getBookingID() &&
-                !"REFUND".equals(payment.getPaymentMethod()) &&
+                !"REFUNDED".equals(payment.getPaymentMethod()) &&
                 booking.getEndDate() != null &&
                 booking.getEndDate().isAfter(LocalDateTime.now());  // Changed after() to isAfter()
     }

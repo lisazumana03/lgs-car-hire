@@ -20,7 +20,6 @@ import java.util.Set;
 import static za.co.carhire.factory.reservation.InvoiceFactory.generateInvoice;
 
 @Service
-@Transactional
 public class PaymentService implements IPaymentService {
 
     @Autowired
@@ -34,12 +33,65 @@ public class PaymentService implements IPaymentService {
 
     @Override
     public Set<Payment> getPayments() {
-        return Set.of();
+        return Set.copyOf(paymentRepository.findAll());
     }
 
     @Override
+    @Transactional
     public Payment create(Payment payment) {
-        return paymentRepository.save(payment);
+
+        if (payment.getBooking() != null) {
+            Optional<Booking> bookingOpt = bookingRepository.findById(payment.getBooking().getBookingID());
+            if (bookingOpt.isEmpty()) {
+                throw new RuntimeException("Booking not found");
+            }
+
+            Booking booking = bookingOpt.get();
+            if (booking.getPayment() != null) {
+                throw new RuntimeException("Booking already has a payment");
+            }
+
+            payment.setBooking(booking);
+        }
+
+        Payment savedPayment = paymentRepository.save(payment);
+
+        // Update the booking with the payment reference
+        if (savedPayment.getBooking() != null) {
+            Booking booking = savedPayment.getBooking();
+            booking.setPayment(savedPayment);
+            bookingRepository.save(booking);
+
+            // AUTOMATICALLY GENERATE INVOICE AFTER PAYMENT
+            Invoice invoice = InvoiceFactory.generateInvoice(savedPayment, booking);
+            if (invoice != null) {
+                invoiceService.create(invoice);
+            }
+        }
+
+        return savedPayment;
+    }
+
+    public Payment createPayment(int bookingId, double amount, String paymentMethod) {
+        Optional<Booking> bookingOpt = bookingRepository.findById(bookingId);
+        if (bookingOpt.isEmpty()) {
+            throw new RuntimeException("Booking not found with ID: " + bookingId);
+        }
+
+        Booking booking = bookingOpt.get();
+
+        // Check if booking already has a payment
+        if (booking.getPayment() != null) {
+            throw new RuntimeException("Booking already has a payment");
+        }
+
+        // Create payment using factory
+        Payment payment = PaymentFactory.createPayment(booking, amount, paymentMethod);
+        if (payment == null) {
+            throw new RuntimeException("Invalid payment parameters");
+        }
+
+        return create(payment);
     }
 
     @Override
@@ -48,6 +100,7 @@ public class PaymentService implements IPaymentService {
     }
 
     @Override
+    @Transactional
     public Payment update(Payment payment) {
         if (paymentRepository.existsById(payment.getPaymentID())) {
             return paymentRepository.save(payment);
@@ -55,6 +108,7 @@ public class PaymentService implements IPaymentService {
         return null;
     }
 
+    @Transactional
     public Payment updatePaymentStatus(int paymentId, PaymentStatus status) {
         Optional<Payment> paymentOpt = paymentRepository.findById(paymentId);
         if (paymentOpt.isEmpty()) {
@@ -67,6 +121,7 @@ public class PaymentService implements IPaymentService {
     }
 
     @Override
+    @Transactional
     public void delete(int paymentId) {
         paymentRepository.deleteById(paymentId);
     }
