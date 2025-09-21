@@ -18,6 +18,11 @@ public class temp_UserServiceImpl implements UserService {
     }
 
     @Override
+    public User save(User user) {
+        return repository.save(user);
+    }
+
+    @Override
     public User read(Integer userId) {
         return repository.findById(userId).orElse(null);
     }
@@ -48,10 +53,5 @@ public class temp_UserServiceImpl implements UserService {
     @Override
     public User findByEmailAndPassword(String email, String password) {
         return repository.findByEmailAndPassword(email, password);
-    }
-
-    @Override
-    public User save(User user) {
-        return repository.save(user);
     }
 }
