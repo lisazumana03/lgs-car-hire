@@ -32,11 +32,9 @@ class ReviewControllerTest {
 
         MockitoAnnotations.openMocks(this);
 
-        User user = new User();
         Car car = new Car();
         testReview = new Review.Builder()
                 .setReviewID(1)
-                .setUser(user)
                 .setCar(car)
                 .setRating(5)
                 .setComment("Excellent service!")

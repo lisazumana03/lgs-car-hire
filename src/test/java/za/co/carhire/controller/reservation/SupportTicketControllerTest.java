@@ -37,9 +37,8 @@ public class SupportTicketControllerTest {
         testTicket = new SupportTicket.Builder()
                 .setTicketID(1)
                 .setUser(user)
-                .setMessage("Cannot order the BMW on the systen")
-                .setStatus("Pending")
-                .setResponse(0)
+                .setDescription("Cannot order the BMW on the systen")
+                .setSubject("Booking error")
                 .build();
     }
 

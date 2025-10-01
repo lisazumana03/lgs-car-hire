@@ -34,9 +34,8 @@ public class SupportTicketServiceTest {
 
         ticket = new SupportTicket.Builder()
                 .setTicketID(1)
-                .setMessage("Cannot log into the system")
-                .setStatus("PENDING")
-                .setResponse(0)
+                .setSubject("System error")
+                .setDescription("I have an issue with loging in the system")
                 .build();
     }
 
