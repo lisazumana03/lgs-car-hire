@@ -12,18 +12,17 @@ Date: 30 July 2025
 public class ReviewFactory {
 
     //Create Review
-    public static Review createReview(int reviewID, User user, Car car , int rating, String comment){
+    public static Review createReview(int reviewID,Car car , String fullName, String comment, int rating){
         if(Helper.isWithinBoundary(reviewID)||
-                Helper.isRating(rating) ||
                 Helper.isEmptyOrNull(comment)){
             return null;
         }else{
             return new Review.Builder()
                     .setReviewID(reviewID)
-                    .setUser(user)
                     .setCar(car)
-                    .setRating(rating)
+                    .setFullName(fullName)
                     .setComment(comment)
+                    .setRating(rating)
                     .build();
         }
     }

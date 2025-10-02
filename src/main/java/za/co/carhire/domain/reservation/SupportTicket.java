@@ -5,25 +5,21 @@ Olwethu Tshingo - 222634383
 Date: 30 2025
  */
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 import za.co.carhire.domain.authentication.User;
 
 import java.io.Serializable;
-import java.util.Date;
 
 @Entity
 public class SupportTicket implements Serializable {
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     protected int ticketID;
     @ManyToOne
     @JoinColumn(name = "user_id")
     protected User user;
-    protected String message;
-    protected String status;
-    protected int response;
+    protected String subject;
+    protected String description;
 
     public SupportTicket() {
     }
@@ -31,9 +27,8 @@ public class SupportTicket implements Serializable {
     private SupportTicket(Builder builder) {
         this.ticketID = builder.ticketID;
         this.user = builder.user;
-        this.message = builder.message;
-        this.status = builder.status;
-        this.response = builder.response;
+        this.subject = builder.subject;
+        this.description = builder.description;
     }
 
     public int getTicketID() {
@@ -44,16 +39,12 @@ public class SupportTicket implements Serializable {
         return user;
     }
 
-    public String getMessage(){
-        return message;
+    public String getSubject(){
+        return subject;
     }
 
-    public String getStatus(){
-        return status;
-    }
-
-    public int getResponse() {
-        return response;
+    public String getDescription(){
+        return description;
     }
 
 
@@ -62,18 +53,16 @@ public class SupportTicket implements Serializable {
         return "SupportTicket{" +
                 "ticketID=" + ticketID +
                 ", userID=" + user +
-                ", message='" + message + '\'' +
-                ", status='" + status + '\'' +
-                ", response=" + response +
+                ", subject='" + subject + '\'' +
+                ", description='" + description +
                 '}';
     }
 
     public static class Builder{
         protected int ticketID;
         protected User user;
-        protected String message;
-        protected String status;
-        protected int response;
+        protected String subject;
+        protected String description;
 
         public Builder setTicketID(int ticketID) {
             this.ticketID = ticketID;
@@ -85,27 +74,21 @@ public class SupportTicket implements Serializable {
             return this;
         }
 
-        public Builder setMessage(String message) {
-            this.message = message;
+        public Builder setSubject(String subject) {
+            this.subject = subject;
             return this;
         }
 
-        public Builder setStatus(String status) {
-            this.status = status;
-            return this;
-        }
-
-        public Builder setResponse(int response) {
-            this.response = response;
+        public Builder setDescription(String description) {
+            this.description = description;
             return this;
         }
 
         public SupportTicket.Builder copy(SupportTicket support){
             this.ticketID = support.getTicketID();
             this.user = support.getUser();;
-            this.message = support.getMessage();
-            this.status = support.getStatus();
-            this.response = support.getResponse();
+            this.subject = support.getSubject();
+            this.description = support.getDescription();
             return this;
         }
 

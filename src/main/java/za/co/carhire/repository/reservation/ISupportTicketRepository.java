@@ -11,6 +11,5 @@ import java.util.Optional;
 
 public interface ISupportTicketRepository extends JpaRepository<SupportTicket, Integer> {
     Optional<SupportTicket> findById(int ticketID);
-    List<SupportTicket> findByStatus(String status);
     List<SupportTicket> findAll();
 }
