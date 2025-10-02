@@ -11,18 +11,17 @@ Date: 30 July 2025
 public class SupportTicketFactory {
 
     //Support Submission
-    public static SupportTicket submitTicket(int ticketID, User user, String message){
+    public static SupportTicket submitTicket(int ticketID, User user, String subject,String description){
         if(Helper.isWithinBoundary(ticketID)||
-           Helper.isEmptyOrNull(message)){
+           Helper.isEmptyOrNull(subject)){
             return null;
         }
         else{
             return new SupportTicket.Builder()
                     .setTicketID(ticketID)
                     .setUser(user)
-                    .setMessage(message)
-                    .setStatus("Open")
-                    .setResponse(0)
+                    .setSubject(subject)
+                    .setDescription(description)
                     .build();
         }
     }
@@ -35,7 +34,7 @@ public class SupportTicketFactory {
         }
         else{
             return new SupportTicket.Builder()
-                    .setStatus("Closed")
+                    .setSubject("Closed")
                     .build();
         }
     }

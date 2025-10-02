@@ -17,17 +17,17 @@ public class ReviewFactoryTest {
     @Test
     public void testCreateReviewValid() {
 
-        User user = new User();   // Stub user (can be mocked or built if needed)
-        Car car = new Car();      // Stub car
+         // Stub user (can be mocked or built if needed)
+        Car car = new Car();
+        String fullName = "Olwethu Tshingo";
         int reviewID = 1;
         int rating = 4;
         String comment = "Great car, smooth ride.";
 
-        Review review = ReviewFactory.createReview(reviewID, user, car, rating, comment);
+        Review review = ReviewFactory.createReview(reviewID, car,fullName, comment, rating);
 
         assertNotNull(review);
         assertEquals(reviewID, review.getReviewID());
-        assertEquals(user, review.getUser());
         assertEquals(car, review.getCar());
         assertEquals(rating, review.getRating());
         assertEquals(comment, review.getComment());
@@ -36,7 +36,7 @@ public class ReviewFactoryTest {
     @Test
     public void testCreateReviewInvalid() {
 
-        Review review = ReviewFactory.createReview(-1, new User(), new Car(), 4, "Nice");  // Invalid reviewID
+        Review review = ReviewFactory.createReview(-1, new Car(), "Olwethu Tshingo","Nice",4);  // Invalid reviewID
         assertNull(review);
     }
 
