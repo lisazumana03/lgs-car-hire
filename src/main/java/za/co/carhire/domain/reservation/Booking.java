@@ -19,6 +19,7 @@ import java.util.List;
 @Table(name = "booking")
 public class Booking implements Serializable {
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private int bookingID;
     @ManyToOne
     @JoinColumn(name = "user_id")

@@ -1,4 +1,4 @@
-package za.co.carhire.service.authentication.Impl;
+package za.co.carhire.service.authentication.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -9,17 +9,12 @@ import za.co.carhire.service.authentication.UserService;
 import java.util.List;
 
 @Service
-public class UserServiceImpl implements UserService {
+public class temp_UserServiceImpl implements UserService {
     @Autowired
     private final IUserRepository repository;
 
-    public UserServiceImpl(IUserRepository repository) {
+    public temp_UserServiceImpl(IUserRepository repository) {
         this.repository = repository;
-    }
-
-    @Override
-    public User save(User user) {
-        return repository.save(user);
     }
 
     @Override
@@ -48,5 +43,15 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<User> findByIdNumber(Long idNumber) {
         return repository.findUserByIdNumber(idNumber);
+    }
+
+    @Override
+    public User findByEmailAndPassword(String email, String password) {
+        return repository.findByEmailAndPassword(email, password);
+    }
+
+    @Override
+    public User save(User user) {
+        return repository.save(user);
     }
 }

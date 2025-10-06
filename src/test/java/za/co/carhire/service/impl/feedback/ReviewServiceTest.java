@@ -37,7 +37,8 @@ public class ReviewServiceTest {
 
         review = new Review.Builder()
                 .setReviewID(1)
-                .setRating(5)
+                .setRating(4)
+                .setFullName("Olwethu Tshingo")
                 .setComment("Excellent service")
                 .build();
     }

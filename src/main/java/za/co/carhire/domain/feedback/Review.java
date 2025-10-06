@@ -6,7 +6,6 @@ Date: 30 July 2025
  */
 
 import jakarta.persistence.*;
-import za.co.carhire.domain.authentication.User;
 import za.co.carhire.domain.vehicle.Car;
 
 import java.io.Serializable;
@@ -14,13 +13,14 @@ import java.io.Serializable;
 @Entity
 public class Review implements Serializable {
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     protected int reviewID;
+
     @ManyToOne
-    @JoinColumn(name = "user_id")
-    protected User user;
-    @ManyToOne
-    @JoinColumn(name = "car_id")
+    @JoinColumn(name ="car_id")
     protected Car car;
+
+    protected String fullName;
     protected int rating;
     protected String comment;
 
@@ -29,8 +29,8 @@ public class Review implements Serializable {
 
     private Review(Builder builder) {
         this.reviewID = builder.reviewID;
-        this.user = builder.user;
         this.car = builder.car;
+        this.fullName = builder.fullName;
         this.rating = builder.rating;
         this.comment = builder.comment;
     }
@@ -39,8 +39,8 @@ public class Review implements Serializable {
         return reviewID;
     }
 
-    public User getUser() {
-        return user;
+    public String getFullName() {
+        return fullName;
     }
 
     public Car getCar() {
@@ -59,8 +59,8 @@ public class Review implements Serializable {
     public String toString() {
         return "Review{" +
                 "reviewID=" + reviewID +
-                ", userID=" + user +
                 ", carID=" + car +
+                ", fullName=" + fullName +
                 ", rating=" + rating +
                 ", comment='" + comment + '\'' +
                 '}';
@@ -68,7 +68,7 @@ public class Review implements Serializable {
 
     public static class Builder{
         private int reviewID;
-        private User user;
+        private String fullName;
         private Car car;
         private int rating;
         private String comment;
@@ -78,8 +78,8 @@ public class Review implements Serializable {
             return this;
         }
 
-        public Builder setUser(User user) {
-            this.user = user;
+        public Builder setFullName(String fullName) {
+            this.fullName = fullName;
             return this;
         }
 
@@ -101,7 +101,7 @@ public class Review implements Serializable {
         public Review.Builder copy(Review review){
             this.reviewID = review.getReviewID();
             this.car = review.getCar();
-            this.user = review.getUser();
+            this.fullName = review.getFullName();
             this.rating = review.getRating();
             this.comment = review.getComment();
             return this;

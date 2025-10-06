@@ -4,8 +4,8 @@ package za.co.carhire.factory.reservation;
 Olwethu Tshingo - 222634383
 Date: 30 July 2025
  */
-import org.junit.jupiter.api.Test;
 import za.co.carhire.domain.authentication.User;
+import org.junit.jupiter.api.Test;
 import za.co.carhire.domain.reservation.SupportTicket;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -15,18 +15,18 @@ public class SupportTicketFactoryTest {
     @Test
     public void testSubmitTicketValid() {
         User user = new User();
-        SupportTicket ticket = SupportTicketFactory.submitTicket(100, user, "Car engine light is on.");
+        SupportTicket ticket = SupportTicketFactory.submitTicket(100, user, "Login error.", "Error while trying to log into the system.");
 
         assertNotNull(ticket);
         assertEquals(100, ticket.getTicketID());
-        assertEquals("Open", ticket.getStatus());
-        assertEquals(0, ticket.getResponse());
+        assertEquals("Bug in system",ticket.getSubject());
+        assertEquals("Error while logging in the system", ticket.getDescription());
     }
 
     @Test
     public void testSubmitTicketInvalid() {
         User user = new User();
-        SupportTicket ticket = SupportTicketFactory.submitTicket(-1, user, "Car needs maintencance");
+        SupportTicket ticket = SupportTicketFactory.submitTicket(-1, user, "Car issue","Car needs maintencance");
         assertNull(ticket);
     }
 
@@ -36,7 +36,7 @@ public class SupportTicketFactoryTest {
         SupportTicket closedTicket = SupportTicketFactory.closeTicket(250);
 
         assertNotNull(closedTicket);
-        assertEquals("Closed", closedTicket.getStatus());
+        assertEquals("Closed", closedTicket.getDescription());
     }
 
     @Test
