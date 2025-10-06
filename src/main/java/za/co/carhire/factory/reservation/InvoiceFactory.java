@@ -53,6 +53,6 @@ public class InvoiceFactory {
                 payment.getBooking().getBookingID() == booking.getBookingID() &&
                 !"REFUNDED".equals(payment.getPaymentMethod()) &&
                 booking.getEndDate() != null &&
-                booking.getEndDate().isAfter(LocalDateTime.now());  // Changed after() to isAfter()
+                booking.getEndDate().isAfter(LocalDateTime.now());
     }
 }
