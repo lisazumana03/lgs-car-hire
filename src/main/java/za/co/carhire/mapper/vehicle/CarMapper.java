@@ -43,7 +43,11 @@ public class CarMapper {
         }
 
         if (car.getInsurance() != null) {
-            builder.setInsuranceID(car.getInsurance().getInsuranceID());
+            builder.setInsuranceID(car.getInsurance().getInsuranceID())
+                    .setInsuranceProvider(car.getInsurance().getInsuranceProvider())
+                    .setInsuranceCost(car.getInsurance().getInsuranceCost())
+                    .setInsuranceStatus(car.getInsurance().getStatus())
+                    .setInsurancePolicyNumber(car.getInsurance().getPolicyNumber());
         }
 
         if (car.getBooking() != null) {
