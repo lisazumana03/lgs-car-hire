@@ -22,7 +22,7 @@ import jakarta.persistence.Table;
 @Table(name = "location")
 public class Location implements Serializable {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int locationID;
     private String locationName;
     private int streetNumber;
