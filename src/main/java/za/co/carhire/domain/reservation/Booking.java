@@ -29,8 +29,6 @@ public class Booking implements Serializable {
     private LocalDateTime bookingDateAndTime;
     private LocalDateTime startDate;
     private LocalDateTime endDate;
-    @OneToOne(mappedBy = "booking", cascade = CascadeType.ALL)
-    private Payment payment;
     @ManyToOne
     @JoinColumn(name = "pickup_location_id")
     private Location pickupLocation;
@@ -49,7 +47,6 @@ public class Booking implements Serializable {
         this.bookingDateAndTime = builder.bookingDateAndTime;
         this.startDate = builder.startDate;
         this.endDate = builder.endDate;
-        this.payment = builder.payment;
         this.pickupLocation = builder.pickupLocation;
         this.dropOffLocation = builder.dropOffLocation;
         this.bookingStatus = builder.bookingStatus;
@@ -79,10 +76,6 @@ public class Booking implements Serializable {
         return endDate;
     }
 
-    public Payment getPayment() {
-        return payment;
-    }
-
     public Location getPickupLocation() {
         return pickupLocation;
     }
@@ -99,8 +92,6 @@ public class Booking implements Serializable {
         this.bookingStatus = bookingStatus;
     }
 
-    public void setPayment(Payment payment) { this.payment = payment; }
-
     @Override
     public String toString() {
         return "Booking{" +
@@ -110,7 +101,6 @@ public class Booking implements Serializable {
                 ", bookingDateAndTime=" + bookingDateAndTime +
                 ", startDate=" + startDate +
                 ", endDate=" + endDate +
-                ", payment=" + payment +
                 ", pickupLocation=" + pickupLocation +
                 ", dropOffLocation=" + dropOffLocation +
                 ", bookingStatus='" + bookingStatus + '\'' +
@@ -124,7 +114,6 @@ public class Booking implements Serializable {
         private LocalDateTime bookingDateAndTime;
         private LocalDateTime startDate;
         private LocalDateTime endDate;
-        private Payment payment;
         private Location pickupLocation;
         private Location dropOffLocation;
         private BookingStatus bookingStatus;
@@ -153,10 +142,6 @@ public class Booking implements Serializable {
             this.endDate = endDate;
             return this;
         }
-        public Builder setPayment(Payment payment) {
-            this.payment = payment;
-            return this;
-        }
         public Builder setPickupLocation(Location pickupLocation) {
             this.pickupLocation = pickupLocation;
             return this;
@@ -178,7 +163,6 @@ public class Booking implements Serializable {
             this.bookingDateAndTime = booking.getBookingDateAndTime();
             this.startDate = booking.getStartDate();
             this.endDate = booking.getEndDate();
-            this.payment = booking.getPayment();
             this.pickupLocation = booking.getPickupLocation();
             this.dropOffLocation = booking.getDropOffLocation();
             this.bookingStatus = booking.getBookingStatus();

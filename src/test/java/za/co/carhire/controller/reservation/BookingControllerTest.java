@@ -2,9 +2,6 @@ package za.co.carhire.controller.reservation;
 
 import org.junit.jupiter.api.*;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
@@ -15,10 +12,8 @@ import za.co.carhire.domain.authentication.User;
 import za.co.carhire.domain.reservation.Booking;
 import za.co.carhire.domain.reservation.BookingStatus;
 import za.co.carhire.domain.reservation.Location;
-import za.co.carhire.domain.reservation.Payment;
 import za.co.carhire.domain.vehicle.Car;
 import za.co.carhire.factory.reservation.BookingFactory;
-import za.co.carhire.service.reservation.impl.BookingService;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -53,9 +48,6 @@ class BookingControllerTest {
         LocalDateTime bookingDateAndTime = LocalDateTime.of(2025, 5, 25, 10, 0);
         LocalDateTime startDate = LocalDateTime.of(2025, 5, 25, 10, 30);
         LocalDateTime endDate = LocalDateTime.of(2025, 5, 25, 11, 0);
-        Payment payment = new Payment.Builder()
-                .setPaymentID(3)
-                .build();
 
         Location pickUpLocation = new Location.Builder()
                 .setLocationName("Beaufort West")

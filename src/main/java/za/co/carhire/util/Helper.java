@@ -7,7 +7,6 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeParseException;
 import java.util.Date;
-import java.util.List;
 
 public class Helper {
     public static boolean isNullOrEmpty(BookingStatus s) {
@@ -43,25 +42,7 @@ public class Helper {
         }
         return false;
     }
-    private static final List<String> VALID_PAYMENT_METHODS =
-            List.of("CREDIT_CARD", "EFT", "CASH", "BANK TRANSFER");
 
-    public static boolean isValidPaymentMethod(String method) {
-        return !isNullOrEmpty(method) &&
-                VALID_PAYMENT_METHODS.contains(method.toUpperCase());
-    }
-
-//    public static boolean isBookingPayable(Booking booking){
-//        try {
-//            return booking != null &&
-//                    !isNullOrEmpty(booking.getBookingStatus()) &&
-//                    !booking.getBookingStatus().equalsIgnoreCase("CANCELLED") &&
-//                    booking.getEndDate() != null &&
-//                    booking.getEndDate().isAfter(LocalDateTime.now());
-//        } catch (Exception e) {
-//            return false;
-//        }
-//    }
     public static int generateId() {
         return (int) (Math.random() * 1000000);
     }

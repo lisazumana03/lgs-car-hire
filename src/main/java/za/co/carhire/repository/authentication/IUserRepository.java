@@ -1,7 +1,7 @@
 package za.co.carhire.repository.authentication;
-/* INUserepository.java
+/* IUserRepository.java
 
-     IUserNotificationRepository/repository class
+     IUserRepository/repository class
 
      Author: Bonga Velem
 
