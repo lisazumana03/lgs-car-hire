@@ -32,7 +32,7 @@ class InvoiceFactoryTest {
         private Payment paidPayment = new Payment.Builder()
                         .setPaymentID(1)
                         .setBooking(validBooking)
-                        .setPaymentMethod("EFT")
+                        .setPaymentMethod(PaymentMethod.EFT)
                         .setAmount(575.00) // 500 + 15% tax
                         .build();
 
@@ -49,7 +49,7 @@ class InvoiceFactoryTest {
                 Payment unpaid = new Payment.Builder()
                                 .setPaymentID(2)
                                 .setBooking(validBooking)
-                                .setPaymentMethod("PENDING")
+                                .setPaymentMethod(PaymentMethod.CASH)
                                 .build();
                 assertNull(InvoiceFactory.generateInvoice(unpaid, validBooking));
         }

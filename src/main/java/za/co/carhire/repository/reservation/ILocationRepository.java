@@ -19,5 +19,8 @@ import java.util.Optional;
 @Repository
 public interface ILocationRepository extends JpaRepository<Location, Integer> {
     List<Location> findByPickUpLocations(List<Booking> pickupLocation);
+
     List<Location> findByDropOffLocations(List<Booking> dropOffLocations);
+
+    Optional<Location> findByLocationName(String locationName);
 }

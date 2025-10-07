@@ -20,7 +20,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/invoice")
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = {"http://localhost:5173", "http://127.0.0.1:5173"})
 public class InvoiceController {
     @Autowired
     private InvoiceService invoiceService;

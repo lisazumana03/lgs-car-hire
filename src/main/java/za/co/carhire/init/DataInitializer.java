@@ -213,7 +213,6 @@ public class DataInitializer implements CommandLineRunner {
         if (!carsByType.get("Economy").isEmpty()) {
             Car firstEconomyCar = carsByType.get("Economy").get(0);
             CarType economy = CarTypeFactory.createEconomy(0);
-            economy.setCar(firstEconomyCar);
             carTypeService.create(economy);
 
             // Update the car with its type
@@ -224,7 +223,6 @@ public class DataInitializer implements CommandLineRunner {
         if (!carsByType.get("Sedan").isEmpty()) {
             Car firstSedanCar = carsByType.get("Sedan").get(0);
             CarType sedan = CarTypeFactory.createSedan(0);
-            sedan.setCar(firstSedanCar);
             carTypeService.create(sedan);
 
             firstSedanCar.setCarType(sedan);
@@ -234,7 +232,6 @@ public class DataInitializer implements CommandLineRunner {
         if (!carsByType.get("SUV").isEmpty()) {
             Car firstSuvCar = carsByType.get("SUV").get(0);
             CarType suv = CarTypeFactory.createSUV(0);
-            suv.setCar(firstSuvCar);
             carTypeService.create(suv);
 
             firstSuvCar.setCarType(suv);
@@ -244,7 +241,6 @@ public class DataInitializer implements CommandLineRunner {
         if (!carsByType.get("Luxury").isEmpty()) {
             Car firstLuxuryCar = carsByType.get("Luxury").get(0);
             CarType luxury = CarTypeFactory.createLuxury(0);
-            luxury.setCar(firstLuxuryCar);
             carTypeService.create(luxury);
 
             firstLuxuryCar.setCarType(luxury);
@@ -254,7 +250,6 @@ public class DataInitializer implements CommandLineRunner {
         if (!carsByType.get("Sports").isEmpty()) {
             Car firstSportsCar = carsByType.get("Sports").get(0);
             CarType sports = CarTypeFactory.createSports(0);
-            sports.setCar(firstSportsCar);
             carTypeService.create(sports);
 
             firstSportsCar.setCarType(sports);
@@ -264,7 +259,6 @@ public class DataInitializer implements CommandLineRunner {
         if (!carsByType.get("Convertible").isEmpty()) {
             Car firstConvertibleCar = carsByType.get("Convertible").get(0);
             CarType convertible = CarTypeFactory.createConvertible(0);
-            convertible.setCar(firstConvertibleCar);
             carTypeService.create(convertible);
 
             firstConvertibleCar.setCarType(convertible);
@@ -274,7 +268,6 @@ public class DataInitializer implements CommandLineRunner {
         if (!carsByType.get("Minivan").isEmpty()) {
             Car firstMinivanCar = carsByType.get("Minivan").get(0);
             CarType minivan = CarTypeFactory.createMinivan(0);
-            minivan.setCar(firstMinivanCar);
             carTypeService.create(minivan);
 
             firstMinivanCar.setCarType(minivan);
@@ -284,7 +277,6 @@ public class DataInitializer implements CommandLineRunner {
         if (!carsByType.get("Electric").isEmpty()) {
             Car firstElectricCar = carsByType.get("Electric").get(0);
             CarType electric = CarTypeFactory.createElectric(0);
-            electric.setCar(firstElectricCar);
             carTypeService.create(electric);
 
             firstElectricCar.setCarType(electric);
@@ -294,7 +286,6 @@ public class DataInitializer implements CommandLineRunner {
         if (!carsByType.get("Hybrid").isEmpty()) {
             Car firstHybridCar = carsByType.get("Hybrid").get(0);
             CarType hybrid = CarTypeFactory.createHybrid(0);
-            hybrid.setCar(firstHybridCar);
             carTypeService.create(hybrid);
 
             firstHybridCar.setCarType(hybrid);

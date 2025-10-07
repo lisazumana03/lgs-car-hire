@@ -1,5 +1,13 @@
 package za.co.carhire.service.authentication;
+/* NotificationController.java
 
+     Notification reservation/Controller class
+
+     Author: Bonga Velem
+
+     Student Number: 220052379
+
+     */
 import za.co.carhire.domain.authentication.User;
 
 import java.util.List;

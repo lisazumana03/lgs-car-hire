@@ -1,16 +1,16 @@
 package za.co.carhire.domain.reservation;
-/* Notifrication.java
 
-     Notification domain/authentication class
+/*
+Notification.java
+Notification domain/authentication class
+Author: Bonga Velem
+Student Number: 220052379
+ */
 
-     Author: Bonga Velem
-
-     Student Number: 220052379
-
-     */
 import jakarta.persistence.*;
 import za.co.carhire.domain.authentication.User;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "Notifications")
@@ -18,21 +18,17 @@ public class Notification {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Integer notificationID;
+    private int notificationID;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false)
+    @ManyToOne
+    @JoinColumn(name = "user_id")
     private User user;
 
-    @Column(nullable = false)
     private String message;
 
-    @Column(nullable = false)
-    private LocalDate dateSent;
+    private boolean readStatus;
 
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private BookingStatus status;
+    private LocalDateTime dateSent;
 
     public Notification() {
     }
@@ -41,74 +37,58 @@ public class Notification {
         this.notificationID = builder.notificationID;
         this.user = builder.user;
         this.message = builder.message;
+        this.readStatus = builder.readStatus;
         this.dateSent = builder.dateSent;
-        this.status = builder.status;
     }
 
-    public Integer getNotificationID() {
+    public int getNotificationID() {
         return notificationID;
-    }
-
-    public void setNotificationID(Integer notificationID) {
-        this.notificationID = notificationID;
     }
 
     public User getUser() {
         return user;
     }
 
-    public void setUser(User user) {
-        this.user = user;
-    }
-
     public String getMessage() {
         return message;
     }
 
-    public void setMessage(String message) {
-        this.message = message;
+    public boolean isReadStatus() {
+        return readStatus;
     }
 
-    public LocalDate getDateSent() {
+    public LocalDateTime getDateSent() {
         return dateSent;
-    }
-
-    public void setDateSent(LocalDate dateSent) {
-        this.dateSent = dateSent;
-    }
-
-    public BookingStatus getStatus() {
-        return status;
-    }
-
-    public void setStatus(BookingStatus status) {
-        this.status = status;
     }
 
     @Override
     public String toString() {
         return "Notification{" +
                 "notificationID=" + notificationID +
-                ", userID=" + user +
+                ", user=" + user +
                 ", message='" + message + '\'' +
+                ", readStatus=" + readStatus +
                 ", dateSent=" + dateSent +
-                ", status='" + status + '\'' +
                 '}';
     }
 
     public static class Builder {
-        private Integer notificationID;
-        private User user;
-        private String message;
-        private LocalDate dateSent;
-        private BookingStatus status;
+        private int notificationID;
 
-        public Builder setNotificationID(Integer notificationID) {
+        private User user;
+
+        private String message;
+
+        private boolean readStatus;
+
+        private LocalDateTime dateSent;
+
+        public Builder setNotificationID(int notificationID) {
             this.notificationID = notificationID;
             return this;
         }
 
-        public Builder setUserID(User user) {
+        public Builder setUser(User user) {
             this.user = user;
             return this;
         }
@@ -118,13 +98,13 @@ public class Notification {
             return this;
         }
 
-        public Builder setDateSent(LocalDate dateSent) {
-            this.dateSent = dateSent;
+        public Builder setReadStatus(boolean readStatus) {
+            this.readStatus = readStatus;
             return this;
         }
 
-        public Builder setStatus(BookingStatus status) {
-            this.status = status;
+        public Builder setDateSent(LocalDateTime dateSent) {
+            this.dateSent = dateSent;
             return this;
         }
 
@@ -132,13 +112,15 @@ public class Notification {
             this.notificationID = notification.notificationID;
             this.user = notification.user;
             this.message = notification.message;
+            this.readStatus = notification.readStatus;
             this.dateSent = notification.dateSent;
-            this.status = notification.status;
             return this;
+
         }
 
         public Notification build() {
             return new Notification(this);
         }
     }
+
 }

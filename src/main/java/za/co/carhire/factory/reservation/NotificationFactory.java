@@ -13,18 +13,23 @@ import za.co.carhire.domain.reservation.BookingStatus;
 import za.co.carhire.util.Helper;
 import za.co.carhire.domain.reservation.Notification;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class NotificationFactory {
 
-    public static Notification createNotification(User user, String message, String dateSent, BookingStatus status){
-        if(user == null || Helper.isEmptyOrNull(message) || !Helper.isValidDate(dateSent) || status == null){
+
+    public static Notification createNotification(int notificationID, User user, String message, boolean readStatus, LocalDateTime dateSent){
+
+        if (Helper.isNull(user)|| Helper.isNullOrEmpty(message)|| Helper.isNull(dateSent)){
             return null;
         }
         return new Notification.Builder()
-                .setUserID(user)
+                .setNotificationID(notificationID)
+                .setUser(user)
                 .setMessage(message)
-                .setDateSent(LocalDate.parse(dateSent))
-                .setStatus(status)
+                .setReadStatus(readStatus)
+                .setDateSent(dateSent)
                 .build();
+
     }
 }

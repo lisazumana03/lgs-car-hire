@@ -125,4 +125,47 @@ public class PaymentService implements IPaymentService {
     public void delete(int paymentId) {
         paymentRepository.deleteById(paymentId);
     }
+
+    @Override
+    public boolean verifyPayment(int paymentId) {
+        return paymentRepository.existsById(paymentId);
+    }
+
+    @Transactional
+    public Payment verifyAndCreatePayment(int bookingId, double amount, String paymentMethod, String reference) {
+        System.out.println("INFO: PaymentService - Starting payment verification for booking " + bookingId);
+
+        Optional<Booking> bookingOpt = bookingRepository.findById(bookingId);
+        if (bookingOpt.isEmpty()) {
+            System.err.println("ERROR: Booking not found with ID: " + bookingId);
+            throw new RuntimeException("Booking not found with ID: " + bookingId);
+        }
+
+        Booking booking = bookingOpt.get();
+        System.out.println("INFO: Found booking " + bookingId + " with status: " + booking.getBookingStatus());
+
+        // Check if booking already has a payment
+        if (booking.getPayment() != null) {
+            System.out.println("INFO: Booking already has payment. Updating to COMPLETED");
+            Payment existingPayment = booking.getPayment();
+            existingPayment.setPaymentStatus(PaymentStatus.COMPLETED);
+            Payment updated = paymentRepository.save(existingPayment);
+            System.out.println("SUCCESS: Payment " + updated.getPaymentID() + " updated to COMPLETED");
+            return updated;
+        }
+
+        System.out.println("INFO: Creating new payment for booking " + bookingId);
+        // Create new payment with COMPLETED status
+        Payment payment = PaymentFactory.createPayment(booking, amount, paymentMethod);
+        if (payment == null) {
+            System.err.println("ERROR: PaymentFactory returned null");
+            throw new RuntimeException("Invalid payment parameters");
+        }
+
+        payment.setPaymentStatus(PaymentStatus.COMPLETED);
+        System.out.println("INFO: Saving payment to database...");
+        Payment savedPayment = create(payment);
+        System.out.println("SUCCESS: Payment saved with ID: " + savedPayment.getPaymentID());
+        return savedPayment;
+    }
 }

@@ -1,4 +1,5 @@
 package za.co.carhire.dto;
+
 /* UserDTO.java
 
      dto/UserDTO class
@@ -8,8 +9,10 @@ package za.co.carhire.dto;
      Student Number: 220052379
 
      */
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.time.LocalDate;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class UserDTO {
     private Integer userId;
     private Long idNumber;

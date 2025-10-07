@@ -2,6 +2,7 @@ package za.co.carhire.repository.reservation;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
+import za.co.carhire.domain.authentication.User;
 import za.co.carhire.domain.reservation.Notification;
 
 import java.util.List;
@@ -16,7 +17,9 @@ import java.util.List;
      */
 @Repository
 public interface INotificationRepository extends JpaRepository<Notification, Integer> {
-  List<Notification> findByUser_IdNumber(Long idNumber);
+  // Find all notifications for a user
+  List<Notification> findByUser(User user);
 
-  List<Notification> findByUser_IdNumberAndStatus(Long idNumber, String status);
+  // Find unread notifications for a user
+  List<Notification> findByUserAndReadStatus(User user, boolean readStatus);
 }

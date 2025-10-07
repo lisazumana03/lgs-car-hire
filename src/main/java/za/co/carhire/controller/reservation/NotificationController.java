@@ -1,4 +1,5 @@
 package za.co.carhire.controller.reservation;
+
 /* NotificationController.java
 
      Notification reservation/Controller class
@@ -9,58 +10,61 @@ package za.co.carhire.controller.reservation;
 
      */
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import za.co.carhire.domain.reservation.Notification;
+import za.co.carhire.dto.CreateNotificationDTO;
 import za.co.carhire.dto.NotificationDTO;
-import za.co.carhire.mapper.NotificationMapper;
-import za.co.carhire.service.reservation.NotificationService;
+import za.co.carhire.service.reservation.impl.NotificationServiceImpl;
 
-import java.util.List;
-@CrossOrigin(origins = {"http://localhost:5173", "http://127.0.0.1:5173"})
+import java.util.Map;
+
+@CrossOrigin(origins = { "http://localhost:5173", "http://127.0.0.1:5173" })
 @RestController
 @RequestMapping("/api/notifications")
 public class NotificationController {
 
-    @Autowired
-    private NotificationService service;
+    private final NotificationServiceImpl notificationService;
 
     @Autowired
-    private NotificationMapper mapper;
+    public NotificationController(NotificationServiceImpl notificationService) {
+        this.notificationService = notificationService;
+    }
 
     @PostMapping
-    public NotificationDTO create(@RequestBody NotificationDTO notificationDTO) {
-        Notification notification = mapper.toDomain(notificationDTO);
-        Notification created = service.save(notification);
-        return mapper.toDTO(created);
-    }
-
-    @GetMapping("/{id}")
-    public NotificationDTO read(@PathVariable Integer id) {
-        Notification notification = service.read(id);
-        return mapper.toDTO(notification);
-    }
-
-    @PutMapping("/{id}")
-    public NotificationDTO update(@PathVariable Integer id, @RequestBody NotificationDTO notificationDTO) {
-        Notification existingNotification = service.read(id);
-        if (existingNotification == null) {
-            return null;
+    public ResponseEntity<?> sendNotification(@RequestBody CreateNotificationDTO createDTO) {
+        try {
+            System.out.println("Received notification request for userId: " + createDTO.userId() + ", message: "
+                    + createDTO.message());
+            NotificationDTO savedNotification = notificationService.sendNotification(createDTO);
+            return ResponseEntity.ok(savedNotification);
+        } catch (Exception e) {
+            System.err.println("Error sending notification: " + e.getMessage());
+            e.printStackTrace();
+            return ResponseEntity.status(500).body(Map.of(
+                    "error", "Internal Server Error",
+                    "message", e.getMessage(),
+                    "cause", e.getClass().getName(),
+                    "timestamp", java.time.LocalDateTime.now().toString()));
         }
-
-        Notification notification = mapper.toDomain(notificationDTO);
-        notification.setNotificationID(id);
-        Notification updated = service.save(notification);
-        return mapper.toDTO(updated);
     }
 
-    @DeleteMapping("/{id}")
-    public void delete(@PathVariable Integer id) {
-        service.delete(id);
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<?> getUserNotifications(@PathVariable String userId) {
+        try {
+            int userIdInt = Integer.parseInt(userId);
+            return ResponseEntity.ok(notificationService.getUserNotifications(userIdInt));
+        } catch (NumberFormatException e) {
+            return ResponseEntity.badRequest().body(Map.of(
+                    "error", "Bad Request",
+                    "message", "Invalid user ID: " + userId + ". User ID must be a number.",
+                    "timestamp", java.time.LocalDateTime.now().toString()));
+        }
     }
 
-    @GetMapping
-    public List<NotificationDTO> getAll() {
-        List<Notification> notifications = service.findAll();
-        return mapper.toDTOList(notifications);
+    @PutMapping("/{notificationId}/read")
+    public ResponseEntity<NotificationDTO> markAsRead(@PathVariable int notificationId) {
+        NotificationDTO updated = notificationService.markAsRead(notificationId);
+        return ResponseEntity.ok(updated);
     }
+
 }

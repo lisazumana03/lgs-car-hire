@@ -1,4 +1,5 @@
 package za.co.carhire.mapper;
+
 /* NotifricationMapper.java
 
      NotificationMapper/mapper class
@@ -12,79 +13,43 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import za.co.carhire.domain.reservation.Notification;
 import za.co.carhire.domain.reservation.BookingStatus;
+import za.co.carhire.domain.reservation.Booking;
 import za.co.carhire.domain.authentication.User;
+import za.co.carhire.dto.CreateNotificationDTO;
 import za.co.carhire.dto.NotificationDTO;
 import za.co.carhire.service.authentication.UserService;
+import za.co.carhire.service.reservation.IBookingService;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Component
 public class NotificationMapper {
-
-    @Autowired
-    private UserService userService;
-
-    public NotificationDTO toDTO(Notification notification) {
+    // Convert Notification domain object to NotificationDTO
+    public static NotificationDTO toDTO(Notification notification) {
         if (notification == null) {
             return null;
         }
-
+        if (notification.getUser() == null) {
+            throw new IllegalStateException("Notification must have a user");
+        }
         return new NotificationDTO(
                 notification.getNotificationID(),
+                notification.getUser().getUserId(),
                 notification.getMessage(),
-                notification.getDateSent(),
-                notification.getStatus().toString(),
-                notification.getUser() != null ? notification.getUser().getUserId() : null,
-                notification.getUser() != null ? notification.getUser().getName() : null
-        );
+                notification.isReadStatus(),
+                notification.getDateSent());
+
     }
 
-    public Notification toDomain(NotificationDTO dto) {
-        if (dto == null) {
-            return null;
-        }
-
-        BookingStatus status = null;
-        if (dto.getStatus() != null) {
-            try {
-                status = BookingStatus.valueOf(dto.getStatus().toUpperCase());
-            } catch (IllegalArgumentException e) {
-                status = BookingStatus.PENDING;
-            }
-        }
-
-        User user = null;
-        if (dto.getUserId() != null) {
-            user = userService.read(dto.getUserId());
-        }
-
+    // Convert CreateNotificationDTO to Notification domain object
+    public static Notification toDomain(CreateNotificationDTO createNotificationDTO, User user) {
         return new Notification.Builder()
-                .setNotificationID(dto.getNotificationID())
-                .setMessage(dto.getMessage())
-                .setDateSent(dto.getDateSent())
-                .setStatus(status)
-                .setUserID(user)
+                .setUser(user)
+                .setMessage(createNotificationDTO.message())
+                .setReadStatus(false)
+                .setDateSent(LocalDateTime.now())
                 .build();
     }
 
-    public List<NotificationDTO> toDTOList(List<Notification> notifications) {
-        if (notifications == null) {
-            return null;
-        }
-
-        return notifications.stream()
-                .map(this::toDTO)
-                .collect(Collectors.toList());
-    }
-
-    public List<Notification> toDomainList(List<NotificationDTO> dtos) {
-        if (dtos == null) {
-            return null;
-        }
-
-        return dtos.stream()
-                .map(this::toDomain)
-                .collect(Collectors.toList());
-    }
 }

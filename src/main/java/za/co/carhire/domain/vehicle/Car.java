@@ -16,7 +16,7 @@ public class Car implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "car_id")
+    @Column(name = "carid")
     private int carID;
 
     @Column(name = "model")
@@ -45,7 +45,8 @@ public class Car implements Serializable {
     @JoinColumn(name = "insurance_id")
     private Insurance insurance;
 
-    @OneToOne(mappedBy = "car", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn(name = "car_typeid")
     private CarType carType;
 
     public Car() {
