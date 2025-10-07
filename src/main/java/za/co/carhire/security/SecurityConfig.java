@@ -43,8 +43,16 @@ public class SecurityConfig {
                                 "/api/users/login",
                                 "/actuator/**"
                         ).permitAll()
+                        // Public GET endpoints for cars and car types
+                        .requestMatchers(
+                                org.springframework.http.HttpMethod.GET,
+                                "/api/car/**",
+                                "/api/cartype/**"
+                        ).permitAll()
+                        // Admin-only endpoints
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")
                         .requestMatchers("/api/lgs-car-hire/admin/**").hasRole("ADMIN")
+                        // All POST, PUT, DELETE operations require authentication
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session

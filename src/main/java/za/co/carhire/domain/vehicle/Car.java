@@ -45,7 +45,8 @@ public class Car implements Serializable {
     @JoinColumn(name = "insurance_id")
     private Insurance insurance;
 
-    @OneToOne(mappedBy = "car", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "car_type_id", referencedColumnName = "car_type_id")
     private CarType carType;
 
     public Car() {

@@ -8,6 +8,7 @@ import za.co.carhire.domain.vehicle.Car;
 import za.co.carhire.dto.vehicle.CarDTO;
 import za.co.carhire.mapper.vehicle.CarMapper;
 import za.co.carhire.service.vehicle.ICarService;
+import za.co.carhire.service.vehicle.ICarTypeService;
 
 import java.util.List;
 import java.util.Set;
@@ -16,18 +17,22 @@ import java.util.stream.Collectors;
 Imtiyaaz Waggie 219374759
 Date: 25/05/2025
 Updated: 28/08/2025 - Added /api prefix to endpoints
+Updated: 07/10/2025 - Added CarType relationship support
  */
 
 @RestController
-@RequestMapping("/api/car") 
+@RequestMapping("/api/car")
 // @CrossOrigin(origins = "http://localhost:3046")
 public class CarController {
     @Autowired
     private ICarService carService;
 
+    @Autowired
+    private ICarTypeService carTypeService;
+
     @PostMapping("/create")
     public ResponseEntity<CarDTO> create(@RequestBody CarDTO carDto) {
-        Car car = CarMapper.toEntity(carDto);
+        Car car = CarMapper.toEntity(carDto, carTypeService);
         Car createdCar = carService.create(car);
         CarDTO responseDto = CarMapper.toDTO(createdCar);
         return new ResponseEntity<>(responseDto, HttpStatus.CREATED);
@@ -47,7 +52,7 @@ public class CarController {
     public ResponseEntity<CarDTO> update(@RequestBody CarDTO carDto) {
         Car existingCar = carService.read(carDto.getCarID());
         if (existingCar != null) {
-            Car updatedCar = CarMapper.updateEntityFromDTO(existingCar, carDto);
+            Car updatedCar = CarMapper.updateEntityFromDTO(existingCar, carDto, carTypeService);
             Car savedCar = carService.update(updatedCar);
             CarDTO responseDto = CarMapper.toDTO(savedCar);
             return new ResponseEntity<>(responseDto, HttpStatus.OK);

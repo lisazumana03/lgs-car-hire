@@ -3,12 +3,14 @@ package za.co.carhire.mapper.vehicle;
 import za.co.carhire.domain.vehicle.Car;
 import za.co.carhire.domain.vehicle.CarType;
 import za.co.carhire.dto.vehicle.CarDTO;
+import za.co.carhire.service.vehicle.ICarTypeService;
 
 /**
  * Mapper class for converting between Car entity and CarDTO
  * Author: Imtiyaaz Waggie 219374759
  * Date: 28/08/2025
  * Updated: 31/08/2025 - Added image URL mapping
+ * Updated: 07/10/2025 - Added CarType relationship support
  */
 public class CarMapper {
 
@@ -52,7 +54,7 @@ public class CarMapper {
     }
 
     /**
-     * Convert CarDTO to Car entity with image URL
+     * Convert CarDTO to Car entity with image URL (without CarType relationship)
      * @param dto the DTO to convert
      * @return the entity representation
      */
@@ -73,7 +75,38 @@ public class CarMapper {
     }
 
     /**
-     * Update existing Car entity from CarDTO including image URL
+     * Convert CarDTO to Car entity with CarType relationship
+     * @param dto the DTO to convert
+     * @param carTypeService service to fetch the CarType
+     * @return the entity representation with CarType linked
+     */
+    public static Car toEntity(CarDTO dto, ICarTypeService carTypeService) {
+        if (dto == null) {
+            return null;
+        }
+
+        Car.Builder builder = new Car.Builder()
+                .setCarID(dto.getCarID())
+                .setModel(dto.getModel())
+                .setBrand(dto.getBrand())
+                .setYear(dto.getYear())
+                .setAvailability(dto.isAvailability())
+                .setRentalPrice(dto.getRentalPrice())
+                .setImageUrl(dto.getImageUrl());
+
+        // Link CarType if carTypeID is provided
+        if (dto.getCarTypeID() != null && carTypeService != null) {
+            CarType carType = carTypeService.read(dto.getCarTypeID());
+            if (carType != null) {
+                builder.setCarType(carType);
+            }
+        }
+
+        return builder.build();
+    }
+
+    /**
+     * Update existing Car entity from CarDTO including image URL (without CarType)
      * @param existingCar the existing entity to update
      * @param dto the DTO with new values
      * @return the updated entity
@@ -89,6 +122,39 @@ public class CarMapper {
         existingCar.setAvailability(dto.isAvailability());
         existingCar.setRentalPrice(dto.getRentalPrice());
         existingCar.setImageUrl(dto.getImageUrl());
+
+        return existingCar;
+    }
+
+    /**
+     * Update existing Car entity from CarDTO including CarType relationship
+     * @param existingCar the existing entity to update
+     * @param dto the DTO with new values
+     * @param carTypeService service to fetch the CarType
+     * @return the updated entity
+     */
+    public static Car updateEntityFromDTO(Car existingCar, CarDTO dto, ICarTypeService carTypeService) {
+        if (existingCar == null || dto == null) {
+            return existingCar;
+        }
+
+        existingCar.setModel(dto.getModel());
+        existingCar.setBrand(dto.getBrand());
+        existingCar.setYear(dto.getYear());
+        existingCar.setAvailability(dto.isAvailability());
+        existingCar.setRentalPrice(dto.getRentalPrice());
+        existingCar.setImageUrl(dto.getImageUrl());
+
+        // Update CarType if carTypeID is provided
+        if (dto.getCarTypeID() != null && carTypeService != null) {
+            CarType carType = carTypeService.read(dto.getCarTypeID());
+            if (carType != null) {
+                existingCar.setCarType(carType);
+            }
+        } else if (dto.getCarTypeID() == null) {
+            // If carTypeID is explicitly null, remove the relationship
+            existingCar.setCarType(null);
+        }
 
         return existingCar;
     }

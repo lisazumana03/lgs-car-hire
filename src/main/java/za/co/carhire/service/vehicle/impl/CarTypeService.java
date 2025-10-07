@@ -2,6 +2,7 @@ package za.co.carhire.service.vehicle.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import za.co.carhire.domain.vehicle.CarType;
 import za.co.carhire.repository.vehicle.ICarTypeRepository;
 import za.co.carhire.service.vehicle.ICarTypeService;
@@ -11,6 +12,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
+@Transactional
 public class CarTypeService implements ICarTypeService {
 
     @Autowired
@@ -22,11 +24,13 @@ public class CarTypeService implements ICarTypeService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public CarType read(Integer id) {
         return carTypeRepository.findById(id).orElse(null);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public CarType read(int carTypeID) {
         return carTypeRepository.findById(carTypeID).orElse(null);
     }
@@ -45,14 +49,16 @@ public class CarTypeService implements ICarTypeService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Set<CarType> getCarTypes() {
         return carTypeRepository.findAll().stream().collect(Collectors.toSet());
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<CarType> getCarTypesByFuelType(String fuelType) {
         return carTypeRepository.findAll().stream()
-                .filter(carType -> carType.getFuelType() != null && 
+                .filter(carType -> carType.getFuelType() != null &&
                        carType.getFuelType().equalsIgnoreCase(fuelType))
                 .collect(Collectors.toList());
     }

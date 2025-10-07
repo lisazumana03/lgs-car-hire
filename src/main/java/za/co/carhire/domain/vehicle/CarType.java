@@ -12,8 +12,7 @@ public class CarType implements Serializable {
     @Column(name = "car_type_id")
     private int carTypeID;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "car_id", referencedColumnName = "car_id")
+    @OneToOne(mappedBy = "carType", fetch = FetchType.LAZY)
     private Car car;
 
     @Column(name = "type")
@@ -87,6 +86,16 @@ public class CarType implements Serializable {
             return this;
         }
 
+        public Builder copy(CarType carType) {
+            this.carTypeID = carType.getCarTypeID();
+            this.car = carType.getCar();
+            this.type = carType.getType();
+            this.fuelType = carType.getFuelType();
+            this.numberOfWheels = carType.getNumberOfWheels();
+            this.numberOfSeats = carType.getNumberOfSeats();
+            return this;
+        }
+
         public CarType build() {
             return new CarType(this);
         }
@@ -138,12 +147,6 @@ public class CarType implements Serializable {
 
     public void setNumberOfSeats(int numberOfSeats) {
         this.numberOfSeats = numberOfSeats;
-    }
-
-    public void addCarDescription(String description) {
-    }
-
-    public void updateCarDescription(String description, boolean update) {
     }
 
     @Override
