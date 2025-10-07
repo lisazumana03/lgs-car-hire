@@ -5,8 +5,10 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
 import za.co.carhire.domain.authentication.User;
@@ -23,21 +25,23 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @RunWith(SpringRunner.class)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class BookingControllerTest {
 
+    @Autowired
     private TestRestTemplate restTemplate;
 
-    @InjectMocks
-    private BookingController bookingController;
+    @LocalServerPort
+    private int port;
 
     private static Booking booking;
-    @Mock
-    private BookingService bookingService;
+
+    private String getBaseUrl() {
+        return "http://localhost:" + port + "/booking";
+    }
 
     @BeforeEach
     void setUp() {
@@ -71,26 +75,35 @@ class BookingControllerTest {
     @Test
     @Order(1)
     void create() {
-        String url = "/create";
+        String url = getBaseUrl() + "/create";
         System.out.println("Post data: " + booking);
+
         ResponseEntity<Booking> response = restTemplate.postForEntity(url, booking, Booking.class);
+
         System.out.println("Response: " + response.getBody());
-        assertEquals(booking, response.getBody());
+
+        assertNotNull(response.getBody());
+        assertEquals(booking.getBookingID(), response.getBody().getBookingID());
     }
 
     @Test
     @Order(2)
     void read() {
+        String url = getBaseUrl() + "/read/" + booking.getBookingID();
+        ResponseEntity<Booking> response = restTemplate.getForEntity(url, Booking.class);
+
+        assertNotNull(response.getBody());
+        assertEquals(booking.getBookingID(), response.getBody().getBookingID());
     }
 
     @Test
     @Order(3)
     void update() {
-        when(bookingService.update(booking)).thenReturn(booking);
-        Booking updatedBooking = bookingController.update(booking).getBody();
-        assertNotNull(updatedBooking);
-        assertEquals(booking, updatedBooking);
-        verify(bookingService, times(1)).update(booking);
+        String url = getBaseUrl() + "/update";
+        ResponseEntity<Booking> response = restTemplate.postForEntity(url, booking, Booking.class);
+
+        assertNotNull(response.getBody());
+        assertEquals(booking.getBookingID(), response.getBody().getBookingID());
     }
 
     @Test

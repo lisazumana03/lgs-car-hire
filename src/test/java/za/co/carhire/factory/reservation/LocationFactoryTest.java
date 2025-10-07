@@ -23,6 +23,7 @@ class LocationFactoryTest {
     void createLocation() {
         int locationID = 14;
         String locationName = "Langeberg Rentals";
+        int streetNumber = 156;
         String streetName = "Robert Street";
         String city = "Kommetjie";
         String provinceOrState = "Western Cape";
@@ -33,7 +34,7 @@ class LocationFactoryTest {
         List<Booking> dropOffLocations = new ArrayList<>();
         dropOffLocations.add(new Booking());
 
-        Location location = LocationFactory.createLocation(locationID, locationName, streetName, city, provinceOrState, country, postalCode, pickUpLocations, dropOffLocations);
+        Location location = LocationFactory.createLocation(locationID, locationName, streetNumber, streetName, city, provinceOrState, country, postalCode, pickUpLocations, dropOffLocations);
 
         System.out.println(location);
         assertNotNull(location);

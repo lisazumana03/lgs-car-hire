@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.*;
 import za.co.carhire.domain.reservation.Location;
 import za.co.carhire.service.reservation.impl.LocationService;
 
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -36,13 +37,19 @@ public class LocationController {
         return locationService.update(location);
     }
 
+    @GetMapping("/all")
+    public ResponseEntity<List<Location>> getAll(){
+        return ResponseEntity.ok(locationService.getAllLocations());
+    }
+
     @GetMapping("/location-set")
     public ResponseEntity<Set<Location>> readAll(){
         return ResponseEntity.ok(locationService.getLocations());
     }
 
     @DeleteMapping("/delete/{id}")
-    public void delete(@PathVariable int id){
+    public ResponseEntity<Void> delete(@PathVariable int id){
         locationService.delete(id);
+        return ResponseEntity.noContent().build();
     }
 }
