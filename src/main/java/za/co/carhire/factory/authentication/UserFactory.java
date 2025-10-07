@@ -10,6 +10,7 @@ package za.co.carhire.factory.authentication;
      */
 import za.co.carhire.util.Helper;
 import za.co.carhire.domain.authentication.User;
+import za.co.carhire.domain.authentication.UserRole;
 import java.time.LocalDate;
 
 public class UserFactory {
@@ -33,7 +34,35 @@ public class UserFactory {
                 .setPhoneNumber(phoneNumber)
                 .setPassword(password)
                 .setLicenseNumber(licenseNumber)
+                .setRole(UserRole.USER) // Default role
                 .build();
+    }
+
+    public static User createUserWithRole(String idNumber, String name, String email, String dateOfBirth, String phoneNumber, String password, String licenseNumber, UserRole role) {
+        if (Helper.isEmptyOrNull(name) ||
+                !Helper.isValidNationalIDNumber(idNumber) ||
+                !Helper.isValidEmail(email) ||
+                !Helper.isValidDate(dateOfBirth) ||
+                Helper.isEmptyOrNull(phoneNumber) ||
+                Helper.isEmptyOrNull(password) ||
+                Helper.isEmptyOrNull(licenseNumber)) {
+            return null;
+        }
+
+        return new User.Builder()
+                .setName(name)
+                .setIdNumber(Long.valueOf(idNumber))
+                .setEmail(email)
+                .setDateOfBirth(LocalDate.parse(dateOfBirth))
+                .setPhoneNumber(phoneNumber)
+                .setPassword(password)
+                .setLicenseNumber(licenseNumber)
+                .setRole(role != null ? role : UserRole.USER)
+                .build();
+    }
+
+    public static User createAdmin(String idNumber, String name, String email, String dateOfBirth, String phoneNumber, String password, String licenseNumber) {
+        return createUserWithRole(idNumber, name, email, dateOfBirth, phoneNumber, password, licenseNumber, UserRole.ADMIN);
     }
 
     public static User loginUser(String email, String password) {

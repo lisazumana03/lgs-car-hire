@@ -1,7 +1,7 @@
 package za.co.carhire.factory.authentication;
 /* UserFactoryTest.java
 
-     UserFactoryest/authentication/factory class Test
+     UserFactoryTest/authentication/factory class Test
 
      Author: Bonga Velem
 
@@ -10,10 +10,7 @@ package za.co.carhire.factory.authentication;
      */
 import org.junit.jupiter.api.*;
 import za.co.carhire.domain.authentication.User;
-
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.UUID;
+import za.co.carhire.domain.authentication.UserRole;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -27,9 +24,14 @@ class UserFactoryTest {
 
     private static User userLoginFail = UserFactory.loginUser("bongavelemoutlook.com", "Bonga34");
 
+    private static User admin = UserFactory.createAdmin("9999999999", "Admin User", "admin@test.com", "1985-01-01", "+27123456789", "Admin@123", "ADMIN001");
+
+    private static User userWithRole = UserFactory.createUserWithRole("8888888888", "Role User", "roleuser@test.com", "1990-06-15", "+27987654321", "User@123", "USER001", UserRole.USER);
+
     @Test
     void createUser() {
         assertNotNull(user1);
+        assertEquals(UserRole.USER, user1.getRole());
         System.out.println("User Register test: " + user1.toString());
     }
 
@@ -49,5 +51,31 @@ class UserFactoryTest {
     void LoginUserFail(){
         assertNotNull(userLoginFail);
         System.out.println("User Login test Fail: " + userLoginFail.toString());
+    }
+
+    @Test
+    void createAdminUser() {
+        assertNotNull(admin);
+        assertEquals(UserRole.ADMIN, admin.getRole());
+        assertEquals("Admin User", admin.getName());
+        assertEquals("admin@test.com", admin.getEmail());
+        System.out.println("Admin Create test: " + admin.toString());
+    }
+
+    @Test
+    void createUserWithRole() {
+        assertNotNull(userWithRole);
+        assertEquals(UserRole.USER, userWithRole.getRole());
+        assertEquals("Role User", userWithRole.getName());
+        assertEquals("roleuser@test.com", userWithRole.getEmail());
+        System.out.println("User with Role test: " + userWithRole.toString());
+    }
+
+    @Test
+    void testDefaultRole() {
+        User user = UserFactory.createUser("7777777777", "Default Role", "default@test.com", "1992-12-12", "+27111222333", "Pass@123", "DEF001");
+        assertNotNull(user);
+        assertEquals(UserRole.USER, user.getRole());
+        System.out.println("Default role test: " + user.toString());
     }
 }

@@ -9,11 +9,17 @@ package za.co.carhire.domain.authentication;
 
      */
 import jakarta.persistence.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
 import java.time.LocalDate;
+import java.util.Collection;
+import java.util.List;
 
 @Entity
 @Table(name = "Users")
-public class User {
+public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer userId;
@@ -39,6 +45,10 @@ public class User {
     @Column
     private String licenseNumber;
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private UserRole role = UserRole.USER;
+
     public User() {
     }
 
@@ -51,6 +61,38 @@ public class User {
         this.phoneNumber = builder.phoneNumber;
         this.password = builder.password;
         this.licenseNumber = builder.licenseNumber;
+        this.role = builder.role;
+    }
+
+    // UserDetails implementation methods
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of(new SimpleGrantedAuthority("ROLE_" + role.name()));
+    }
+
+    @Override
+    public String getUsername() {
+        return email; // Using email as username
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
     }
 
     public Integer getUserId() {
@@ -117,6 +159,14 @@ public class User {
         this.licenseNumber = licenseNumber;
     }
 
+    public UserRole getRole() {
+        return role;
+    }
+
+    public void setRole(UserRole role) {
+        this.role = role;
+    }
+
     @Override
     public String toString() {
         return "User{" +
@@ -128,6 +178,7 @@ public class User {
                 ", phoneNumber='" + phoneNumber + '\'' +
                 ", password='" + password + '\'' +
                 ", licenseNumber='" + licenseNumber + '\'' +
+                ", role=" + role +
                 '}';
     }
 
@@ -140,6 +191,7 @@ public class User {
         private String phoneNumber;
         private String password;
         private String licenseNumber;
+        private UserRole role = UserRole.USER;
 
         public Builder setUserId(Integer userId) {
             this.userId = userId;
@@ -181,6 +233,11 @@ public class User {
             return this;
         }
 
+        public Builder setRole(UserRole role) {
+            this.role = role;
+            return this;
+        }
+
         public Builder copy(User user){
             this.userId =  user.userId;
             this.idNumber = user.idNumber;
@@ -190,6 +247,7 @@ public class User {
             this.phoneNumber = user.phoneNumber;
             this.password = user.password;
             this.licenseNumber = user.licenseNumber;
+            this.role = user.role;
             return this;
         }
 

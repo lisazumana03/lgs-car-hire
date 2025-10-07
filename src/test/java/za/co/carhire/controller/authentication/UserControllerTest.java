@@ -13,7 +13,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import za.co.carhire.domain.authentication.User;
+import za.co.carhire.domain.authentication.UserRole;
 import za.co.carhire.service.authentication.UserService;
 
 import java.time.LocalDate;
@@ -26,6 +28,9 @@ class UserControllerTest {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     private Long uniqueIdNumber;
 
@@ -44,6 +49,7 @@ class UserControllerTest {
                 .setPhoneNumber("1234567890")
                 .setPassword("password123")
                 .setLicenseNumber("LIC" + uniqueIdNumber)
+                .setRole(UserRole.USER)
                 .build();
 
         User saved = userService.save(user);
@@ -54,8 +60,10 @@ class UserControllerTest {
         assertEquals("john@example.com", saved.getEmail());
         assertEquals(uniqueIdNumber, saved.getIdNumber());
         assertEquals("1234567890", saved.getPhoneNumber());
-        assertEquals("password123", saved.getPassword());
+        // Password should be encrypted after save
+        assertTrue(passwordEncoder.matches("password123", saved.getPassword()));
         assertEquals("LIC" + uniqueIdNumber, saved.getLicenseNumber());
+        assertEquals(UserRole.USER, saved.getRole());
     }
 
     @Test
@@ -68,6 +76,7 @@ class UserControllerTest {
                 .setPhoneNumber("0987654321")
                 .setPassword("password456")
                 .setLicenseNumber("LIC" + (uniqueIdNumber + 1))
+                .setRole(UserRole.USER)
                 .build();
 
         User saved = userService.save(user);
@@ -80,6 +89,7 @@ class UserControllerTest {
         assertEquals("Jane Smith", found.getName());
         assertEquals("jane@example.com", found.getEmail());
         assertEquals(uniqueIdNumber + 1, found.getIdNumber());
+        assertEquals(UserRole.USER, found.getRole());
     }
 
     @Test
@@ -92,6 +102,7 @@ class UserControllerTest {
                 .setPhoneNumber("1112223333")
                 .setPassword("password789")
                 .setLicenseNumber("LIC" + (uniqueIdNumber + 2))
+                .setRole(UserRole.USER)
                 .build();
 
         User saved = userService.save(user);
@@ -106,6 +117,7 @@ class UserControllerTest {
                 .setPhoneNumber("9998887777")
                 .setPassword("newpassword")
                 .setLicenseNumber("LIC" + (uniqueIdNumber + 2))
+                .setRole(UserRole.USER)
                 .build();
 
         User updated = userService.save(updatedUser);
@@ -115,7 +127,9 @@ class UserControllerTest {
         assertEquals("Updated Name", updated.getName());
         assertEquals("updated@example.com", updated.getEmail());
         assertEquals("9998887777", updated.getPhoneNumber());
-        assertEquals("newpassword", updated.getPassword());
+        // Check password is encrypted
+        assertTrue(passwordEncoder.matches("newpassword", updated.getPassword()));
+        assertEquals(UserRole.USER, updated.getRole());
     }
 
     @Test
@@ -128,6 +142,7 @@ class UserControllerTest {
                 .setPhoneNumber("5556667777")
                 .setPassword("password999")
                 .setLicenseNumber("LIC" + (uniqueIdNumber + 3))
+                .setRole(UserRole.USER)
                 .build();
 
         User saved = userService.save(user);
@@ -150,6 +165,7 @@ class UserControllerTest {
                 .setPhoneNumber("1111111111")
                 .setPassword("password111")
                 .setLicenseNumber("LIC" + (uniqueIdNumber + 4))
+                .setRole(UserRole.USER)
                 .build();
 
         User user2 = new User.Builder()
@@ -160,6 +176,7 @@ class UserControllerTest {
                 .setPhoneNumber("2222222222")
                 .setPassword("password222")
                 .setLicenseNumber("LIC" + (uniqueIdNumber + 5))
+                .setRole(UserRole.USER)
                 .build();
 
         userService.save(user1);
@@ -187,6 +204,7 @@ class UserControllerTest {
                 .setPhoneNumber("3333333333")
                 .setPassword("password333")
                 .setLicenseNumber("LIC" + (uniqueIdNumber + 6))
+                .setRole(UserRole.USER)
                 .build();
 
         User saved = userService.save(user);
@@ -194,6 +212,7 @@ class UserControllerTest {
         assertNotNull(saved);
         assertEquals("", saved.getName());
         assertEquals("empty@example.com", saved.getEmail());
+        assertEquals(UserRole.USER, saved.getRole());
     }
 
     @Test
@@ -206,6 +225,7 @@ class UserControllerTest {
                 .setPhoneNumber("4444444444")
                 .setPassword("password444")
                 .setLicenseNumber("LIC" + (uniqueIdNumber + 7))
+                .setRole(UserRole.USER)
                 .build();
 
         User saved = userService.save(user);
@@ -213,6 +233,7 @@ class UserControllerTest {
         assertNotNull(saved);
         assertEquals("Invalid Email User", saved.getName());
         assertEquals("invalid-email-format", saved.getEmail());
+        assertEquals(UserRole.USER, saved.getRole());
     }
 
     @Test
@@ -225,6 +246,7 @@ class UserControllerTest {
                 .setPhoneNumber("5555555555")
                 .setPassword("password555")
                 .setLicenseNumber("LIC" + (uniqueIdNumber + 8))
+                .setRole(UserRole.ADMIN)
                 .build();
 
         assertNotNull(user);
@@ -235,5 +257,26 @@ class UserControllerTest {
         assertEquals("5555555555", user.getPhoneNumber());
         assertEquals("password555", user.getPassword());
         assertEquals("LIC" + (uniqueIdNumber + 8), user.getLicenseNumber());
+        assertEquals(UserRole.ADMIN, user.getRole());
+    }
+
+    @Test
+    void testCreateAdminUser() {
+        User admin = new User.Builder()
+                .setName("Admin User")
+                .setEmail("admin" + uniqueIdNumber + "@example.com")
+                .setIdNumber(uniqueIdNumber + 9)
+                .setDateOfBirth(LocalDate.of(1985, 1, 1))
+                .setPhoneNumber("9999999999")
+                .setPassword("adminpass")
+                .setLicenseNumber("ADMIN" + uniqueIdNumber)
+                .setRole(UserRole.ADMIN)
+                .build();
+
+        User saved = userService.save(admin);
+
+        assertNotNull(saved);
+        assertEquals(UserRole.ADMIN, saved.getRole());
+        assertEquals("Admin User", saved.getName());
     }
 }

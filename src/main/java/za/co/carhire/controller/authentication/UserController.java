@@ -2,6 +2,7 @@ package za.co.carhire.controller.authentication;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import za.co.carhire.domain.authentication.User;
 import za.co.carhire.dto.LoginRequest;
@@ -98,6 +99,7 @@ public class UserController {
   }
 
   @GetMapping("/all")
+  @PreAuthorize("hasRole('ADMIN')")
   public List<UserDTO> getAll() {
     List<User> users = service.findAll();
     return mapper.toDTOList(users);
