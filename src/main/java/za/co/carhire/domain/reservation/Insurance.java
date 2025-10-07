@@ -6,28 +6,41 @@ Sibulele Gift Nohamba
 Date: 10/05/2025
  */
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.*;
 import za.co.carhire.domain.vehicle.Car;
 
 import java.io.Serializable;
 import java.util.Date;
 
 @Entity
+@Table(name = "insurance")
 public class Insurance implements Serializable {
     // Primary attributes
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "insurance_id")
     private int insuranceID;
+
+    @Column(name = "insurance_start_date")
     private Date insuranceStartDate;
+
+    @Column(name = "insurance_cost")
     private double insuranceCost;
+
+    @Column(name = "insurance_provider")
     private String insuranceProvider;
+
+    @Column(name = "status")
     private String status;
+
+    @Column(name = "policy_number")
     private long policyNumber;
+
+    @Column(name = "mechanic")
     private String mechanic;
 
-    // Relationship with Car
-    @OneToOne
+    // Relationship with Car - Car owns the relationship
+    @OneToOne(mappedBy = "insurance", fetch = FetchType.LAZY)
     private Car car;
 
     // Default constructor
@@ -68,6 +81,16 @@ public class Insurance implements Serializable {
     public long getPolicyNumber() { return policyNumber; }
     public String getMechanic() { return mechanic; }
     public Car getCar() { return car; }
+
+    // Setters
+    public void setInsuranceID(int insuranceID) { this.insuranceID = insuranceID; }
+    public void setInsuranceStartDate(Date insuranceStartDate) { this.insuranceStartDate = insuranceStartDate; }
+    public void setInsuranceCost(double insuranceCost) { this.insuranceCost = insuranceCost; }
+    public void setInsuranceProvider(String insuranceProvider) { this.insuranceProvider = insuranceProvider; }
+    public void setStatus(String status) { this.status = status; }
+    public void setPolicyNumber(long policyNumber) { this.policyNumber = policyNumber; }
+    public void setMechanic(String mechanic) { this.mechanic = mechanic; }
+    public void setCar(Car car) { this.car = car; }
 
     @Override
     public String toString() {
