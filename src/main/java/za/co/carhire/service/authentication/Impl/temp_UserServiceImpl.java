@@ -1,4 +1,4 @@
-package za.co.carhire.service.authentication.impl;
+package za.co.carhire.service.authentication.Impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -9,11 +9,11 @@ import za.co.carhire.service.authentication.UserService;
 import java.util.List;
 
 @Service
-public class UserServiceImpl implements UserService {
+public class temp_UserServiceImpl implements UserService {
     @Autowired
     private final IUserRepository repository;
 
-    public UserServiceImpl(IUserRepository repository) {
+    public temp_UserServiceImpl(IUserRepository repository) {
         this.repository = repository;
     }
 
