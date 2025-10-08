@@ -1,21 +1,26 @@
 package za.co.carhire.service.reservation;
+/* NotificationService.java
 
+     Notification reservation/Service interface
+
+     Author: Bonga Velem
+
+     Student Number: 220052379
+
+     */
 import za.co.carhire.domain.reservation.Notification;
+import za.co.carhire.dto.CreateNotificationDTO;
+import za.co.carhire.dto.NotificationDTO;
 
 import java.util.List;
 
 public interface NotificationService {
-    Notification save(Notification notification);
 
-    Notification read(Integer notificationId);
+    NotificationDTO sendNotification(CreateNotificationDTO createDTO);
 
-    Notification update(Notification notification);
 
-    void delete(Integer notificationId);
+    List<NotificationDTO> getUserNotifications(int userId);
 
-    List<Notification> findAll();
 
-    List<Notification> findByUserId(Long userId);
-
-    List<Notification> findByUserIdAndStatus(Long userId, String status);
+    NotificationDTO markAsRead(int notificationId);
 }

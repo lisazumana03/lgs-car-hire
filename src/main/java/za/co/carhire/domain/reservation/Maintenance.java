@@ -3,65 +3,52 @@ package za.co.carhire.domain.reservation;
  * Sibulele Gift Nohamba (220374686)
  * Date: 11/05/2025
  * */
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 import za.co.carhire.domain.vehicle.Car;
 
 import java.io.Serializable;
 import java.util.Date;
-
 @Entity
-public class Maintenance implements Serializable {
-    
-    // Primary attributes
-    @Id
-    private int maintenanceID;
-    private Date serviceDate;
-    private String description;
-    private double cost;
-    private String status;
-    private String mechanic;
+@Table(name = "Maintenance")
+public class Maintenance {
 
-    // Relationship with Car
-    @ManyToOne
-    private Car car;
-    
-    // Default constructor
-    public Maintenance() {}
-    
-     private Maintenance(Builder builder){
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int maintenanceID;
+
+    @Column(name = "maintenance_date", nullable = false)
+    private Date maintenanceDate;
+    @Column(name = "description", nullable = false)
+    private String description;
+
+    @Column(name = "cost")// e.g., Oil change, Tire rotation
+    private double cost;
+    @Column(name = "mechanic_name", nullable = false)
+    private String mechanicName;
+
+    @OneToOne
+    @JoinColumn(name = "car_id")
+    private Car car; // Association with Car entity
+
+    public Maintenance() {
+    }
+
+    public Maintenance(Builder builder) {
         this.maintenanceID = builder.maintenanceID;
-        this.serviceDate = builder.serviceDate;
+        this.maintenanceDate = builder.maintenanceDate;
         this.description = builder.description;
         this.cost = builder.cost;
-        this.status = builder.status;
-        this.mechanic = builder.mechanic;
+        this.mechanicName = builder.mechanicName;
+        this.car = builder.car;
     }
-     
-     // Methods from diagram
-    public int scheduleMaintenance(int maintenanceID, Date serviceDate, String description,
-                            double cost, String mechanic) {
-        // Implementation to schedule maintenance
+
+
+    public int getMaintenanceID() {
         return maintenanceID;
     }
 
-    public void updateMaintenanceStatus(int maintenanceID, String status) {
-        // Implementation to update maintenance status
-        if (this.maintenanceID == maintenanceID) {
-            this.status = status;
-        }
-    }
-    
-    
-    //Getters
-    public int getMaintenanceId() {
-        return maintenanceID;
-    }
-    
-
-    public Date getServiceDate() {
-        return serviceDate;
+    public Date getMaintenanceDate() {
+        return maintenanceDate;
     }
 
     public String getDescription() {
@@ -72,70 +59,75 @@ public class Maintenance implements Serializable {
         return cost;
     }
 
-    public String getStatus() {
-        return status;
+    public String getMechanicName() {
+        return mechanicName;
     }
 
-    public String getMechanic() {
-        return mechanic;
+    public Car getCar() {
+        return car;
     }
-    
-    public void setStatus(String status){
-        this.status = status;
-    }
-    
+
     @Override
     public String toString() {
         return "Maintenance{" +
-                "MaintenanceID=" + maintenanceID +
-                ", Service date=" + serviceDate +
-                ", Description=" + description +
-                ", Cost=" + cost  +
-                ", Status=" + status +
-                ", Mechanic=" + mechanic +
+                "maintenanceID=" + maintenanceID +
+                ", maintenanceDate=" + maintenanceDate +
+                ", description='" + description + '\'' +
+                ", cost=" + cost +
+                ", mechanicName='" + mechanicName + '\'' +
+                ", car=" + car +
                 '}';
     }
-    
-    
-    // Builder class
+
     public static class Builder {
-    private int maintenanceID;
-    private Date serviceDate;
-    private String description;
-    private double cost;
-    private String status;
-    private String mechanic;
-    
-    public Builder setMaintenanceID(int maintenanceID) {
-        this.maintenanceID = maintenanceID;
-        return this;
-    }
-    
-    public Builder setServiceDate(Date serviceDate) {
-        this.serviceDate = serviceDate;
-        return this;
-    }
-    
-    public Builder setDescription(String description) {
-        this.description = description;
-        return this;
-    }
-    
-     public Builder setCost(double cost) {
-        this.cost = cost;
-        return this;
-    }
-     
-    public Builder setStatus(String status) {
-        this.status = status;
-        return this;
-    }
- 
-    public Builder setMechanic(String mechanic) {
-        this.mechanic = mechanic;
-        return this;
-    }
-    public Maintenance build() {
+        private int maintenanceID;
+        private Date maintenanceDate;
+        private String description;
+        private double cost;
+        private String mechanicName;
+        private Car car;
+
+        public Builder setMaintenanceID(int maintenanceID) {
+            this.maintenanceID = maintenanceID;
+            return this;
+        }
+
+        public Builder setMaintenanceDate(Date maintenanceDate) {
+            this.maintenanceDate = maintenanceDate;
+            return this;
+        }
+
+        public Builder setDescription(String description) {
+            this.description = description;
+            return this;
+        }
+
+        public Builder setCost(double cost) {
+            this.cost = cost;
+            return this;
+        }
+
+        public Builder setMechanicName(String mechanicName) {
+            this.mechanicName = mechanicName;
+            return this;
+        }
+
+        public Builder setCar(Car car) {
+            this.car = car;
+            return this;
+        }
+
+        public Builder copy(Maintenance maintenance) {
+            this.maintenanceID = maintenance.maintenanceID;
+            this.maintenanceDate = maintenance.maintenanceDate;
+            this.description = maintenance.description;
+            this.cost = maintenance.cost;
+            this.mechanicName = maintenance.mechanicName;
+            this.car = maintenance.car;
+            return this;
+        }
+
+        public Maintenance build() {
             return new Maintenance(this);
         }
     }

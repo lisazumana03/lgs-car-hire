@@ -1,58 +1,70 @@
 package za.co.carhire.service.reservation.impl;
 
+/* NotificationServiceImpl.java
+
+     Notification reservation/Service class
+
+     Author: Bonga Velem
+
+     Student Number: 220052379
+
+     */
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import za.co.carhire.domain.authentication.User;
 import za.co.carhire.domain.reservation.Notification;
+import za.co.carhire.dto.CreateNotificationDTO;
+import za.co.carhire.dto.NotificationDTO;
+import za.co.carhire.mapper.NotificationMapper;
+import za.co.carhire.repository.authentication.IUserRepository;
 import za.co.carhire.repository.reservation.INotificationRepository;
 import za.co.carhire.service.reservation.NotificationService;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class NotificationServiceImpl implements NotificationService {
 
     private final INotificationRepository repository;
 
+    private final IUserRepository userRepository;
+
     @Autowired
-    public NotificationServiceImpl(INotificationRepository repository) {
+    public NotificationServiceImpl(INotificationRepository repository, IUserRepository userRepository) {
+        this.userRepository = userRepository;
         this.repository = repository;
     }
 
     @Override
-    public Notification save(Notification notification) {
-        return repository.save(notification);
+    public NotificationDTO sendNotification(CreateNotificationDTO createDTO) {
+        User user = userRepository.findById(createDTO.userId())
+                .orElseThrow(() -> new IllegalArgumentException("User not found with ID: " + createDTO.userId()));
+
+        Notification notification = NotificationMapper.toDomain(createDTO, user);
+        return NotificationMapper.toDTO(repository.save(notification));
     }
 
     @Override
-    public Notification read(Integer notificationId) {
-        return repository.findById(notificationId).orElse(null);
+    public List<NotificationDTO> getUserNotifications(int userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("User not found with ID: " + userId));
+
+        return repository.findByUser(user).stream()
+                .map(NotificationMapper::toDTO)
+                .collect(Collectors.toList());
     }
 
     @Override
-    public Notification update(Notification notification) {
-        if (repository.existsById(notification.getNotificationID())) {
-            return repository.save(notification);
-        }
-        return null;
-    }
+    public NotificationDTO markAsRead(int notificationId) {
+        Notification notification = repository.findById(notificationId)
+                .orElseThrow(() -> new IllegalArgumentException("Notification not found with ID: " + notificationId));
 
-    @Override
-    public void delete(Integer notificationId) {
-        repository.deleteById(notificationId);
-    }
+        Notification updated = new Notification.Builder()
+                .copy(notification)
+                .setReadStatus(true)
+                .build();
 
-    @Override
-    public List<Notification> findAll() {
-        return repository.findAll();
-    }
-
-    @Override
-    public List<Notification> findByUserId(Long userId) {
-        return repository.findByUser_IdNumber(userId);
-    }
-
-    @Override
-    public List<Notification> findByUserIdAndStatus(Long userId, String status) {
-        return repository.findByUser_IdNumberAndStatus(userId, status);
+        return NotificationMapper.toDTO(repository.save(updated));
     }
 }

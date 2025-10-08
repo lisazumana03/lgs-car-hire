@@ -13,7 +13,7 @@ import za.co.carhire.service.authentication.UserService;
 
 import java.util.List;
 
-/* User.java
+/* UserController.java
 
      User Controller class
 
@@ -24,6 +24,7 @@ import java.util.List;
      */
 @RestController
 @RequestMapping("/api/users")
+@CrossOrigin(origins = { "http://localhost:5173", "http://127.0.0.1:5173" })
 public class UserController {
 
   @Autowired
@@ -77,15 +78,30 @@ public class UserController {
 
   @PutMapping("/{id}")
   public ResponseEntity<UserDTO> update(@PathVariable Integer id, @RequestBody UserDTO userDTO) {
-    User existingUser = service.read(id);
-    if (existingUser == null) {
-      return ResponseEntity.notFound().build();
-    }
+    try {
+      System.out.println("INFO: Updating user with ID: " + id);
+      System.out.println("INFO: Received DTO: " + userDTO);
 
-    User user = mapper.toDomain(userDTO);
-    user.setUserId(id);
-    User updatedUser = service.update(user);
-    return ResponseEntity.ok(mapper.toDTO(updatedUser));
+      User existingUser = service.read(id);
+      if (existingUser == null) {
+        System.err.println("ERROR: User not found with ID: " + id);
+        return ResponseEntity.notFound().build();
+      }
+
+      User user = mapper.toDomain(userDTO);
+      user.setUserId(id);
+
+      // Preserve password from existing user
+      user.setPassword(existingUser.getPassword());
+
+      User updatedUser = service.update(user);
+      System.out.println("SUCCESS: User updated successfully: " + updatedUser.getName());
+      return ResponseEntity.ok(mapper.toDTO(updatedUser));
+    } catch (Exception e) {
+      System.err.println("ERROR: Error updating user: " + e.getMessage());
+      e.printStackTrace();
+      throw e;
+    }
   }
 
   @DeleteMapping("/{id}")

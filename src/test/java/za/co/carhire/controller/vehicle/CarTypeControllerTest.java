@@ -71,7 +71,6 @@ public class CarTypeControllerTest {
                 .setFuelType("Petrol")
                 .setNumberOfWheels(4)
                 .setNumberOfSeats(5)
-                .setCar(testCar)
                 .build();
 
         testCarTypeDTO = new CarTypeDTO.Builder()
@@ -134,7 +133,6 @@ public class CarTypeControllerTest {
                 .setFuelType("Petrol")
                 .setNumberOfWheels(4)
                 .setNumberOfSeats(5)
-                .setCar(testCar)
                 .build();
 
         when(carTypeService.read(1)).thenReturn(testCarType);
@@ -291,7 +289,6 @@ public class CarTypeControllerTest {
                 .setFuelType("Diesel")
                 .setNumberOfWheels(4)
                 .setNumberOfSeats(5)
-                .setCar(testCar)
                 .build();
 
         when(carTypeService.read(1)).thenReturn(testCarType);

@@ -10,6 +10,7 @@ import java.io.Serializable;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -17,9 +18,11 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import za.co.carhire.util.LocationDeserializer;
 
 @Entity
 @Table(name = "location")
+@JsonDeserialize(using = LocationDeserializer.class)
 public class Location implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -39,11 +42,11 @@ public class Location implements Serializable {
     @JsonIgnore
     private List<Booking> dropOffLocations;
 
-    public Location(){
+    public Location() {
 
     }
 
-    private Location(Builder builder){
+    private Location(Builder builder) {
         this.locationID = builder.locationID;
         this.locationName = builder.locationName;
         this.streetNumber = builder.streetNumber;
@@ -60,7 +63,7 @@ public class Location implements Serializable {
         return locationID;
     }
 
-    public int getStreetNumber(){
+    public int getStreetNumber() {
         return streetNumber;
     }
 
@@ -96,7 +99,6 @@ public class Location implements Serializable {
         return dropOffLocations;
     }
 
-
     @Override
     public String toString() {
         return "Location{" +
@@ -128,6 +130,7 @@ public class Location implements Serializable {
             this.locationID = locationID;
             return this;
         }
+
         public Builder setLocationName(String locationName) {
             this.locationName = locationName;
             return this;
@@ -142,32 +145,38 @@ public class Location implements Serializable {
             this.streetName = streetName;
             return this;
         }
+
         public Builder setCity(String cityOrTown) {
             this.cityOrTown = cityOrTown;
             return this;
         }
+
         public Builder setProvinceOrState(String provinceOrState) {
             this.provinceOrState = provinceOrState;
             return this;
         }
+
         public Builder setCountry(String country) {
             this.country = country;
             return this;
         }
+
         public Builder setPostalCode(String postalCode) {
             this.postalCode = postalCode;
             return this;
         }
+
         public Builder setPickUpLocations(List<Booking> pickUpLocations) {
             this.pickUpLocations = pickUpLocations;
             return this;
         }
+
         public Builder setDropOffLocations(List<Booking> dropOffLocations) {
             this.dropOffLocations = dropOffLocations;
             return this;
         }
 
-        public Builder copy(Location location){
+        public Builder copy(Location location) {
             this.locationID = location.locationID;
             this.locationName = location.locationName;
             this.streetNumber = location.streetNumber;
@@ -181,7 +190,7 @@ public class Location implements Serializable {
             return this;
         }
 
-        public Location build(){
+        public Location build() {
             return new Location(this);
         }
 

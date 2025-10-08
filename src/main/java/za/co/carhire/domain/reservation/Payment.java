@@ -6,6 +6,7 @@ package za.co.carhire.domain.reservation;
  * Due Date: 11/05/2025
  * */
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import java.io.Serializable;
 
@@ -18,6 +19,7 @@ public class Payment implements Serializable {
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "booking_id", nullable = false, unique = true)
+    @JsonIgnoreProperties({ "payment", "pickupLocation", "dropOffLocation", "user", "car" })
     private Booking booking;
 
     @Column(nullable = false)
@@ -41,7 +43,6 @@ public class Payment implements Serializable {
         this.paymentMethod = builder.paymentMethod;
         this.paymentStatus = builder.paymentStatus;
     }
-
 
     public int getPaymentID() {
         return paymentID;

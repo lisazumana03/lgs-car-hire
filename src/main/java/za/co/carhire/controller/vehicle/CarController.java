@@ -19,8 +19,8 @@ Updated: 28/08/2025 - Added /api prefix to endpoints
  */
 
 @RestController
-@RequestMapping("/api/car") 
-// @CrossOrigin(origins = "http://localhost:3046")
+@RequestMapping("/api/car")
+@CrossOrigin(origins = {"http://localhost:5173", "http://127.0.0.1:5173"})
 public class CarController {
     @Autowired
     private ICarService carService;

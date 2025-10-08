@@ -23,19 +23,15 @@ public class MaintenanceFactory {
     if (cost < 0) {
       return null;
     }
-    if (status == null || status.isEmpty()) {
-      return null;
-    }
     if (mechanic == null || mechanic.isEmpty()) {
       return null;
     }
     return new Maintenance.Builder()
         .setMaintenanceID(maintenanceID)
-        .setServiceDate(serviceDate)
+        .setMaintenanceDate(serviceDate)
         .setDescription(description)
         .setCost(cost)
-        .setStatus(status)
-        .setMechanic(mechanic)
+        .setMechanicName(mechanic)
         .build();
   }
 }

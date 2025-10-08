@@ -9,12 +9,10 @@ public class CarType implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "car_type_id")
+    @Column(name = "car_typeid")
     private int carTypeID;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "car_id", referencedColumnName = "car_id")
-    private Car car;
+    // Removed circular reference to Car - Car owns this relationship
 
     @Column(name = "type")
     private String type;
@@ -31,9 +29,8 @@ public class CarType implements Serializable {
     public CarType() {
     }
 
-    public CarType(int carTypeID, Car car, String type, String fuelType, int numberOfWheels, int numberOfSeats) {
+    public CarType(int carTypeID, String type, String fuelType, int numberOfWheels, int numberOfSeats) {
         this.carTypeID = carTypeID;
-        this.car = car;
         this.type = type;
         this.fuelType = fuelType;
         this.numberOfWheels = numberOfWheels;
@@ -42,7 +39,6 @@ public class CarType implements Serializable {
 
     private CarType(Builder builder) {
         this.carTypeID = builder.carTypeID;
-        this.car = builder.car;
         this.type = builder.type;
         this.fuelType = builder.fuelType;
         this.numberOfWheels = builder.numberOfWheels;
@@ -51,7 +47,6 @@ public class CarType implements Serializable {
 
     public static class Builder {
         private int carTypeID;
-        private Car car;
         private String type;
         private String fuelType;
         private int numberOfWheels;
@@ -59,11 +54,6 @@ public class CarType implements Serializable {
 
         public Builder setCarTypeID(int carTypeID) {
             this.carTypeID = carTypeID;
-            return this;
-        }
-
-        public Builder setCar(Car car) {
-            this.car = car;
             return this;
         }
 
@@ -100,13 +90,7 @@ public class CarType implements Serializable {
         this.carTypeID = carTypeID;
     }
 
-    public Car getCar() {
-        return car;
-    }
-
-    public void setCar(Car car) {
-        this.car = car;
-    }
+    // Removed Car getter/setter to avoid circular dependency
 
     public String getType() {
         return type;
@@ -150,7 +134,6 @@ public class CarType implements Serializable {
     public String toString() {
         return "CarType{" +
                 "carTypeID=" + carTypeID +
-                ", car=" + (car != null ? car.getCarID() : "null") +
                 ", type='" + type + '\'' +
                 ", fuelType='" + fuelType + '\'' +
                 ", numberOfWheels=" + numberOfWheels +
