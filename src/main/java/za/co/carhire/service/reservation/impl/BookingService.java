@@ -59,12 +59,15 @@ public class BookingService implements IBookingService {
         Booking booking = bookingRepository.findById(bookingID)
                 .orElse(null);
 
-        assert booking != null;
+        if(booking == null){
+            throw new IllegalArgumentException("Booking not found with ID: " + bookingID);
+        }
+
         if(booking.getBookingStatus() == BookingStatus.CANCELLED){
             throw new IllegalStateException("You already cancelled this booking!");
         }
 
-        if(booking.getBookingDateAndTime().isBefore(LocalDateTime.now().plusMinutes(45))){
+        if(booking.getBookingDateAndTime().isBefore(LocalDateTime.now().minusMinutes(45))){
             throw new IllegalStateException("You are too late to cancel this booking!");
         }
 

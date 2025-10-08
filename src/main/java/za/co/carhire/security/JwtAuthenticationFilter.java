@@ -15,10 +15,11 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 
-/**
- * JWT Authentication Filter
- * Intercepts requests to validate JWT tokens
- */
+/*
+    Imtiyaaz Waggie 219374759
+    Date: 09/10/2025
+*/
+
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 

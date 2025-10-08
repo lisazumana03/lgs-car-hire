@@ -1,9 +1,9 @@
 package za.co.carhire.dto;
 
-/**
- * Authentication Request DTO
- * Used for login requests
- */
+/*
+    Imtiyaaz Waggie 219374759
+    Date: 8/10/2025
+*/
 public class AuthenticationRequest {
     private String email;
     private String password;

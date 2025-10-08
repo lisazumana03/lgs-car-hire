@@ -2,13 +2,11 @@ package za.co.carhire.dto.reservation;
 
 import java.util.Date;
 
-/**
- * InsuranceDTO
- * Data Transfer Object for Insurance entity
- * Used for API requests/responses
- * Author: System Generated
- * Date: 2025-10-07
- */
+/*
+    Imtiyaaz Waggie 219374759
+    Date: 8/10/2025
+*/
+
 public class InsuranceDTO {
     private Integer insuranceID;
     private Date insuranceStartDate;

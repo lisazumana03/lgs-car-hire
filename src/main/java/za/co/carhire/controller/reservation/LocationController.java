@@ -4,14 +4,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import za.co.carhire.domain.reservation.Location;
+import za.co.carhire.dto.reservation.LocationDTO;
+import za.co.carhire.mapper.reservation.LocationMapper;
 import za.co.carhire.service.reservation.impl.LocationService;
 
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
 Lisakhanya Zumana (230864821)
 Date: 25/05/2025
+Updated: 08/10/2025 - Added DTO support for better API responses
  */
 
 @RestController
@@ -23,28 +27,43 @@ public class LocationController {
     private LocationService locationService;
 
     @PostMapping("/create")
-    public ResponseEntity<Location> create(@RequestBody Location location){
-        return ResponseEntity.ok(locationService.create(location));
+    public ResponseEntity<LocationDTO> create(@RequestBody Location location){
+        Location created = locationService.create(location);
+        return ResponseEntity.ok(LocationMapper.toDTO(created));
     }
 
     @GetMapping("/read/{id}")
-    public Location read(@PathVariable int id){
-        return locationService.read(id);
+    public ResponseEntity<LocationDTO> read(@PathVariable int id){
+        Location location = locationService.read(id);
+        if (location == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(LocationMapper.toDTO(location));
     }
 
-    @PostMapping("/update")
-    public Location update(@RequestBody Location location){
-        return locationService.update(location);
+    @PutMapping("/update")
+    public ResponseEntity<LocationDTO> update(@RequestBody Location location){
+        Location updated = locationService.update(location);
+        if(updated == null){
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(LocationMapper.toDTO(updated));
     }
 
     @GetMapping("/all")
-    public ResponseEntity<List<Location>> getAll(){
-        return ResponseEntity.ok(locationService.getAllLocations());
+    public ResponseEntity<List<LocationDTO>> getAll(){
+        List<LocationDTO> locations = locationService.getAllLocations().stream()
+                .map(LocationMapper::toDTO)
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(locations);
     }
 
     @GetMapping("/location-set")
-    public ResponseEntity<Set<Location>> readAll(){
-        return ResponseEntity.ok(locationService.getLocations());
+    public ResponseEntity<Set<LocationDTO>> readAll(){
+        Set<LocationDTO> locations = locationService.getLocations().stream()
+                .map(LocationMapper::toDTO)
+                .collect(Collectors.toSet());
+        return ResponseEntity.ok(locations);
     }
 
     @DeleteMapping("/delete/{id}")

@@ -29,7 +29,7 @@ public class BookingFactory {
                 .setEndDate(endDate)
                 .setPickupLocation(pickupLocation)
                 .setDropOffLocation(dropOffLocation)
-                .setBookingStatus(BookingStatus.PENDING)
+                .setBookingStatus(bookingStatus)
                 .build();
     }
 

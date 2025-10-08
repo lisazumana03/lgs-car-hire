@@ -8,10 +8,11 @@ import org.springframework.stereotype.Service;
 import za.co.carhire.domain.authentication.User;
 import za.co.carhire.repository.authentication.IUserRepository;
 
-/**
- * Custom UserDetailsService implementation
- * Loads user details from database for Spring Security
- */
+/*
+    Imtiyaaz Waggie 219374759
+    Date: 09/10/2025
+*/
+
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
 

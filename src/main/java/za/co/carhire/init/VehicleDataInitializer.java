@@ -10,12 +10,11 @@ import za.co.carhire.domain.vehicle.CarType;
 import za.co.carhire.service.vehicle.ICarService;
 import za.co.carhire.service.vehicle.ICarTypeService;
 
-/**
- * Vehicle Data Initializer
- * Creates sample Car and CarType data when the application starts
- * Author: System Generated
- * Date: 2025-10-07
- */
+/*
+    Imtiyaaz Waggie 219374759
+    Date: 09/10/2025
+*/
+
 @Component
 @Order(2)
 public class VehicleDataInitializer implements CommandLineRunner {

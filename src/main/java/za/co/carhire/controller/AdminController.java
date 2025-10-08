@@ -12,11 +12,16 @@ import za.co.carhire.service.authentication.UserService;
 
 import java.util.List;
 
-/**
- * Admin Controller
- * Handles admin-specific operations
- * All endpoints require ADMIN role
- */
+/*
+
+    Imtiyaaz Waggie 219374759
+
+    Date: 9/09/2025
+
+    Updated : Admin Controller
+
+*/
+
 @RestController
 @RequestMapping("/api/admin")
 @PreAuthorize("hasRole('ADMIN')")

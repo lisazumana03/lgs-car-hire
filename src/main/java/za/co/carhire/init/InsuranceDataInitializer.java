@@ -13,12 +13,11 @@ import za.co.carhire.service.vehicle.ICarService;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-/**
- * Insurance Data Initializer
- * Creates sample Insurance data and links it to existing Cars
- * Author: System Generated
- * Date: 2025-10-07
- */
+/*
+    Imtiyaaz Waggie 219374759
+    Date: 09/10/2025
+*/
+
 @Component
 @Order(3) // Run after VehicleDataInitializer (Order 2)
 public class InsuranceDataInitializer implements CommandLineRunner {

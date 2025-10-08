@@ -52,6 +52,22 @@ public class CarMapper {
 
         if (car.getBooking() != null) {
             builder.setBookingID(car.getBooking().getBookingID());
+
+            if (car.getBooking().getBookingStatus() != null) {
+                builder.setBookingStatus(car.getBooking().getBookingStatus().name());
+            }
+
+            if (car.getBooking().getUser() != null) {
+                builder.setBookingUserName(car.getBooking().getUser().getName());
+            }
+
+            if (car.getBooking().getStartDate() != null) {
+                builder.setBookingStartDate(car.getBooking().getStartDate().toString());
+            }
+
+            if (car.getBooking().getEndDate() != null) {
+                builder.setBookingEndDate(car.getBooking().getEndDate().toString());
+            }
         }
 
         return builder.build();

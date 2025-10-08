@@ -14,10 +14,11 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
-/**
- * JWT Utility class
- * Handles JWT token generation, validation, and extraction
- */
+/*
+    Imtiyaaz Waggie 219374759
+    Date: 09/10/2025
+*/
+
 @Component
 public class JwtUtil {
 

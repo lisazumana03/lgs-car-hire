@@ -3,12 +3,11 @@ package za.co.carhire.mapper.reservation;
 import za.co.carhire.domain.reservation.Insurance;
 import za.co.carhire.dto.reservation.InsuranceDTO;
 
-/**
- * InsuranceMapper
- * Maps between Insurance entity and InsuranceDTO
- * Author: System Generated
- * Date: 2025-10-07
- */
+/*
+    Imtiyaaz Waggie 219374759
+    Date: 09/10/2025
+*/
+
 public class InsuranceMapper {
 
     /**

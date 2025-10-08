@@ -6,6 +6,7 @@ package za.co.carhire.domain.vehicle;
 
 import za.co.carhire.domain.reservation.Insurance;
 import za.co.carhire.domain.reservation.Booking;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.*;
 import java.io.Serializable;
@@ -39,6 +40,7 @@ public class Car implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "booking_id")
+    @JsonIgnore
     private Booking booking;
 
     @OneToOne

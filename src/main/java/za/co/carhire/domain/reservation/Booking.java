@@ -60,7 +60,7 @@ public class Booking implements Serializable {
         return user;
     }
 
-    public List<Car> getCar() {
+    public List<Car> getCars() {
         return cars;
     }
 
@@ -159,7 +159,7 @@ public class Booking implements Serializable {
         public Builder copy(Booking booking){
             this.bookingID = booking.getBookingID();
             this.user = booking.getUser();
-            this.cars = booking.getCar();
+            this.cars = booking.getCars();
             this.bookingDateAndTime = booking.getBookingDateAndTime();
             this.startDate = booking.getStartDate();
             this.endDate = booking.getEndDate();

@@ -14,10 +14,16 @@ import za.co.carhire.dto.SignUpRequest;
 import za.co.carhire.security.JwtUtil;
 import za.co.carhire.service.authentication.UserService;
 
-/**
- * Authentication Controller
- * Handles login and signup with JWT tokens
- */
+/*
+
+    Imtiyaaz Waggie 219374759
+
+    Date: 25/05/2025
+
+    Updated : UserController created 
+
+*/
+
 @RestController
 @RequestMapping("/api/auth")
 public class AuthenticationController {
@@ -61,9 +67,8 @@ public class AuthenticationController {
     @PostMapping("/signup")
     public ResponseEntity<AuthenticationResponse> signup(@RequestBody SignUpRequest request) {
         try {
-            // Check if user already exists
             if (userService.findAll().stream().anyMatch(u -> u.getEmail().equals(request.getEmail()))) {
-                return ResponseEntity.status(409).build(); // Conflict
+                return ResponseEntity.status(409).build(); 
             }
 
             User user = new User.Builder()
@@ -74,7 +79,7 @@ public class AuthenticationController {
                     .setPhoneNumber(request.getPhoneNumber())
                     .setPassword(request.getPassword())
                     .setLicenseNumber(request.getLicenseNumber())
-                    .setRole(UserRole.USER) // Default role is USER
+                    .setRole(UserRole.USER)
                     .build();
 
             User savedUser = userService.save(user);
@@ -97,7 +102,6 @@ public class AuthenticationController {
     @PostMapping("/signup/admin")
     public ResponseEntity<AuthenticationResponse> signupAdmin(@RequestBody SignUpRequest request) {
         try {
-            // Check if user already exists
             if (userService.findAll().stream().anyMatch(u -> u.getEmail().equals(request.getEmail()))) {
                 return ResponseEntity.status(409).build(); // Conflict
             }
@@ -110,7 +114,7 @@ public class AuthenticationController {
                     .setPhoneNumber(request.getPhoneNumber())
                     .setPassword(request.getPassword())
                     .setLicenseNumber(request.getLicenseNumber())
-                    .setRole(UserRole.ADMIN) // Admin role
+                    .setRole(UserRole.ADMIN)
                     .build();
 
             User savedUser = userService.save(user);

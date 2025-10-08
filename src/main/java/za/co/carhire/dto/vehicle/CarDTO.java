@@ -31,6 +31,10 @@ public class CarDTO implements Serializable {
     private Long insurancePolicyNumber;
 
     private Integer bookingID;
+    private String bookingStatus;
+    private String bookingUserName;
+    private String bookingStartDate;
+    private String bookingEndDate;
 
     public CarDTO() {
     }
@@ -81,6 +85,10 @@ public class CarDTO implements Serializable {
         private String insuranceStatus;
         private Long insurancePolicyNumber;
         private Integer bookingID;
+        private String bookingStatus;
+        private String bookingUserName;
+        private String bookingStartDate;
+        private String bookingEndDate;
 
         public Builder setCarID(int carID) {
             this.carID = carID;
@@ -172,6 +180,26 @@ public class CarDTO implements Serializable {
             return this;
         }
 
+        public Builder setBookingStatus(String bookingStatus) {
+            this.bookingStatus = bookingStatus;
+            return this;
+        }
+
+        public Builder setBookingUserName(String bookingUserName) {
+            this.bookingUserName = bookingUserName;
+            return this;
+        }
+
+        public Builder setBookingStartDate(String bookingStartDate) {
+            this.bookingStartDate = bookingStartDate;
+            return this;
+        }
+
+        public Builder setBookingEndDate(String bookingEndDate) {
+            this.bookingEndDate = bookingEndDate;
+            return this;
+        }
+
         public CarDTO build() {
             CarDTO dto = new CarDTO();
             dto.carID = this.carID;
@@ -192,6 +220,10 @@ public class CarDTO implements Serializable {
             dto.insuranceStatus = this.insuranceStatus;
             dto.insurancePolicyNumber = this.insurancePolicyNumber;
             dto.bookingID = this.bookingID;
+            dto.bookingStatus = this.bookingStatus;
+            dto.bookingUserName = this.bookingUserName;
+            dto.bookingStartDate = this.bookingStartDate;
+            dto.bookingEndDate = this.bookingEndDate;
             return dto;
         }
     }
@@ -340,6 +372,38 @@ public class CarDTO implements Serializable {
         this.bookingID = bookingID;
     }
 
+    public String getBookingStatus() {
+        return bookingStatus;
+    }
+
+    public void setBookingStatus(String bookingStatus) {
+        this.bookingStatus = bookingStatus;
+    }
+
+    public String getBookingUserName() {
+        return bookingUserName;
+    }
+
+    public void setBookingUserName(String bookingUserName) {
+        this.bookingUserName = bookingUserName;
+    }
+
+    public String getBookingStartDate() {
+        return bookingStartDate;
+    }
+
+    public void setBookingStartDate(String bookingStartDate) {
+        this.bookingStartDate = bookingStartDate;
+    }
+
+    public String getBookingEndDate() {
+        return bookingEndDate;
+    }
+
+    public void setBookingEndDate(String bookingEndDate) {
+        this.bookingEndDate = bookingEndDate;
+    }
+
     @Override
     public String toString() {
         return "CarDTO{" +
@@ -361,6 +425,10 @@ public class CarDTO implements Serializable {
                 ", insuranceStatus='" + insuranceStatus + '\'' +
                 ", insurancePolicyNumber=" + insurancePolicyNumber +
                 ", bookingID=" + bookingID +
+                ", bookingStatus='" + bookingStatus + '\'' +
+                ", bookingUserName='" + bookingUserName + '\'' +
+                ", bookingStartDate='" + bookingStartDate + '\'' +
+                ", bookingEndDate='" + bookingEndDate + '\'' +
                 '}';
     }
 }

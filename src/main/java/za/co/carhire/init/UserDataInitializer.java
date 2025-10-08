@@ -11,10 +11,11 @@ import za.co.carhire.service.authentication.UserService;
 
 import java.time.LocalDate;
 
-/**
- * User Data Initializer
- * Creates default admin and user accounts when the application starts
- */
+/*
+    Imtiyaaz Waggie 219374759
+    Date: 09/10/2025
+*/
+
 @Component
 @Order(1)
 public class UserDataInitializer implements CommandLineRunner {

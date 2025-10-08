@@ -2,10 +2,10 @@ package za.co.carhire.dto;
 
 import za.co.carhire.domain.authentication.UserRole;
 
-/**
- * Authentication Response DTO
- * Returned after successful login/signup
- */
+/*
+    Imtiyaaz Waggie 219374759
+    Date: 8/10/2025
+*/
 public class AuthenticationResponse {
     private String token;
     private Integer userId;
