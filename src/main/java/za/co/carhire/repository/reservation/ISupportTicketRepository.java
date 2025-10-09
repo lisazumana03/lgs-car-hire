@@ -2,14 +2,17 @@ package za.co.carhire.repository.reservation;
 /*
 Olwethu Tshingo - 222634383
 Date: 30 July 2025
+Updated: 09 October 2025
  */
 import org.springframework.data.jpa.repository.JpaRepository;
 import za.co.carhire.domain.reservation.SupportTicket;
+import za.co.carhire.domain.reservation.TicketStatus;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface ISupportTicketRepository extends JpaRepository<SupportTicket, Integer> {
-    Optional<SupportTicket> findById(int ticketID);
-    List<SupportTicket> findAll();
+    List<SupportTicket> findByUser_UserId(Integer userId);
+    List<SupportTicket> findByStatus(TicketStatus status);
+    List<SupportTicket> findByBooking_BookingID(Integer bookingId);
+    List<SupportTicket> findByAssignedTo_UserId(Integer assignedToUserId);
 }
