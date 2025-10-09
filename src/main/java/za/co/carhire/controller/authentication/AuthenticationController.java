@@ -55,7 +55,11 @@ public class AuthenticationController {
                     user.getUserId(),
                     user.getEmail(),
                     user.getName(),
-                    user.getRole()
+                    user.getRole(),
+                    user.getIdNumber(),
+                    user.getDateOfBirth(),
+                    user.getPhoneNumber(),
+                    user.getLicenseNumber()
             );
 
             return ResponseEntity.ok(response);
@@ -68,7 +72,7 @@ public class AuthenticationController {
     public ResponseEntity<AuthenticationResponse> signup(@RequestBody SignUpRequest request) {
         try {
             if (userService.findAll().stream().anyMatch(u -> u.getEmail().equals(request.getEmail()))) {
-                return ResponseEntity.status(409).build(); 
+                return ResponseEntity.status(409).build();
             }
 
             User user = new User.Builder()
@@ -90,7 +94,11 @@ public class AuthenticationController {
                     savedUser.getUserId(),
                     savedUser.getEmail(),
                     savedUser.getName(),
-                    savedUser.getRole()
+                    savedUser.getRole(),
+                    savedUser.getIdNumber(),
+                    savedUser.getDateOfBirth(),
+                    savedUser.getPhoneNumber(),
+                    savedUser.getLicenseNumber()
             );
 
             return ResponseEntity.ok(response);
@@ -125,7 +133,11 @@ public class AuthenticationController {
                     savedUser.getUserId(),
                     savedUser.getEmail(),
                     savedUser.getName(),
-                    savedUser.getRole()
+                    savedUser.getRole(),
+                    savedUser.getIdNumber(),
+                    savedUser.getDateOfBirth(),
+                    savedUser.getPhoneNumber(),
+                    savedUser.getLicenseNumber()
             );
 
             return ResponseEntity.ok(response);
