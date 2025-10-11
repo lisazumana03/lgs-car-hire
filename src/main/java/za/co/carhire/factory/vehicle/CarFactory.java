@@ -23,14 +23,16 @@ public class CarFactory {
     }
 
     public static Car createBasicCarWithImage(int carID, String model, String brand, int year,
-                                              double rentalPrice, String imageUrl) {
+                                              double rentalPrice, byte[] imageData, String imageName, String imageType) {
         return new Car.Builder()
                 .setCarID(carID)
                 .setModel(model)
                 .setBrand(brand)
                 .setYear(year)
                 .setRentalPrice(rentalPrice)
-                .setImageUrl(imageUrl)
+                .setImageData(imageData)
+                .setImageName(imageName)
+                .setImageType(imageType)
                 .setAvailability(true)
                 .build();
     }
@@ -52,7 +54,8 @@ public class CarFactory {
     }
 
     public static Car createCompleteCarWithImage(int carID, String model, String brand, int year,
-                                                 boolean availability, double rentalPrice, String imageUrl,
+                                                 boolean availability, double rentalPrice,
+                                                 byte[] imageData, String imageName, String imageType,
                                                  CarType carType, Insurance insurance, Booking booking) {
         return new Car.Builder()
                 .setCarID(carID)
@@ -61,7 +64,9 @@ public class CarFactory {
                 .setYear(year)
                 .setAvailability(availability)
                 .setRentalPrice(rentalPrice)
-                .setImageUrl(imageUrl)
+                .setImageData(imageData)
+                .setImageName(imageName)
+                .setImageType(imageType)
                 .setCarType(carType)
                 .setInsurance(insurance)
                 .setBooking(booking)
@@ -82,14 +87,17 @@ public class CarFactory {
     }
 
     public static Car createCarWithTypeAndImage(int carID, String model, String brand, int year,
-                                                double rentalPrice, String imageUrl, CarType carType) {
+                                                double rentalPrice, byte[] imageData, String imageName, String imageType,
+                                                CarType carType) {
         return new Car.Builder()
                 .setCarID(carID)
                 .setModel(model)
                 .setBrand(brand)
                 .setYear(year)
                 .setRentalPrice(rentalPrice)
-                .setImageUrl(imageUrl)
+                .setImageData(imageData)
+                .setImageName(imageName)
+                .setImageType(imageType)
                 .setCarType(carType)
                 .setAvailability(true)
                 .build();
@@ -110,7 +118,7 @@ public class CarFactory {
     }
 
     public static Car createCarWithInsuranceAndImage(int carID, String model, String brand, int year,
-                                                     double rentalPrice, String imageUrl,
+                                                     double rentalPrice, byte[] imageData, String imageName, String imageType,
                                                      CarType carType, Insurance insurance) {
         return new Car.Builder()
                 .setCarID(carID)
@@ -118,7 +126,9 @@ public class CarFactory {
                 .setBrand(brand)
                 .setYear(year)
                 .setRentalPrice(rentalPrice)
-                .setImageUrl(imageUrl)
+                .setImageData(imageData)
+                .setImageName(imageName)
+                .setImageType(imageType)
                 .setCarType(carType)
                 .setInsurance(insurance)
                 .setAvailability(true)
@@ -146,14 +156,17 @@ public class CarFactory {
     }
 
     public static Car createUnavailableCarWithImage(int carID, String model, String brand, int year,
-                                                    double rentalPrice, String imageUrl, CarType carType) {
+                                                    double rentalPrice, byte[] imageData, String imageName, String imageType,
+                                                    CarType carType) {
         return new Car.Builder()
                 .setCarID(carID)
                 .setModel(model)
                 .setBrand(brand)
                 .setYear(year)
                 .setRentalPrice(rentalPrice)
-                .setImageUrl(imageUrl)
+                .setImageData(imageData)
+                .setImageName(imageName)
+                .setImageType(imageType)
                 .setCarType(carType)
                 .setAvailability(false)
                 .build();

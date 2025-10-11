@@ -71,7 +71,9 @@ public class CarControllerTest {
                 .setYear(2022)
                 .setAvailability(true)
                 .setRentalPrice(500.0)
-                .setImageUrl("http://example.com/image.jpg")
+                .setImageData("test-image-data".getBytes())
+                .setImageName("image.jpg")
+                .setImageType("image/jpeg")
                 .setCarType(testCarType)
                 .build();
 
@@ -82,7 +84,9 @@ public class CarControllerTest {
                 .setYear(2022)
                 .setAvailability(true)
                 .setRentalPrice(500.0)
-                .setImageUrl("http://example.com/image.jpg")
+                .setImageBase64("dGVzdC1pbWFnZS1kYXRh")
+                .setImageName("image.jpg")
+                .setImageType("image/jpeg")
                 .setCarTypeID(1)
                 .setCarTypeName("Sedan")
                 .setCarTypeFuelType("Petrol")

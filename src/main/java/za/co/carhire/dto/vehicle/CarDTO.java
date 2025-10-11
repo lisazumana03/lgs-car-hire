@@ -16,7 +16,9 @@ public class CarDTO implements Serializable {
     private int year;
     private boolean availability;
     private double rentalPrice;
-    private String imageUrl;
+    private String imageBase64;
+    private String imageName;
+    private String imageType;
 
     private Integer carTypeID;
     private String carTypeName;
@@ -41,7 +43,8 @@ public class CarDTO implements Serializable {
     }
 
     public CarDTO(int carID, String model, String brand, int year,
-                  boolean availability, double rentalPrice, String imageUrl,
+                  boolean availability, double rentalPrice, String imageBase64,
+                  String imageName, String imageType,
                   Integer carTypeID, String carTypeName,
                   Integer insuranceID, Integer bookingID) {
         this.carID = carID;
@@ -50,7 +53,9 @@ public class CarDTO implements Serializable {
         this.year = year;
         this.availability = availability;
         this.rentalPrice = rentalPrice;
-        this.imageUrl = imageUrl;
+        this.imageBase64 = imageBase64;
+        this.imageName = imageName;
+        this.imageType = imageType;
         this.carTypeID = carTypeID;
         this.carTypeName = carTypeName;
         this.insuranceID = insuranceID;
@@ -64,7 +69,9 @@ public class CarDTO implements Serializable {
         private int year;
         private boolean availability;
         private double rentalPrice;
-        private String imageUrl;
+        private String imageBase64;
+        private String imageName;
+        private String imageType;
         private Integer carTypeID;
         private String carTypeName;
         private String carTypeFuelType;
@@ -103,8 +110,18 @@ public class CarDTO implements Serializable {
             return this;
         }
 
-        public Builder setImageUrl(String imageUrl) {
-            this.imageUrl = imageUrl;
+        public Builder setImageBase64(String imageBase64) {
+            this.imageBase64 = imageBase64;
+            return this;
+        }
+
+        public Builder setImageName(String imageName) {
+            this.imageName = imageName;
+            return this;
+        }
+
+        public Builder setImageType(String imageType) {
+            this.imageType = imageType;
             return this;
         }
 
@@ -151,7 +168,9 @@ public class CarDTO implements Serializable {
             dto.year = this.year;
             dto.availability = this.availability;
             dto.rentalPrice = this.rentalPrice;
-            dto.imageUrl = this.imageUrl;
+            dto.imageBase64 = this.imageBase64;
+            dto.imageName = this.imageName;
+            dto.imageType = this.imageType;
             dto.carTypeID = this.carTypeID;
             dto.carTypeName = this.carTypeName;
             dto.carTypeFuelType = this.carTypeFuelType;
@@ -211,12 +230,28 @@ public class CarDTO implements Serializable {
         this.rentalPrice = rentalPrice;
     }
 
-    public String getImageUrl() {
-        return imageUrl;
+    public String getImageBase64() {
+        return imageBase64;
     }
 
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
+    public void setImageBase64(String imageBase64) {
+        this.imageBase64 = imageBase64;
+    }
+
+    public String getImageName() {
+        return imageName;
+    }
+
+    public void setImageName(String imageName) {
+        this.imageName = imageName;
+    }
+
+    public String getImageType() {
+        return imageType;
+    }
+
+    public void setImageType(String imageType) {
+        this.imageType = imageType;
     }
 
     public Integer getCarTypeID() {
@@ -284,7 +319,9 @@ public class CarDTO implements Serializable {
                 ", year=" + year +
                 ", availability=" + availability +
                 ", rentalPrice=" + rentalPrice +
-                ", imageUrl='" + imageUrl + '\'' +
+                ", imageName='" + imageName + '\'' +
+                ", imageType='" + imageType + '\'' +
+                ", hasImage=" + (imageBase64 != null && !imageBase64.isEmpty()) +
                 ", carTypeID=" + carTypeID +
                 ", carTypeName='" + carTypeName + '\'' +
                 ", carTypeFuelType='" + carTypeFuelType + '\'' +

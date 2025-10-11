@@ -47,7 +47,9 @@ public class CarServiceTest {
                 .setYear(2022)
                 .setAvailability(true)
                 .setRentalPrice(500.0)
-                .setImageUrl("http://example.com/image.jpg")
+                .setImageData("test-image-data".getBytes())
+                .setImageName("image.jpg")
+                .setImageType("image/jpeg")
                 .setCarType(testCarType)
                 .build();
 
@@ -387,7 +389,9 @@ public class CarServiceTest {
                 .setYear(2024)
                 .setAvailability(true)
                 .setRentalPrice(600.0)
-                .setImageUrl("http://example.com/altima.jpg")
+                .setImageData("altima-image-data".getBytes())
+                .setImageName("altima.jpg")
+                .setImageType("image/jpeg")
                 .setCarType(testCarType)
                 .build();
 
@@ -397,7 +401,9 @@ public class CarServiceTest {
 
         assertNotNull(createdCar);
         assertEquals("Altima", createdCar.getModel());
-        assertEquals("http://example.com/altima.jpg", createdCar.getImageUrl());
+        assertEquals("altima.jpg", createdCar.getImageName());
+        assertEquals("image/jpeg", createdCar.getImageType());
+        assertNotNull(createdCar.getImageData());
         assertEquals(testCarType, createdCar.getCarType());
         verify(carRepository, times(1)).save(fullCar);
     }

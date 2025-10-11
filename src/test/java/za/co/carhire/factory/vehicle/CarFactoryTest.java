@@ -33,14 +33,16 @@ public class CarFactoryTest {
         assertEquals(2022, car.getYear());
         assertEquals(500.0, car.getRentalPrice());
         assertTrue(car.isAvailability());
-        assertNull(car.getImageUrl());
+        assertNull(car.getImageData());
         assertNull(car.getCarType());
     }
 
     @Test
     void testCreateBasicCarWithImage() {
-        String imageUrl = "http://example.com/car-image.jpg";
-        Car car = CarFactory.createBasicCarWithImage(2, "Civic", "Honda", 2023, 550.0, imageUrl);
+        byte[] imageData = "test-image-data".getBytes();
+        String imageName = "car-image.jpg";
+        String imageType = "image/jpeg";
+        Car car = CarFactory.createBasicCarWithImage(2, "Civic", "Honda", 2023, 550.0, imageData, imageName, imageType);
 
         assertNotNull(car);
         assertEquals(2, car.getCarID());
@@ -48,7 +50,9 @@ public class CarFactoryTest {
         assertEquals("Honda", car.getBrand());
         assertEquals(2023, car.getYear());
         assertEquals(550.0, car.getRentalPrice());
-        assertEquals(imageUrl, car.getImageUrl());
+        assertNotNull(car.getImageData());
+        assertEquals(imageName, car.getImageName());
+        assertEquals(imageType, car.getImageType());
         assertTrue(car.isAvailability());
         assertNull(car.getCarType());
     }
@@ -65,15 +69,17 @@ public class CarFactoryTest {
         assertEquals(2021, car.getYear());
         assertEquals(600.0, car.getRentalPrice());
         assertFalse(car.isAvailability());
-        assertNull(car.getImageUrl());
+        assertNull(car.getImageData());
         assertEquals(testCarType, car.getCarType());
     }
 
     @Test
     void testCreateCompleteCarWithImage() {
-        String imageUrl = "http://example.com/complete-car.jpg";
+        byte[] imageData = "complete-car-data".getBytes();
+        String imageName = "complete-car.jpg";
+        String imageType = "image/jpeg";
         Car car = CarFactory.createCompleteCarWithImage(4, "Accord", "Honda", 2022,
-                true, 700.0, imageUrl, testCarType, null, null);
+                true, 700.0, imageData, imageName, imageType, testCarType, null, null);
 
         assertNotNull(car);
         assertEquals(4, car.getCarID());
@@ -82,7 +88,8 @@ public class CarFactoryTest {
         assertEquals(2022, car.getYear());
         assertEquals(700.0, car.getRentalPrice());
         assertTrue(car.isAvailability());
-        assertEquals(imageUrl, car.getImageUrl());
+        assertNotNull(car.getImageData());
+        assertEquals(imageName, car.getImageName());
         assertEquals(testCarType, car.getCarType());
     }
 
@@ -97,15 +104,17 @@ public class CarFactoryTest {
         assertEquals(2023, car.getYear());
         assertEquals(800.0, car.getRentalPrice());
         assertTrue(car.isAvailability());
-        assertNull(car.getImageUrl());
+        assertNull(car.getImageData());
         assertEquals(testCarType, car.getCarType());
     }
 
     @Test
     void testCreateCarWithTypeAndImage() {
-        String imageUrl = "http://example.com/bmw.jpg";
+        byte[] imageData = "bmw-image-data".getBytes();
+        String imageName = "bmw.jpg";
+        String imageType = "image/jpeg";
         Car car = CarFactory.createCarWithTypeAndImage(6, "X5", "BMW", 2023,
-                1000.0, imageUrl, testCarType);
+                1000.0, imageData, imageName, imageType, testCarType);
 
         assertNotNull(car);
         assertEquals(6, car.getCarID());
@@ -113,15 +122,17 @@ public class CarFactoryTest {
         assertEquals("BMW", car.getBrand());
         assertEquals(2023, car.getYear());
         assertEquals(1000.0, car.getRentalPrice());
-        assertEquals(imageUrl, car.getImageUrl());
+        assertNotNull(car.getImageData());
+        assertEquals(imageName, car.getImageName());
         assertTrue(car.isAvailability());
         assertEquals(testCarType, car.getCarType());
     }
 
     @Test
     void testCreateCarCopy() {
+        byte[] imageData = "tesla-image-data".getBytes();
         Car originalCar = CarFactory.createCompleteCarWithImage(9, "Model S", "Tesla", 2023,
-                true, 1200.0, "http://example.com/tesla.jpg",
+                true, 1200.0, imageData, "tesla.jpg", "image/jpeg",
                 testCarType, null, null);
 
         Car copiedCar = CarFactory.createCarCopy(originalCar, 10);
@@ -133,7 +144,7 @@ public class CarFactoryTest {
         assertEquals(originalCar.getYear(), copiedCar.getYear());
         assertEquals(originalCar.getRentalPrice(), copiedCar.getRentalPrice());
         assertEquals(originalCar.isAvailability(), copiedCar.isAvailability());
-        assertEquals(originalCar.getImageUrl(), copiedCar.getImageUrl());
+        assertEquals(originalCar.getImageName(), copiedCar.getImageName());
         assertEquals(originalCar.getCarType(), copiedCar.getCarType());
     }
 
@@ -149,15 +160,17 @@ public class CarFactoryTest {
         assertEquals(2021, car.getYear());
         assertEquals(450.0, car.getRentalPrice());
         assertFalse(car.isAvailability());
-        assertNull(car.getImageUrl());
+        assertNull(car.getImageData());
         assertEquals(testCarType, car.getCarType());
     }
 
     @Test
     void testCreateUnavailableCarWithImage() {
-        String imageUrl = "http://example.com/vw.jpg";
+        byte[] imageData = "vw-image-data".getBytes();
+        String imageName = "vw.jpg";
+        String imageType = "image/jpeg";
         Car car = CarFactory.createUnavailableCarWithImage(12, "Passat", "Volkswagen",
-                2022, 550.0, imageUrl, testCarType);
+                2022, 550.0, imageData, imageName, imageType, testCarType);
 
         assertNotNull(car);
         assertEquals(12, car.getCarID());
@@ -166,7 +179,8 @@ public class CarFactoryTest {
         assertEquals(2022, car.getYear());
         assertEquals(550.0, car.getRentalPrice());
         assertFalse(car.isAvailability());
-        assertEquals(imageUrl, car.getImageUrl());
+        assertNotNull(car.getImageData());
+        assertEquals(imageName, car.getImageName());
         assertEquals(testCarType, car.getCarType());
     }
 
@@ -205,7 +219,8 @@ public class CarFactoryTest {
     @Test
     void testCreateMultipleCarsWithDifferentFactoryMethods() {
         Car basicCar = CarFactory.createBasicCar(16, "Yaris", "Toyota", 2023, 300.0);
-        Car carWithImage = CarFactory.createBasicCarWithImage(17, "Fit", "Honda", 2023, 320.0, "http://example.com/fit.jpg");
+        byte[] imageData = "fit-image-data".getBytes();
+        Car carWithImage = CarFactory.createBasicCarWithImage(17, "Fit", "Honda", 2023, 320.0, imageData, "fit.jpg", "image/jpeg");
         Car carWithType = CarFactory.createCarWithType(18, "A3", "Audi", 2023, 650.0, testCarType);
 
         assertNotNull(basicCar);
@@ -213,13 +228,13 @@ public class CarFactoryTest {
         assertNotNull(carWithType);
 
         assertNull(basicCar.getCarType());
-        assertNull(basicCar.getImageUrl());
+        assertNull(basicCar.getImageData());
 
-        assertNotNull(carWithImage.getImageUrl());
+        assertNotNull(carWithImage.getImageData());
         assertNull(carWithImage.getCarType());
 
         assertNotNull(carWithType.getCarType());
-        assertNull(carWithType.getImageUrl());
+        assertNull(carWithType.getImageData());
     }
 
     @Test

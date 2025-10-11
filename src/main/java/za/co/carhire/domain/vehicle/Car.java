@@ -34,8 +34,15 @@ public class Car implements Serializable {
     @Column(name = "rental_price")
     private double rentalPrice;
 
-    @Column(name = "image_url", length = 500)
-    private String imageUrl;
+    @Lob
+    @Column(name = "image_data", columnDefinition = "LONGBLOB")
+    private byte[] imageData;
+
+    @Column(name = "image_name")
+    private String imageName;
+
+    @Column(name = "image_type")
+    private String imageType;
 
     @ManyToOne
     @JoinColumn(name = "booking_id")
@@ -59,7 +66,9 @@ public class Car implements Serializable {
         this.year = builder.year;
         this.availability = builder.availability;
         this.rentalPrice = builder.rentalPrice;
-        this.imageUrl = builder.imageUrl;
+        this.imageData = builder.imageData;
+        this.imageName = builder.imageName;
+        this.imageType = builder.imageType;
         this.carType = builder.carType;
         this.insurance = builder.insurance;
         this.booking = builder.booking;
@@ -117,12 +126,28 @@ public class Car implements Serializable {
         this.rentalPrice = rentalPrice;
     }
 
-    public String getImageUrl() {
-        return imageUrl;
+    public byte[] getImageData() {
+        return imageData;
     }
 
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
+    public void setImageData(byte[] imageData) {
+        this.imageData = imageData;
+    }
+
+    public String getImageName() {
+        return imageName;
+    }
+
+    public void setImageName(String imageName) {
+        this.imageName = imageName;
+    }
+
+    public String getImageType() {
+        return imageType;
+    }
+
+    public void setImageType(String imageType) {
+        this.imageType = imageType;
     }
 
     public CarType getCarType() {
@@ -166,7 +191,9 @@ public class Car implements Serializable {
                 ", year=" + year +
                 ", availability=" + availability +
                 ", rentalPrice=" + rentalPrice +
-                ", imageUrl='" + imageUrl + '\'' +
+                ", imageName='" + imageName + '\'' +
+                ", imageType='" + imageType + '\'' +
+                ", hasImage=" + (imageData != null && imageData.length > 0) +
                 ", carType=" + (carType != null ? carType.getCarTypeID() : "null") +
                 ", insurance=" + (insurance != null ? insurance.getInsuranceID() : "null") +
                 ", booking=" + (booking != null ? booking.getBookingID() : "null") +
@@ -180,7 +207,9 @@ public class Car implements Serializable {
         private int year;
         private boolean availability;
         private double rentalPrice;
-        private String imageUrl;
+        private byte[] imageData;
+        private String imageName;
+        private String imageType;
         private CarType carType;
         private Insurance insurance;
         private Booking booking;
@@ -215,8 +244,18 @@ public class Car implements Serializable {
             return this;
         }
 
-        public Builder setImageUrl(String imageUrl) {
-            this.imageUrl = imageUrl;
+        public Builder setImageData(byte[] imageData) {
+            this.imageData = imageData;
+            return this;
+        }
+
+        public Builder setImageName(String imageName) {
+            this.imageName = imageName;
+            return this;
+        }
+
+        public Builder setImageType(String imageType) {
+            this.imageType = imageType;
             return this;
         }
 
@@ -242,7 +281,9 @@ public class Car implements Serializable {
             this.year = car.getYear();
             this.availability = car.isAvailability();
             this.rentalPrice = car.getRentalPrice();
-            this.imageUrl = car.getImageUrl();
+            this.imageData = car.getImageData();
+            this.imageName = car.getImageName();
+            this.imageType = car.getImageType();
             this.carType = car.getCarType();
             this.insurance = car.getInsurance();
             this.booking = car.getBooking();

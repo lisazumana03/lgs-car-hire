@@ -190,15 +190,19 @@ public class DataInitializer implements CommandLineRunner {
 
     private Car createAndSaveCar(String model, String brand, int year, double rentalPrice,
                                  boolean available, String imageUrl) {
-        Car car = CarFactory.createBasicCarWithImage(
+        // Note: Image URLs are kept for reference but not stored as we now use BLOB storage
+        // For initial data, you can later add logic to download and convert images to byte arrays
+        Car car = CarFactory.createBasicCar(
                 0, // ID will be auto-generated
                 model,
                 brand,
                 year,
-                rentalPrice,
-                imageUrl
+                rentalPrice
         );
         car.setAvailability(available);
+
+        // TODO: Optionally download image from imageUrl and convert to byte array
+        // For now, images can be uploaded via the API endpoints after initialization
 
         car = carService.create(car);
         System.out.println("Created car: " + brand + " " + model + " (" + year + ") - R" + rentalPrice + "/day");
