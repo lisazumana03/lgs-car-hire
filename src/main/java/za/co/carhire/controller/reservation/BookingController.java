@@ -7,7 +7,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import za.co.carhire.domain.authentication.User;
 import za.co.carhire.domain.reservation.Booking;
+import za.co.carhire.service.authentication.UserService;
 import za.co.carhire.service.reservation.impl.BookingService;
 
 /**
@@ -22,9 +24,31 @@ public class BookingController {
     @Autowired
     private BookingService bookingService;
 
+    @Autowired
+    private UserService userService;
+
+    /**
+     * Create booking with full Booking object
+     * Automatically fetches User if only userId is provided
+     */
     @PostMapping("/create")
     public ResponseEntity<Booking> create(@RequestBody Booking booking) {
         try {
+            // If booking has a user with only userId set, fetch the full user and rebuild
+            // with Builder
+            if (booking.getUser() != null && booking.getUser().getUserId() != null) {
+                User fullUser = userService.read(booking.getUser().getUserId());
+                if (fullUser == null) {
+                    return ResponseEntity.badRequest().build();
+                }
+
+                // Rebuild booking with the full user using Builder pattern
+                booking = new Booking.Builder()
+                        .copy(booking) // Copy all existing fields
+                        .setUser(fullUser) // Replace partial user with full user
+                        .build();
+            }
+
             Booking createdBooking = bookingService.create(booking);
             return new ResponseEntity<>(createdBooking, HttpStatus.CREATED);
         } catch (Exception e) {

@@ -26,6 +26,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/invoice")
+@CrossOrigin(origins = {"http://localhost:5173", "http://localhost:5173"})
 public class InvoiceController {
 
     @Autowired

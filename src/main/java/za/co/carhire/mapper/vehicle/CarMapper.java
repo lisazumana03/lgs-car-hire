@@ -15,11 +15,24 @@ import java.util.Base64;
 public class CarMapper {
 
     /**
-     * Convert Car entity to CarDTO with full CarType details and image data as Base64
+     * Convert Car entity to CarDTO WITHOUT image data (lightweight version)
+     * Use this for list/search operations to avoid 431 errors
+     * 
      * @param car the entity to convert
-     * @return the DTO representation with complete CarType information and image as Base64
+     * @return the DTO representation without Base64 image data
      */
     public static CarDTO toDTO(Car car) {
+        return toDTO(car, false);
+    }
+
+    /**
+     * Convert Car entity to CarDTO with optional image data
+     * 
+     * @param car          the entity to convert
+     * @param includeImage whether to include Base64 image data
+     * @return the DTO representation
+     */
+    public static CarDTO toDTO(Car car, boolean includeImage) {
         if (car == null) {
             return null;
         }
@@ -32,13 +45,18 @@ public class CarMapper {
                 .setAvailability(car.isAvailability())
                 .setRentalPrice(car.getRentalPrice());
 
-        // Convert byte array to Base64 string for transmission
-        if (car.getImageData() != null && car.getImageData().length > 0) {
+        // Set image data directly as byte array
+        builder.setImageData(car.getImageData());
+
+        // Only include Base64 image if explicitly requested
+        if (includeImage && car.getImageData() != null && car.getImageData().length > 0) {
             String base64Image = Base64.getEncoder().encodeToString(car.getImageData());
             builder.setImageBase64(base64Image);
         }
+
+        // Always include image metadata (name and type)
         builder.setImageName(car.getImageName())
-               .setImageType(car.getImageType());
+                .setImageType(car.getImageType());
 
         if (car.getCarType() != null) {
             CarType carType = car.getCarType();
@@ -62,6 +80,7 @@ public class CarMapper {
 
     /**
      * Convert CarDTO to Car entity with image data decoded from Base64
+     * 
      * @param dto the DTO to convert
      * @return the entity representation
      */
@@ -89,15 +108,16 @@ public class CarMapper {
             }
         }
         builder.setImageName(dto.getImageName())
-               .setImageType(dto.getImageType());
+                .setImageType(dto.getImageType());
 
         return builder.build();
     }
 
     /**
      * Update existing Car entity from CarDTO including image data
+     * 
      * @param existingCar the existing entity to update
-     * @param dto the DTO with new values
+     * @param dto         the DTO with new values
      * @return the updated entity
      */
     public static Car updateEntityFromDTO(Car existingCar, CarDTO dto) {
