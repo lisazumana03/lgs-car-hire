@@ -1,5 +1,6 @@
 package za.co.carhire.domain.reservation;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -19,10 +20,12 @@ public class Invoice implements Serializable {
 
   @OneToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "payment_id", nullable = false)
+  @JsonIgnore
   private Payment payment;
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "booking_id", nullable = false)
+  @JsonIgnore
   private Booking booking;
 
   @Column(name = "issue_date", nullable = false)

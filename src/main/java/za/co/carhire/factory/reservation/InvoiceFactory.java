@@ -1,9 +1,4 @@
 package za.co.carhire.factory.reservation;
-/* InvoiceFactory.java
- * InvoiceFactory class
- * Sanele Zondi (221602011)
- * Due Date: 18/05/2025
- * */
 
 import za.co.carhire.domain.reservation.*;
 import za.co.carhire.util.Helper;
@@ -15,7 +10,8 @@ public class InvoiceFactory {
             return null;
         }
 
-        double subTotal = calculateSubTotal(booking);
+        // Use payment amount instead of calculating from booking
+        double subTotal = payment.getAmount();
         double taxAmount = subTotal * 0.15;
         double totalAmount = subTotal + taxAmount;
 
@@ -31,27 +27,12 @@ public class InvoiceFactory {
                 .build();
     }
 
-    private static double calculateSubTotal(Booking booking) {
-        if (booking == null || booking.getCar() == null || booking.getCar().isEmpty() ||
-                booking.getStartDate() == null || booking.getEndDate() == null) {
-            return 0.0;
-        }
-
-        long days = Helper.daysBetween(booking.getStartDate(), booking.getEndDate());
-        days = Math.max(1, days); // Minimum 1 day charge
-
-        long finalDays = days;
-        return booking.getCar().stream()
-                .filter(car -> car != null && car.getRentalPrice() > 0)
-                .mapToDouble(car -> car.getRentalPrice() * finalDays)
-                .sum();
-    }
     private static boolean isValid(Payment payment, Booking booking) {
         return payment != null &&
                 booking != null &&
                 payment.getBooking() != null &&
                 payment.getBooking().getBookingID() == booking.getBookingID() &&
-                !"REFUNDED".equals(payment.getPaymentMethod()) &&
+                payment.getAmount() > 0 &&
                 booking.getEndDate() != null &&
                 booking.getEndDate().isAfter(LocalDateTime.now());
     }

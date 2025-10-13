@@ -12,6 +12,7 @@ import za.co.carhire.domain.reservation.*;
 import za.co.carhire.repository.reservation.IInvoiceRepository;
 import za.co.carhire.service.reservation.*;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -55,5 +56,20 @@ public class InvoiceService implements IInvoiceService {
     @Transactional
     public void delete(int invoiceId) {
         invoiceRepository.deleteById(invoiceId);
+    }
+    public List<Invoice> getUserInvoices(int userId) {
+        return invoiceRepository.findByBooking_User_UserId(userId);
+    }
+
+    public List<Invoice> getAllInvoices() {
+        return invoiceRepository.findAll();
+    }
+
+    public List<Invoice> getInvoicesByPayment(int paymentId) {
+        return invoiceRepository.findByPayment_PaymentID(paymentId);
+    }
+
+    public List<Invoice> getInvoicesByStatus(String status) {
+        return invoiceRepository.findByStatus(status);
     }
 }
