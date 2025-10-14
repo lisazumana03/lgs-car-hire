@@ -11,15 +11,35 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import za.co.carhire.domain.reservation.Payment;
 import za.co.carhire.domain.reservation.PaymentStatus;
+import za.co.carhire.dto.reservation.PaymentRequest;
 import za.co.carhire.service.reservation.impl.PaymentService;
 
 import java.util.Map;
 
+@CrossOrigin(origins = { "http://localhost:3046", "http://127.0.0.1:3046" })
 @RestController
-@RequestMapping("/payment")
+@RequestMapping("/api/payment")
 public class PaymentController {
     @Autowired
     private PaymentService paymentService;
+
+    @PostMapping("/create-payment")
+    public ResponseEntity<Payment> createPayment(@RequestBody PaymentRequest request) {
+        try {
+            System.out.println("Creating payment for booking: " + request.getBookingId());
+            Payment payment = paymentService.createPayment(
+                    request.getBookingId(),
+                    request.getAmount(),
+                    request.getPaymentMethod()
+            );
+            return new ResponseEntity<>(payment, HttpStatus.CREATED);
+        } catch (Exception e) {
+            System.err.println("Error creating payment: " + e.getMessage());
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
 
     @PostMapping("/create")
     public ResponseEntity<Payment> create(@RequestBody Payment payment) {
