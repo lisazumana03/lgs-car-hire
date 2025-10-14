@@ -16,6 +16,7 @@ public class CarDTO implements Serializable {
     private int year;
     private boolean availability;
     private double rentalPrice;
+    private byte[] imageData;
     private String imageBase64;
     private String imageName;
     private String imageType;
@@ -33,7 +34,7 @@ public class CarDTO implements Serializable {
     }
 
     public CarDTO(int carID, String model, String brand, int year,
-                  boolean availability, double rentalPrice) {
+            boolean availability, double rentalPrice) {
         this.carID = carID;
         this.model = model;
         this.brand = brand;
@@ -43,10 +44,10 @@ public class CarDTO implements Serializable {
     }
 
     public CarDTO(int carID, String model, String brand, int year,
-                  boolean availability, double rentalPrice, String imageBase64,
-                  String imageName, String imageType,
-                  Integer carTypeID, String carTypeName,
-                  Integer insuranceID, Integer bookingID) {
+            boolean availability, double rentalPrice, String imageBase64,
+            String imageName, String imageType,
+            Integer carTypeID, String carTypeName,
+            Integer insuranceID, Integer bookingID) {
         this.carID = carID;
         this.model = model;
         this.brand = brand;
@@ -69,6 +70,7 @@ public class CarDTO implements Serializable {
         private int year;
         private boolean availability;
         private double rentalPrice;
+        private byte[] imageData;
         private String imageBase64;
         private String imageName;
         private String imageType;
@@ -107,6 +109,11 @@ public class CarDTO implements Serializable {
 
         public Builder setRentalPrice(double rentalPrice) {
             this.rentalPrice = rentalPrice;
+            return this;
+        }
+
+        public Builder setImageData(byte[] imageData) {
+            this.imageData = imageData;
             return this;
         }
 
@@ -168,6 +175,7 @@ public class CarDTO implements Serializable {
             dto.year = this.year;
             dto.availability = this.availability;
             dto.rentalPrice = this.rentalPrice;
+            dto.imageData = this.imageData;
             dto.imageBase64 = this.imageBase64;
             dto.imageName = this.imageName;
             dto.imageType = this.imageType;
@@ -228,6 +236,14 @@ public class CarDTO implements Serializable {
 
     public void setRentalPrice(double rentalPrice) {
         this.rentalPrice = rentalPrice;
+    }
+
+    public byte[] getImageData() {
+        return imageData;
+    }
+
+    public void setImageData(byte[] imageData) {
+        this.imageData = imageData;
     }
 
     public String getImageBase64() {
@@ -321,7 +337,6 @@ public class CarDTO implements Serializable {
                 ", rentalPrice=" + rentalPrice +
                 ", imageName='" + imageName + '\'' +
                 ", imageType='" + imageType + '\'' +
-                ", hasImage=" + (imageBase64 != null && !imageBase64.isEmpty()) +
                 ", carTypeID=" + carTypeID +
                 ", carTypeName='" + carTypeName + '\'' +
                 ", carTypeFuelType='" + carTypeFuelType + '\'' +
