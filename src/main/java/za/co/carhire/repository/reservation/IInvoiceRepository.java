@@ -15,7 +15,6 @@ import java.util.List;
 public interface IInvoiceRepository extends JpaRepository<Invoice, Integer> {
     List<Invoice> findByBooking(Booking booking);
     List<Invoice> findByPayment(Payment payment);
-    List<Invoice> findById(int invoiceID);
     List<Invoice> findByStatus(String status);
     List<Invoice> findByPayment_PaymentID(int paymentID);
     List<Invoice> findByBooking_User_UserId(int userId);

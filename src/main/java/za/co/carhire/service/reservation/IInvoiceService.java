@@ -13,9 +13,12 @@ import java.util.List;
 import java.util.Set;
 
 public interface IInvoiceService extends IService<Invoice, Integer> {
+    List<Invoice> getUserInvoices(int userId);
+    List<Invoice> getAllInvoices();
+    List<Invoice> getInvoicesByPayment(int paymentId);
+    List<Invoice> getInvoicesByStatus(String status);
+
     Set<Invoice> getInvoices();
-    Invoice create(Invoice invoice);
-    Invoice read(int invoiceID);
-    Invoice update(Invoice invoice);
+
     void delete(int invoiceID);
 }
