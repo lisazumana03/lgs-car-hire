@@ -1,10 +1,7 @@
 package za.co.carhire.dto.reservation;
 
 import za.co.carhire.domain.reservation.Invoice;
-import za.co.carhire.domain.vehicle.Car;
-
 import java.time.LocalDateTime;
-import java.util.List;
 
 public class InvoiceDTO {
     private int invoiceID;
@@ -16,6 +13,10 @@ public class InvoiceDTO {
     private LocalDateTime dueDate;
     private String carModel;
 
+    public InvoiceDTO() {
+        // Default constructor
+    }
+
     public InvoiceDTO(Invoice invoice) {
         this.invoiceID = invoice.getInvoiceID();
         this.totalAmount = invoice.getTotalAmount();
@@ -24,21 +25,7 @@ public class InvoiceDTO {
         this.status = invoice.getStatus();
         this.issueDate = invoice.getIssueDate();
         this.dueDate = invoice.getDueDate();
-        this.carModel = extractCarModel(invoice);
-    }
-
-    private String extractCarModel(Invoice invoice) {
-        try {
-            if (invoice.getBooking() != null && invoice.getBooking().getCar() != null) {
-                List<Car> cars = invoice.getBooking().getCar();
-                if (!cars.isEmpty() && cars.get(0) != null) {
-                    return cars.get(0).getModel() != null ? cars.get(0).getModel() : "Unknown Model";
-                }
-            }
-        } catch (Exception e) {
-            // Log error if needed
-        }
-        return "Unknown";
+        this.carModel = "Car Rental"; // Simple default - remove the complex extraction
     }
 
     // Getters
@@ -50,4 +37,14 @@ public class InvoiceDTO {
     public LocalDateTime getIssueDate() { return issueDate; }
     public LocalDateTime getDueDate() { return dueDate; }
     public String getCarModel() { return carModel; }
+    // Add these setters to InvoiceDTO
+    public void setInvoiceID(int invoiceID) { this.invoiceID = invoiceID; }
+    public void setTotalAmount(double totalAmount) { this.totalAmount = totalAmount; }
+    public void setSubTotal(double subTotal) { this.subTotal = subTotal; }
+    public void setTaxAmount(double taxAmount) { this.taxAmount = taxAmount; }
+    public void setStatus(String status) { this.status = status; }
+    public void setIssueDate(LocalDateTime issueDate) { this.issueDate = issueDate; }
+    public void setDueDate(LocalDateTime dueDate) { this.dueDate = dueDate; }
+    public void setCarModel(String carModel) { this.carModel = carModel; }
+
 }

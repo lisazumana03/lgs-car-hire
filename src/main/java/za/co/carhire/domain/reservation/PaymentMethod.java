@@ -4,6 +4,7 @@ public enum PaymentMethod {
     CREDIT_CARD,
     DEBIT_CARD,
     EFT,
-    CASH,
-    PAYSTACK
+    PAYSTACK,
+    CASH
+
 }

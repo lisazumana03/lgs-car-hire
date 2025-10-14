@@ -12,6 +12,7 @@ import za.co.carhire.domain.reservation.*;
 import za.co.carhire.repository.reservation.IInvoiceRepository;
 import za.co.carhire.service.reservation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -24,8 +25,9 @@ public class InvoiceService implements IInvoiceService {
 
     @Override
     public Set<Invoice> getInvoices() {
-        return Set.of();
+        return Set.copyOf(invoiceRepository.findAll());
     }
+
 
     @Override
     @Transactional
@@ -34,6 +36,7 @@ public class InvoiceService implements IInvoiceService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Invoice read(Integer invoiceID) {
         Optional<Invoice> invoice = invoiceRepository.findById(invoiceID);
         return invoice.orElse(null);
@@ -57,14 +60,24 @@ public class InvoiceService implements IInvoiceService {
     public void delete(int invoiceId) {
         invoiceRepository.deleteById(invoiceId);
     }
+
+    @Transactional(readOnly = true)
     public List<Invoice> getUserInvoices(int userId) {
-        return invoiceRepository.findByBooking_User_UserId(userId);
+        try {
+            return invoiceRepository.findByBooking_User_UserId(userId);
+        } catch (Exception e) {
+            System.err.println("Error fetching user invoices: " + e.getMessage());
+            e.printStackTrace();
+            return new ArrayList<>(); // Return empty list instead of throwing
+        }
     }
 
+    @Transactional(readOnly = true)
     public List<Invoice> getAllInvoices() {
         return invoiceRepository.findAll();
     }
 
+    @Transactional(readOnly = true)
     public List<Invoice> getInvoicesByPayment(int paymentId) {
         return invoiceRepository.findByPayment_PaymentID(paymentId);
     }
