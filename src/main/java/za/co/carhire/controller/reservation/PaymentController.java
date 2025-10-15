@@ -16,11 +16,9 @@ import za.co.carhire.service.reservation.impl.PaymentService;
 
 import java.util.Map;
 
-@CrossOrigin(origins = { "http://localhost:3046", "http://127.0.0.1:3046" })
 @RestController
-@RequestMapping("/payment")
-@CrossOrigin(origins = {"http://localhost:5173", "http://localhost:5173"})
-@RequestMapping("/api/payment")
+@RequestMapping({"/payment", "/api/payment"})
+@CrossOrigin(origins = {"http://localhost:3046", "http://127.0.0.1:3046", "http://localhost:5173", "http://localhost:5173"})
 public class PaymentController {
     @Autowired
     private PaymentService paymentService;

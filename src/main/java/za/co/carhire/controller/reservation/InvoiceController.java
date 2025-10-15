@@ -15,12 +15,11 @@ import za.co.carhire.service.reservation.IPaymentService;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@CrossOrigin(origins = { "http://localhost:3046", "http://127.0.0.1:3046" },
-        allowedHeaders = "*",
-        methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE})
 @RestController
 @RequestMapping("/api/invoice")
-@CrossOrigin(origins = {"http://localhost:5173", "http://localhost:5173"})
+@CrossOrigin(origins = {"http://localhost:5173", "http://127.0.0.1:5173", "http://localhost:3046", "http://127.0.0.1:3046"},
+        allowedHeaders = "*",
+        methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE})
 public class InvoiceController {
 
     @Autowired
