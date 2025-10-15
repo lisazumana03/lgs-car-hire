@@ -22,8 +22,8 @@ public class UserMapper {
         user.getEmail(),
         user.getDateOfBirth(),
         user.getPhoneNumber(),
-        user.getLicenseNumber());
-    // Note: password is intentionally excluded from DTO for security
+        user.getLicenseNumber(),
+        user.getRole());
   }
 
   public User toDomain(UserDTO dto) {
@@ -31,8 +31,6 @@ public class UserMapper {
       return null;
     }
 
-    // For security, we don't set password from DTO
-    // Password should be handled separately in authentication flows
     return new User.Builder()
         .setUserId(dto.getUserId())
         .setIdNumber(dto.getIdNumber())
@@ -41,6 +39,7 @@ public class UserMapper {
         .setDateOfBirth(dto.getDateOfBirth())
         .setPhoneNumber(dto.getPhoneNumber())
         .setLicenseNumber(dto.getLicenseNumber())
+        .setRole(dto.getRole() != null ? dto.getRole() : za.co.carhire.domain.authentication.Role.CUSTOMER)
         .build();
   }
 

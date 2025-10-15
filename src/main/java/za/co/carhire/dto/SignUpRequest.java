@@ -1,5 +1,7 @@
 package za.co.carhire.dto;
 
+import za.co.carhire.domain.authentication.Role;
+
 import java.time.LocalDate;
 
 /* SignUpRequest.java
@@ -20,12 +22,13 @@ public class SignUpRequest {
     private String phoneNumber;
     private String password;
     private String licenseNumber;
+    private Role role;
 
     public SignUpRequest() {
     }
 
-    public SignUpRequest(Long idNumber, String name, String email, LocalDate dateOfBirth, 
-                        String phoneNumber, String password, String licenseNumber) {
+    public SignUpRequest(Long idNumber, String name, String email, LocalDate dateOfBirth,
+                        String phoneNumber, String password, String licenseNumber, Role role) {
         this.idNumber = idNumber;
         this.name = name;
         this.email = email;
@@ -33,6 +36,7 @@ public class SignUpRequest {
         this.phoneNumber = phoneNumber;
         this.password = password;
         this.licenseNumber = licenseNumber;
+        this.role = role;
     }
 
     public Long getIdNumber() {
@@ -91,6 +95,14 @@ public class SignUpRequest {
         this.licenseNumber = licenseNumber;
     }
 
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
+    }
+
     @Override
     public String toString() {
         return "SignUpRequest{" +
@@ -99,8 +111,9 @@ public class SignUpRequest {
                 ", email='" + email + '\'' +
                 ", dateOfBirth=" + dateOfBirth +
                 ", phoneNumber='" + phoneNumber + '\'' +
-                ", password='" + password + '\'' +
+                ", password='[PROTECTED]'" +
                 ", licenseNumber='" + licenseNumber + '\'' +
+                ", role=" + role +
                 '}';
     }
 }

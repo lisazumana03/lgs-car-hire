@@ -3,6 +3,7 @@ package za.co.carhire.init;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import za.co.carhire.domain.vehicle.Car;
@@ -19,6 +20,7 @@ import java.util.Map;
 import java.util.Set;
 
 @Component
+@Order(2)
 public class DataInitializer implements CommandLineRunner {
 
     @Autowired
@@ -63,7 +65,7 @@ public class DataInitializer implements CommandLineRunner {
         }
 
         System.out.println("============================================");
-        System.out.println("Initializing database with sample data...");
+        System.out.println("Initializing vehicle database with sample data...");
         System.out.println("============================================");
 
         // Create Cars first without CarType

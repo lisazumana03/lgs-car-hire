@@ -2,7 +2,13 @@ package za.co.carhire.controller.authentication;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+import za.co.carhire.domain.authentication.Role;
 import za.co.carhire.domain.authentication.User;
 import za.co.carhire.dto.LoginRequest;
 import za.co.carhire.dto.SignUpRequest;
@@ -33,6 +39,12 @@ public class UserController {
   @Autowired
   private UserMapper mapper;
 
+  @Autowired
+  private PasswordEncoder passwordEncoder;
+
+  @Autowired
+  private AuthenticationManager authenticationManager;
+
   @PostMapping("/create")
   public UserDTO createUser(@RequestBody final UserDTO userDTO) {
     User user = mapper.toDomain(userDTO);
@@ -42,14 +54,20 @@ public class UserController {
 
   @PostMapping("/signup")
   public UserDTO signUp(@RequestBody final SignUpRequest signUpRequest) {
+
+    String hashedPassword = passwordEncoder.encode(signUpRequest.getPassword());
+
+    Role userRole = signUpRequest.getRole() != null ? signUpRequest.getRole() : Role.CUSTOMER;
+
     User user = new User.Builder()
         .setIdNumber(signUpRequest.getIdNumber())
         .setName(signUpRequest.getName())
         .setEmail(signUpRequest.getEmail())
         .setDateOfBirth(signUpRequest.getDateOfBirth())
         .setPhoneNumber(signUpRequest.getPhoneNumber())
-        .setPassword(signUpRequest.getPassword())
+        .setPassword(hashedPassword)
         .setLicenseNumber(signUpRequest.getLicenseNumber())
+        .setRole(userRole)
         .build();
 
     User createdUser = service.save(user);
@@ -58,13 +76,23 @@ public class UserController {
 
   @PostMapping("/login")
   public ResponseEntity<UserDTO> login(@RequestBody LoginRequest loginDetails) {
-    User user = service.findByEmailAndPassword(
-        loginDetails.getEmail(),
-        loginDetails.getPassword());
-    if (user != null) {
-      return ResponseEntity.ok(mapper.toDTO(user));
+    try {
+      Authentication authentication = authenticationManager.authenticate(
+          new UsernamePasswordAuthenticationToken(
+              loginDetails.getEmail(),
+              loginDetails.getPassword()
+          )
+      );
+
+      User user = service.findByEmail(loginDetails.getEmail());
+      if (user != null) {
+        return ResponseEntity.ok(mapper.toDTO(user));
+      }
+      return ResponseEntity.status(404).build();
+
+    } catch (AuthenticationException e) {
+      return ResponseEntity.status(401).build();
     }
-    return ResponseEntity.status(404).build();
   }
 
   @GetMapping("/{id}")

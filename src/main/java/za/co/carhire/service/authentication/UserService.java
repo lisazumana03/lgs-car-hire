@@ -25,7 +25,8 @@ public interface UserService {
 
     List<User> findByIdNumber(Long idNumber);
 
-    // New methods for login and registration
+    User findByEmail(String email);
+
     User findByEmailAndPassword(String email, String password);
 
 }

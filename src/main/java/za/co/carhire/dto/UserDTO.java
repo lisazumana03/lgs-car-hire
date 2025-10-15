@@ -10,6 +10,8 @@ package za.co.carhire.dto;
 
      */
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import za.co.carhire.domain.authentication.Role;
+
 import java.time.LocalDate;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -21,12 +23,13 @@ public class UserDTO {
     private LocalDate dateOfBirth;
     private String phoneNumber;
     private String licenseNumber;
+    private Role role;
 
     public UserDTO() {
     }
 
     public UserDTO(Integer userId, Long idNumber, String name, String email,
-            LocalDate dateOfBirth, String phoneNumber, String licenseNumber) {
+            LocalDate dateOfBirth, String phoneNumber, String licenseNumber, Role role) {
         this.userId = userId;
         this.idNumber = idNumber;
         this.name = name;
@@ -34,6 +37,7 @@ public class UserDTO {
         this.dateOfBirth = dateOfBirth;
         this.phoneNumber = phoneNumber;
         this.licenseNumber = licenseNumber;
+        this.role = role;
     }
 
     public Integer getUserId() {
@@ -92,6 +96,14 @@ public class UserDTO {
         this.licenseNumber = licenseNumber;
     }
 
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
+    }
+
     @Override
     public String toString() {
         return "UserDTO{" +
@@ -102,6 +114,7 @@ public class UserDTO {
                 ", dateOfBirth=" + dateOfBirth +
                 ", phoneNumber='" + phoneNumber + '\'' +
                 ", licenseNumber='" + licenseNumber + '\'' +
+                ", role=" + role +
                 '}';
     }
 }

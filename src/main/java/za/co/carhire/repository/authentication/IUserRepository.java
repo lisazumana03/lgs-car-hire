@@ -17,7 +17,8 @@ import java.util.Optional;
 @Repository
 public interface IUserRepository extends JpaRepository<User, Integer> {
     List<User> findUserByIdNumber(Long idNumber);
-    
-    // Method for login authentication
+
+    User findByEmail(String email);
+
     User findByEmailAndPassword(String email, String password);
 }
