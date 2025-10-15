@@ -13,7 +13,7 @@ import java.io.Serializable;
 @Entity
 public class SupportTicket implements Serializable {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     protected int ticketID;
     @ManyToOne
     @JoinColumn(name = "user_id")

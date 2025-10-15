@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import za.co.carhire.domain.vehicle.Car;
+import za.co.carhire.domain.vehicle.CarStatus;
 import za.co.carhire.dto.vehicle.CarDTO;
 import za.co.carhire.mapper.vehicle.CarMapper;
 import za.co.carhire.service.vehicle.ICarService;
@@ -16,6 +17,7 @@ import java.util.stream.Collectors;
 Imtiyaaz Waggie 219374759
 Date: 25/05/2025
 Updated: 28/08/2025 - Added /api prefix to endpoints
+Updated: 15/10/2025 - Refactored for new Car model
  */
 
 @RestController
@@ -88,9 +90,24 @@ public class CarController {
         return new ResponseEntity<>(carDtos, HttpStatus.OK);
     }
 
-    @PutMapping("/availability/{id}")
-    public ResponseEntity<CarDTO> updateAvailability(@PathVariable int id, @RequestParam boolean available) {
-        Car car = carService.updateAvailability(id, available);
+    @PutMapping("/status/{id}")
+    public ResponseEntity<CarDTO> updateStatus(@PathVariable int id, @RequestParam String status) {
+        try {
+            CarStatus carStatus = CarStatus.valueOf(status.toUpperCase());
+            Car car = carService.updateStatus(id, carStatus);
+            if (car != null) {
+                CarDTO dto = CarMapper.toDTO(car);
+                return new ResponseEntity<>(dto, HttpStatus.OK);
+            }
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PutMapping("/mileage/{id}")
+    public ResponseEntity<CarDTO> updateMileage(@PathVariable int id, @RequestParam int mileage) {
+        Car car = carService.updateMileage(id, mileage);
         if (car != null) {
             CarDTO dto = CarMapper.toDTO(car);
             return new ResponseEntity<>(dto, HttpStatus.OK);
@@ -98,13 +115,38 @@ public class CarController {
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    @GetMapping("/price-range")
-    public ResponseEntity<List<CarDTO>> getByPriceRange(@RequestParam double minPrice, @RequestParam double maxPrice) {
-        List<Car> cars = carService.getCarsByPriceRange(minPrice, maxPrice);
-        List<CarDTO> carDtos = cars.stream()
-                .map(CarMapper::toDTO)
-                .collect(Collectors.toList());
-        return new ResponseEntity<>(carDtos, HttpStatus.OK);
+    @GetMapping("/status/{status}")
+    public ResponseEntity<List<CarDTO>> getByStatus(@PathVariable String status) {
+        try {
+            CarStatus carStatus = CarStatus.valueOf(status.toUpperCase());
+            List<Car> cars = carService.getCarsByStatus(carStatus);
+            List<CarDTO> carDtos = cars.stream()
+                    .map(CarMapper::toDTO)
+                    .collect(Collectors.toList());
+            return new ResponseEntity<>(carDtos, HttpStatus.OK);
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping("/license-plate/{licensePlate}")
+    public ResponseEntity<CarDTO> getByLicensePlate(@PathVariable String licensePlate) {
+        Car car = carService.getCarByLicensePlate(licensePlate);
+        if (car != null) {
+            CarDTO dto = CarMapper.toDTO(car);
+            return new ResponseEntity<>(dto, HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    @GetMapping("/vin/{vin}")
+    public ResponseEntity<CarDTO> getByVin(@PathVariable String vin) {
+        Car car = carService.getCarByVin(vin);
+        if (car != null) {
+            CarDTO dto = CarMapper.toDTO(car);
+            return new ResponseEntity<>(dto, HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     @GetMapping("/year/{year}")
@@ -116,7 +158,4 @@ public class CarController {
         return new ResponseEntity<>(carDtos, HttpStatus.OK);
     }
 
-    // Image upload endpoints have been moved to CarImageController
-    // Use /api/car/image/upload/{id} to upload images
-    // Use /api/car/image/{id} to retrieve images
 }

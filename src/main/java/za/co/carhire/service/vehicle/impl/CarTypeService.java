@@ -3,6 +3,7 @@ package za.co.carhire.service.vehicle.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import za.co.carhire.domain.vehicle.CarType;
+import za.co.carhire.domain.vehicle.FuelType;
 import za.co.carhire.repository.vehicle.ICarTypeRepository;
 import za.co.carhire.service.vehicle.ICarTypeService;
 
@@ -50,10 +51,7 @@ public class CarTypeService implements ICarTypeService {
     }
 
     @Override
-    public List<CarType> getCarTypesByFuelType(String fuelType) {
-        return carTypeRepository.findAll().stream()
-                .filter(carType -> carType.getFuelType() != null && 
-                       carType.getFuelType().equalsIgnoreCase(fuelType))
-                .collect(Collectors.toList());
+    public List<CarType> getCarTypesByFuelType(FuelType fuelType) {
+        return carTypeRepository.findByFuelType(fuelType);
     }
 }

@@ -12,61 +12,76 @@ public class CarType implements Serializable {
     @Column(name = "car_typeid")
     private int carTypeID;
 
-    @Column(name = "type")
-    private String type;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "category", nullable = false)
+    private VehicleCategory category;
 
-    @Column(name = "fuel_type")
-    private String fuelType;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "fuel_type", nullable = false)
+    private FuelType fuelType;
 
-    @Column(name = "number_of_wheels")
-    private int numberOfWheels;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "transmission_type", nullable = false)
+    private TransmissionType transmissionType;
 
-    @Column(name = "number_of_seats")
+    @Column(name = "number_of_seats", nullable = false)
     private int numberOfSeats;
+
+    @Column(name = "number_of_doors")
+    private int numberOfDoors;
+
+    @Column(name = "air_conditioned", nullable = false)
+    private boolean airConditioned;
+
+    @Column(name = "luggage_capacity")
+    private int luggageCapacity;
+
+    @Column(name = "description", length = 500)
+    private String description;
 
     public CarType() {
     }
 
-    public CarType(int carTypeID, String type, String fuelType, int numberOfWheels, int numberOfSeats) {
-        this.carTypeID = carTypeID;
-        this.type = type;
-        this.fuelType = fuelType;
-        this.numberOfWheels = numberOfWheels;
-        this.numberOfSeats = numberOfSeats;
-    }
-
     private CarType(Builder builder) {
         this.carTypeID = builder.carTypeID;
-        this.type = builder.type;
+        this.category = builder.category;
         this.fuelType = builder.fuelType;
-        this.numberOfWheels = builder.numberOfWheels;
+        this.transmissionType = builder.transmissionType;
         this.numberOfSeats = builder.numberOfSeats;
+        this.numberOfDoors = builder.numberOfDoors;
+        this.airConditioned = builder.airConditioned;
+        this.luggageCapacity = builder.luggageCapacity;
+        this.description = builder.description;
     }
 
     public static class Builder {
         private int carTypeID;
-        private String type;
-        private String fuelType;
-        private int numberOfWheels;
+        private VehicleCategory category;
+        private FuelType fuelType;
+        private TransmissionType transmissionType;
         private int numberOfSeats;
+        private int numberOfDoors;
+        private boolean airConditioned;
+        private int luggageCapacity;
+        private String description;
 
         public Builder setCarTypeID(int carTypeID) {
             this.carTypeID = carTypeID;
             return this;
         }
 
-        public Builder setType(String type) {
-            this.type = type;
+        public Builder setCategory(VehicleCategory category) {
+            this.category = category;
             return this;
         }
 
-        public Builder setFuelType(String fuelType) {
+        public Builder setFuelType(FuelType fuelType) {
             this.fuelType = fuelType;
             return this;
         }
 
-        public Builder setNumberOfWheels(int numberOfWheels) {
-            this.numberOfWheels = numberOfWheels;
+        public Builder setTransmissionType(TransmissionType transmissionType) {
+            this.transmissionType = transmissionType;
             return this;
         }
 
@@ -75,12 +90,36 @@ public class CarType implements Serializable {
             return this;
         }
 
+        public Builder setNumberOfDoors(int numberOfDoors) {
+            this.numberOfDoors = numberOfDoors;
+            return this;
+        }
+
+        public Builder setAirConditioned(boolean airConditioned) {
+            this.airConditioned = airConditioned;
+            return this;
+        }
+
+        public Builder setLuggageCapacity(int luggageCapacity) {
+            this.luggageCapacity = luggageCapacity;
+            return this;
+        }
+
+        public Builder setDescription(String description) {
+            this.description = description;
+            return this;
+        }
+
         public Builder copy(CarType carType) {
             this.carTypeID = carType.getCarTypeID();
-            this.type = carType.getType();
+            this.category = carType.getCategory();
             this.fuelType = carType.getFuelType();
-            this.numberOfWheels = carType.getNumberOfWheels();
+            this.transmissionType = carType.getTransmissionType();
             this.numberOfSeats = carType.getNumberOfSeats();
+            this.numberOfDoors = carType.getNumberOfDoors();
+            this.airConditioned = carType.isAirConditioned();
+            this.luggageCapacity = carType.getLuggageCapacity();
+            this.description = carType.getDescription();
             return this;
         }
 
@@ -97,28 +136,28 @@ public class CarType implements Serializable {
         this.carTypeID = carTypeID;
     }
 
-    public String getType() {
-        return type;
+    public VehicleCategory getCategory() {
+        return category;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public void setCategory(VehicleCategory category) {
+        this.category = category;
     }
 
-    public String getFuelType() {
+    public FuelType getFuelType() {
         return fuelType;
     }
 
-    public void setFuelType(String fuelType) {
+    public void setFuelType(FuelType fuelType) {
         this.fuelType = fuelType;
     }
 
-    public int getNumberOfWheels() {
-        return numberOfWheels;
+    public TransmissionType getTransmissionType() {
+        return transmissionType;
     }
 
-    public void setNumberOfWheels(int numberOfWheels) {
-        this.numberOfWheels = numberOfWheels;
+    public void setTransmissionType(TransmissionType transmissionType) {
+        this.transmissionType = transmissionType;
     }
 
     public int getNumberOfSeats() {
@@ -129,14 +168,50 @@ public class CarType implements Serializable {
         this.numberOfSeats = numberOfSeats;
     }
 
+    public int getNumberOfDoors() {
+        return numberOfDoors;
+    }
+
+    public void setNumberOfDoors(int numberOfDoors) {
+        this.numberOfDoors = numberOfDoors;
+    }
+
+    public boolean isAirConditioned() {
+        return airConditioned;
+    }
+
+    public void setAirConditioned(boolean airConditioned) {
+        this.airConditioned = airConditioned;
+    }
+
+    public int getLuggageCapacity() {
+        return luggageCapacity;
+    }
+
+    public void setLuggageCapacity(int luggageCapacity) {
+        this.luggageCapacity = luggageCapacity;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
     @Override
     public String toString() {
         return "CarType{" +
                 "carTypeID=" + carTypeID +
-                ", type='" + type + '\'' +
-                ", fuelType='" + fuelType + '\'' +
-                ", numberOfWheels=" + numberOfWheels +
+                ", category=" + category +
+                ", fuelType=" + fuelType +
+                ", transmissionType=" + transmissionType +
                 ", numberOfSeats=" + numberOfSeats +
+                ", numberOfDoors=" + numberOfDoors +
+                ", airConditioned=" + airConditioned +
+                ", luggageCapacity=" + luggageCapacity +
+                ", description='" + description + '\'' +
                 '}';
     }
 }

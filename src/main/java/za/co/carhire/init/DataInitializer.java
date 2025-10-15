@@ -7,17 +7,18 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import za.co.carhire.domain.vehicle.Car;
+import za.co.carhire.domain.vehicle.CarCondition;
+import za.co.carhire.domain.vehicle.CarStatus;
 import za.co.carhire.domain.vehicle.CarType;
+import za.co.carhire.domain.vehicle.PricingRule;
 import za.co.carhire.factory.vehicle.CarFactory;
 import za.co.carhire.factory.vehicle.CarTypeFactory;
+import za.co.carhire.factory.vehicle.PricingRuleFactory;
 import za.co.carhire.service.vehicle.ICarService;
 import za.co.carhire.service.vehicle.ICarTypeService;
+import za.co.carhire.service.vehicle.IPricingRuleService;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 @Component
 @Order(2)
@@ -29,11 +30,18 @@ public class DataInitializer implements CommandLineRunner {
     @Autowired
     private ICarTypeService carTypeService;
 
+    @Autowired
+    private IPricingRuleService pricingRuleService;
+
     @Value("${app.database.init.enabled:false}")
     private boolean initEnabled;
 
     @Value("${app.database.init.clear-existing:false}")
     private boolean clearExisting;
+
+    private static final String[] COLORS = {"White", "Black", "Silver", "Gray", "Blue", "Red", "Green", "Yellow"};
+    private static final Random RANDOM = new Random();
+    private int licenseCounter = 1000;
 
     @Override
     @Transactional
@@ -57,10 +65,8 @@ public class DataInitializer implements CommandLineRunner {
 
         if (clearExisting && (!existingCars.isEmpty() || !existingCarTypes.isEmpty())) {
             System.out.println("Clearing existing data as requested...");
-            // Delete car types first (they depend on cars)
-            existingCarTypes.forEach(carType -> carTypeService.delete(carType.getCarTypeID()));
-            // Then delete cars
             existingCars.forEach(car -> carService.delete(car.getCarID()));
+            existingCarTypes.forEach(carType -> carTypeService.delete(carType.getCarTypeID()));
             System.out.println("Existing data cleared.");
         }
 
@@ -68,248 +74,249 @@ public class DataInitializer implements CommandLineRunner {
         System.out.println("Initializing vehicle database with sample data...");
         System.out.println("============================================");
 
-        // Create Cars first without CarType
-        Map<String, List<Car>> carsByType = createCarsWithoutTypes();
+        // Create CarTypes and PricingRules first
+        Map<String, CarType> carTypeMap = createCarTypesWithPricing();
 
-        // Then create CarTypes and associate them with cars
-        createCarTypesAndAssociate(carsByType);
+        // Then create Cars
+        createCarsWithTypes(carTypeMap);
 
         System.out.println("============================================");
         System.out.println("Database initialization completed successfully!");
         System.out.println("--------------------------------------------");
         System.out.println("Created " + carService.getCars().size() + " cars");
         System.out.println("Created " + carTypeService.getCarTypes().size() + " car types");
+        System.out.println("Created " + pricingRuleService.getAllPricingRules().size() + " pricing rules");
         System.out.println("--------------------------------------------");
         displaySummaryStatistics();
         System.out.println("============================================");
     }
 
-    private Map<String, List<Car>> createCarsWithoutTypes() {
-        Map<String, List<Car>> carsByType = new HashMap<>();
+    private Map<String, CarType> createCarTypesWithPricing() {
+        Map<String, CarType> carTypeMap = new HashMap<>();
 
-        // Economy Cars
-        List<Car> economyCars = new ArrayList<>();
-        economyCars.add(createAndSaveCar("Corolla", "Toyota", 2022, 350.0, true,
-                "https://media.cdntoyota.co.za/toyotacms23/attachments/cmdwsn56u5h981oakxfbkvupg-corolla-cross-side-img.desktop.png"));
-        economyCars.add(createAndSaveCar("Civic", "Honda", 2023, 380.0, true,
-                "https://cdn.honda.co.za/main-03/general/civic-1-5-rs-cvt-2/featured/Civic_Models.png"));
-        economyCars.add(createAndSaveCar("Sentra", "Nissan", 2022, 320.0, true,
-                "https://www.nissanusa.com/content/dam/Nissan/us/vehicles/sentra/2025/gallery/exterior/2025-nissan-sentra-blue-driveway-front-building.jpg"));
-        economyCars.add(createAndSaveCar("Elantra", "Hyundai", 2023, 340.0, true,
-                "https://img.autotrader.co.za/20841671/Crop676x507"));
-        carsByType.put("Economy", economyCars);
+        // Economy
+        CarType economy = CarTypeFactory.createEconomy(0);
+        economy = carTypeService.create(economy);
+        PricingRule economyPricing = PricingRuleFactory.createEconomyPricing(0, economy);
+        pricingRuleService.create(economyPricing);
+        carTypeMap.put("Economy", economy);
+        System.out.println("Created car type: Economy with pricing (R350/day)");
 
-        // Sedan Cars
-        List<Car> sedanCars = new ArrayList<>();
-        sedanCars.add(createAndSaveCar("Camry", "Toyota", 2023, 450.0, true,
-                "https://tmna.aemassets.toyota.com/is/image/toyota/toyota/jellies/max/2026/camry/nightshade/2558/3u5/36/5.png?fmt=png-alpha&wid=930&hei=328&qlt=90"));
-        sedanCars.add(createAndSaveCar("Accord", "Honda", 2022, 480.0, true,
-                "https://automobiles.honda.com/-/media/Honda-Automobiles/Vehicles/2025/accord-sedan/feature-blades/EXTERIOR--INTERIOR/Overview/MY25-accord-feat-blade-exterior-interior-overview-desktop-2x.jpg"));
-        sedanCars.add(createAndSaveCar("Altima", "Nissan", 2023, 420.0, false,
-                "https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/2024_Nissan_Altima_SR%2C_front_left%2C_05-05-2025.jpg/500px-2024_Nissan_Altima_SR%2C_front_left%2C_05-05-2025.jpg"));
-        sedanCars.add(createAndSaveCar("Sonata", "Hyundai", 2022, 410.0, true,
-                "https://s7d1.scene7.com/is/image/hyundai/2024-sonata-dn8-n-line-0362-gallery:16-9?wid=1440&hei=810&qlt=85,0&fmt=webp"));
-        carsByType.put("Sedan", sedanCars);
+        // Compact
+        CarType compact = CarTypeFactory.createCompact(0);
+        compact = carTypeService.create(compact);
+        PricingRule compactPricing = PricingRuleFactory.createCompactPricing(0, compact);
+        pricingRuleService.create(compactPricing);
+        carTypeMap.put("Compact", compact);
+        System.out.println("Created car type: Compact with pricing (R380/day)");
 
-        // SUV Cars
-        List<Car> suvCars = new ArrayList<>();
-        suvCars.add(createAndSaveCar("RAV4", "Toyota", 2023, 550.0, true,
-                "https://media.cdntoyota.co.za/toyotacms23/attachments/cklg63bdl00250qnqz8cc32r8-0101010203-exterior-2.desktop.jpg"));
-        suvCars.add(createAndSaveCar("CR-V", "Honda", 2022, 580.0, true,
-                "https://cdn.honda.co.za/main-03/general/crv-1-5t-executive-cvt/featured/CRV_Models.png"));
-        suvCars.add(createAndSaveCar("X5", "BMW", 2023, 850.0, true,
-                "https://images.unsplash.com/photo-1696294586764-6baffd088b71?q=80&w=627&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"));
-        suvCars.add(createAndSaveCar("Explorer", "Ford", 2022, 620.0, false,
-                "https://images.unsplash.com/photo-1672690536198-cf2ec44b73b6?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"));
-        suvCars.add(createAndSaveCar("Grand Cherokee", "Jeep", 2023, 650.0, true,
-                "https://images.unsplash.com/photo-1511527844068-006b95d162c2?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"));
-        carsByType.put("SUV", suvCars);
+        // Sedan
+        CarType sedan = CarTypeFactory.createSedan(0);
+        sedan = carTypeService.create(sedan);
+        PricingRule sedanPricing = PricingRuleFactory.createSedanPricing(0, sedan);
+        pricingRuleService.create(sedanPricing);
+        carTypeMap.put("Sedan", sedan);
+        System.out.println("Created car type: Sedan with pricing (R450/day)");
 
-        // Luxury Cars
-        List<Car> luxuryCars = new ArrayList<>();
-        luxuryCars.add(createAndSaveCar("S-Class", "Mercedes-Benz", 2023, 1200.0, true,
-                "https://images.unsplash.com/photo-1680446983373-853872fb667a?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"));
-        luxuryCars.add(createAndSaveCar("7 Series", "BMW", 2023, 1100.0, true,
-                "https://images.unsplash.com/photo-1523983388277-336a66bf9bcd?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"));
-        luxuryCars.add(createAndSaveCar("A8", "Audi", 2022, 1050.0, false,
-                "https://images.unsplash.com/photo-1540066019607-e5f69323a8dc?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"));
-        luxuryCars.add(createAndSaveCar("Continental", "Bentley", 2023, 2500.0, true,
-                "https://images.unsplash.com/photo-1637950634698-2e27e3d6f3db?q=80&w=786&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"));
-        carsByType.put("Luxury", luxuryCars);
+        // SUV
+        CarType suv = CarTypeFactory.createSUV(0);
+        suv = carTypeService.create(suv);
+        PricingRule suvPricing = PricingRuleFactory.createSUVPricing(0, suv);
+        pricingRuleService.create(suvPricing);
+        carTypeMap.put("SUV", suv);
+        System.out.println("Created car type: SUV with pricing (R600/day)");
 
-        // Sports Cars
-        List<Car> sportsCars = new ArrayList<>();
-        sportsCars.add(createAndSaveCar("911", "Porsche", 2023, 1500.0, true,
-                "https://images.unsplash.com/photo-1593353798398-6024b7444bb6?q=80&w=764&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"));
-        sportsCars.add(createAndSaveCar("Corvette", "Chevrolet", 2023, 900.0, true,
-                "https://images.unsplash.com/photo-1617255148661-afb26d4f933e?q=80&w=1740&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"));
-        sportsCars.add(createAndSaveCar("GT-R", "Nissan", 2022, 1100.0, false,
-                "https://images.unsplash.com/photo-1609964729554-a02fb2a04830?q=80&w=765&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"));
-        sportsCars.add(createAndSaveCar("Supra", "Toyota", 2023, 850.0, true,
-                "https://images.unsplash.com/photo-1603811478698-0b1d6256f79a?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"));
-        carsByType.put("Sports", sportsCars);
+        // Luxury
+        CarType luxury = CarTypeFactory.createLuxury(0);
+        luxury = carTypeService.create(luxury);
+        PricingRule luxuryPricing = PricingRuleFactory.createLuxuryPricing(0, luxury);
+        pricingRuleService.create(luxuryPricing);
+        carTypeMap.put("Luxury", luxury);
+        System.out.println("Created car type: Luxury with pricing (R1200/day)");
 
-        // Convertible Cars
-        List<Car> convertibleCars = new ArrayList<>();
-        convertibleCars.add(createAndSaveCar("Miata", "Mazda", 2023, 600.0, true,
-                "https://images.unsplash.com/photo-1603739297343-21e40a7e127d?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"));
-        convertibleCars.add(createAndSaveCar("Z4", "BMW", 2022, 950.0, true,
-                "https://images.unsplash.com/photo-1612610683796-3b7d3a65df3d?q=80&w=765&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"));
-        convertibleCars.add(createAndSaveCar("Mustang Convertible", "Ford", 2023, 700.0, true,
-                "https://images.unsplash.com/photo-1547744152-14d985cb937f?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"));
-        carsByType.put("Convertible", convertibleCars);
+        // Sports
+        CarType sports = CarTypeFactory.createSports(0);
+        sports = carTypeService.create(sports);
+        PricingRule sportsPricing = PricingRuleFactory.createSportsPricing(0, sports);
+        pricingRuleService.create(sportsPricing);
+        carTypeMap.put("Sports", sports);
+        System.out.println("Created car type: Sports with pricing (R1000/day)");
 
-        // Minivan Cars
-        List<Car> minivanCars = new ArrayList<>();
-        minivanCars.add(createAndSaveCar("Sienna", "Toyota", 2023, 580.0, true,
-                "https://images.unsplash.com/photo-1638618164682-12b986ec2a75?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"));
-        minivanCars.add(createAndSaveCar("Odyssey", "Honda", 2022, 560.0, true,
-                "https://images.unsplash.com/photo-1578659258511-4a4e7dee7344?q=80&w=1331&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"));
-        minivanCars.add(createAndSaveCar("Pacifica", "Chrysler", 2023, 590.0, false,
-                "https://www.chrysler.com/content/dam/fca-brands/na/chrysler/en_us/2026/pacifica/hybrid/overview/desktop/my26-chrysler-pacifica-hybrid-overview-hero-hybrid101-desktop.jpg"));
-        carsByType.put("Minivan", minivanCars);
+        // Convertible
+        CarType convertible = CarTypeFactory.createConvertible(0);
+        convertible = carTypeService.create(convertible);
+        PricingRule convertiblePricing = PricingRuleFactory.createConvertiblePricing(0, convertible);
+        pricingRuleService.create(convertiblePricing);
+        carTypeMap.put("Convertible", convertible);
+        System.out.println("Created car type: Convertible with pricing (R700/day)");
 
-        // Electric Cars
-        List<Car> electricCars = new ArrayList<>();
-        electricCars.add(createAndSaveCar("Model 3", "Tesla", 2023, 800.0, true,
-                "https://images.unsplash.com/photo-1585011664466-b7bbe92f34ef?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"));
-        electricCars.add(createAndSaveCar("Model Y", "Tesla", 2023, 900.0, true,
-                "https://images.unsplash.com/photo-1600661653561-629509216228?q=80&w=1169&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"));
-        electricCars.add(createAndSaveCar("ID.4", "Volkswagen", 2022, 650.0, true,
-                "https://images.unsplash.com/photo-1572811298797-9eecadf6cb24?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"));
-        carsByType.put("Electric", electricCars);
+        // Minivan
+        CarType minivan = CarTypeFactory.createMinivan(0);
+        minivan = carTypeService.create(minivan);
+        PricingRule minivanPricing = PricingRuleFactory.createMinivanPricing(0, minivan);
+        pricingRuleService.create(minivanPricing);
+        carTypeMap.put("Minivan", minivan);
+        System.out.println("Created car type: Minivan with pricing (R580/day)");
 
-        // Hybrid Cars
-        List<Car> hybridCars = new ArrayList<>();
-        hybridCars.add(createAndSaveCar("Prius", "Toyota", 2023, 400.0, true,
-                "https://images.unsplash.com/photo-1638618164682-12b986ec2a75?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"));
-        hybridCars.add(createAndSaveCar("Insight", "Honda", 2022, 380.0, true,
-                "https://upload.wikimedia.org/wikipedia/commons/e/e7/2019-2020_Honda_Insight_EX_1.5_6AA-ZE4_%2820220910%29.jpg"));
-        carsByType.put("Hybrid", hybridCars);
+        // Electric
+        CarType electric = CarTypeFactory.createElectric(0);
+        electric = carTypeService.create(electric);
+        PricingRule electricPricing = PricingRuleFactory.createElectricPricing(0, electric);
+        pricingRuleService.create(electricPricing);
+        carTypeMap.put("Electric", electric);
+        System.out.println("Created car type: Electric with pricing (R750/day)");
 
-        return carsByType;
+        // Hybrid
+        CarType hybrid = CarTypeFactory.createHybrid(0);
+        hybrid = carTypeService.create(hybrid);
+        PricingRule hybridPricing = PricingRuleFactory.createHybridPricing(0, hybrid);
+        pricingRuleService.create(hybridPricing);
+        carTypeMap.put("Hybrid", hybrid);
+        System.out.println("Created car type: Hybrid with pricing (R400/day)");
+
+        return carTypeMap;
     }
 
-    private Car createAndSaveCar(String model, String brand, int year, double rentalPrice,
-                                 boolean available, String imageUrl) {
-        // Note: Image URLs are kept for reference but not stored as we now use BLOB storage
-        // For initial data, you can later add logic to download and convert images to byte arrays
-        Car car = CarFactory.createBasicCar(
+    private void createCarsWithTypes(Map<String, CarType> carTypeMap) {
+        // Economy Cars
+        createCar("Corolla", "Toyota", 2022, carTypeMap.get("Economy"), CarStatus.AVAILABLE);
+        createCar("Sentra", "Nissan", 2022, carTypeMap.get("Economy"), CarStatus.AVAILABLE);
+        createCar("Elantra", "Hyundai", 2023, carTypeMap.get("Economy"), CarStatus.AVAILABLE);
+
+        // Compact Cars
+        createCar("Civic", "Honda", 2023, carTypeMap.get("Compact"), CarStatus.AVAILABLE);
+        createCar("Golf", "Volkswagen", 2023, carTypeMap.get("Compact"), CarStatus.AVAILABLE);
+        createCar("Mazda3", "Mazda", 2022, carTypeMap.get("Compact"), CarStatus.AVAILABLE);
+
+        // Sedan Cars
+        createCar("Camry", "Toyota", 2023, carTypeMap.get("Sedan"), CarStatus.AVAILABLE);
+        createCar("Accord", "Honda", 2022, carTypeMap.get("Sedan"), CarStatus.AVAILABLE);
+        createCar("Altima", "Nissan", 2023, carTypeMap.get("Sedan"), CarStatus.RENTED);
+        createCar("Sonata", "Hyundai", 2022, carTypeMap.get("Sedan"), CarStatus.AVAILABLE);
+
+        // SUV Cars
+        createCar("RAV4", "Toyota", 2023, carTypeMap.get("SUV"), CarStatus.AVAILABLE);
+        createCar("CR-V", "Honda", 2022, carTypeMap.get("SUV"), CarStatus.AVAILABLE);
+        createCar("X5", "BMW", 2023, carTypeMap.get("SUV"), CarStatus.AVAILABLE);
+        createCar("Explorer", "Ford", 2022, carTypeMap.get("SUV"), CarStatus.MAINTENANCE);
+        createCar("Grand Cherokee", "Jeep", 2023, carTypeMap.get("SUV"), CarStatus.AVAILABLE);
+
+        // Luxury Cars
+        createCar("S-Class", "Mercedes-Benz", 2023, carTypeMap.get("Luxury"), CarStatus.AVAILABLE);
+        createCar("7 Series", "BMW", 2023, carTypeMap.get("Luxury"), CarStatus.AVAILABLE);
+        createCar("A8", "Audi", 2022, carTypeMap.get("Luxury"), CarStatus.RESERVED);
+        createCar("Continental", "Bentley", 2023, carTypeMap.get("Luxury"), CarStatus.AVAILABLE);
+
+        // Sports Cars
+        createCar("911", "Porsche", 2023, carTypeMap.get("Sports"), CarStatus.AVAILABLE);
+        createCar("Corvette", "Chevrolet", 2023, carTypeMap.get("Sports"), CarStatus.AVAILABLE);
+        createCar("GT-R", "Nissan", 2022, carTypeMap.get("Sports"), CarStatus.RENTED);
+        createCar("Supra", "Toyota", 2023, carTypeMap.get("Sports"), CarStatus.AVAILABLE);
+
+        // Convertible Cars
+        createCar("Miata", "Mazda", 2023, carTypeMap.get("Convertible"), CarStatus.AVAILABLE);
+        createCar("Z4", "BMW", 2022, carTypeMap.get("Convertible"), CarStatus.AVAILABLE);
+        createCar("Mustang Convertible", "Ford", 2023, carTypeMap.get("Convertible"), CarStatus.AVAILABLE);
+
+        // Minivan Cars
+        createCar("Sienna", "Toyota", 2023, carTypeMap.get("Minivan"), CarStatus.AVAILABLE);
+        createCar("Odyssey", "Honda", 2022, carTypeMap.get("Minivan"), CarStatus.AVAILABLE);
+        createCar("Pacifica", "Chrysler", 2023, carTypeMap.get("Minivan"), CarStatus.OUT_OF_SERVICE);
+
+        // Electric Cars
+        createCar("Model 3", "Tesla", 2023, carTypeMap.get("Electric"), CarStatus.AVAILABLE);
+        createCar("Model Y", "Tesla", 2023, carTypeMap.get("Electric"), CarStatus.AVAILABLE);
+        createCar("ID.4", "Volkswagen", 2022, carTypeMap.get("Electric"), CarStatus.AVAILABLE);
+
+        // Hybrid Cars
+        createCar("Prius", "Toyota", 2023, carTypeMap.get("Hybrid"), CarStatus.AVAILABLE);
+        createCar("Insight", "Honda", 2022, carTypeMap.get("Hybrid"), CarStatus.AVAILABLE);
+    }
+
+    private void createCar(String model, String brand, int year, CarType carType, CarStatus status) {
+        String licensePlate = generateLicensePlate();
+        String vin = generateVIN(brand, year);
+        String color = COLORS[RANDOM.nextInt(COLORS.length)];
+        int mileage = generateMileage(year);
+        CarCondition condition = determineCondition(mileage);
+
+        Car car = CarFactory.createCompleteCar(
                 0, // ID will be auto-generated
                 model,
                 brand,
                 year,
-                rentalPrice
+                licensePlate,
+                vin,
+                color,
+                mileage,
+                status,
+                condition,
+                carType,
+                null // No location for now
         );
-        car.setAvailability(available);
-
-        // TODO: Optionally download image from imageUrl and convert to byte array
-        // For now, images can be uploaded via the API endpoints after initialization
 
         car = carService.create(car);
-        System.out.println("Created car: " + brand + " " + model + " (" + year + ") - R" + rentalPrice + "/day");
-        return car;
+        System.out.println("Created car: " + brand + " " + model + " (" + year + ") - " +
+                          licensePlate + " - " + color + " - Status: " + status);
     }
 
-    private void createCarTypesAndAssociate(Map<String, List<Car>> carsByType) {
-        // Create CarTypes and associate with the first car of each type
-        // Note: Due to the OneToOne relationship where CarType owns the foreign key,
-        // each CarType can only be associated with one car
+    private String generateLicensePlate() {
+        // South African format: ABC 123 GP (3 letters, 3 numbers, 2 letters)
+        String letters1 = randomLetters(3);
+        String numbers = String.format("%03d", licenseCounter++);
+        String letters2 = "GP"; // Gauteng Province
+        return letters1 + " " + numbers + " " + letters2;
+    }
 
-        if (!carsByType.get("Economy").isEmpty()) {
-            Car firstEconomyCar = carsByType.get("Economy").get(0);
-            CarType economy = CarTypeFactory.createEconomy(0);
-            carTypeService.create(economy);
+    private String generateVIN(String brand, int year) {
+        // Simplified VIN generation (17 characters)
+        String manufacturer = brand.substring(0, Math.min(3, brand.length())).toUpperCase();
+        String yearCode = String.valueOf(year).substring(2);
+        String random = String.format("%012d", RANDOM.nextInt(1000000000));
+        return manufacturer + yearCode + random;
+    }
 
-            // Update the car with its type
-            firstEconomyCar.setCarType(economy);
-            carService.update(firstEconomyCar);
+    private String randomLetters(int count) {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < count; i++) {
+            char c = (char) ('A' + RANDOM.nextInt(26));
+            sb.append(c);
         }
+        return sb.toString();
+    }
 
-        if (!carsByType.get("Sedan").isEmpty()) {
-            Car firstSedanCar = carsByType.get("Sedan").get(0);
-            CarType sedan = CarTypeFactory.createSedan(0);
-            carTypeService.create(sedan);
+    private int generateMileage(int year) {
+        int age = 2025 - year;
+        // Average 15,000 km per year with some variation
+        int baseMileage = age * 15000;
+        int variation = RANDOM.nextInt(10000) - 5000;
+        return Math.max(0, baseMileage + variation);
+    }
 
-            firstSedanCar.setCarType(sedan);
-            carService.update(firstSedanCar);
-        }
-
-        if (!carsByType.get("SUV").isEmpty()) {
-            Car firstSuvCar = carsByType.get("SUV").get(0);
-            CarType suv = CarTypeFactory.createSUV(0);
-            carTypeService.create(suv);
-
-            firstSuvCar.setCarType(suv);
-            carService.update(firstSuvCar);
-        }
-
-        if (!carsByType.get("Luxury").isEmpty()) {
-            Car firstLuxuryCar = carsByType.get("Luxury").get(0);
-            CarType luxury = CarTypeFactory.createLuxury(0);
-            carTypeService.create(luxury);
-
-            firstLuxuryCar.setCarType(luxury);
-            carService.update(firstLuxuryCar);
-        }
-
-        if (!carsByType.get("Sports").isEmpty()) {
-            Car firstSportsCar = carsByType.get("Sports").get(0);
-            CarType sports = CarTypeFactory.createSports(0);
-            carTypeService.create(sports);
-
-            firstSportsCar.setCarType(sports);
-            carService.update(firstSportsCar);
-        }
-
-        if (!carsByType.get("Convertible").isEmpty()) {
-            Car firstConvertibleCar = carsByType.get("Convertible").get(0);
-            CarType convertible = CarTypeFactory.createConvertible(0);
-            carTypeService.create(convertible);
-
-            firstConvertibleCar.setCarType(convertible);
-            carService.update(firstConvertibleCar);
-        }
-
-        if (!carsByType.get("Minivan").isEmpty()) {
-            Car firstMinivanCar = carsByType.get("Minivan").get(0);
-            CarType minivan = CarTypeFactory.createMinivan(0);
-            carTypeService.create(minivan);
-
-            firstMinivanCar.setCarType(minivan);
-            carService.update(firstMinivanCar);
-        }
-
-        if (!carsByType.get("Electric").isEmpty()) {
-            Car firstElectricCar = carsByType.get("Electric").get(0);
-            CarType electric = CarTypeFactory.createElectric(0);
-            carTypeService.create(electric);
-
-            firstElectricCar.setCarType(electric);
-            carService.update(firstElectricCar);
-        }
-
-        if (!carsByType.get("Hybrid").isEmpty()) {
-            Car firstHybridCar = carsByType.get("Hybrid").get(0);
-            CarType hybrid = CarTypeFactory.createHybrid(0);
-            carTypeService.create(hybrid);
-
-            firstHybridCar.setCarType(hybrid);
-            carService.update(firstHybridCar);
-        }
-
-        System.out.println("Created and associated car types");
+    private CarCondition determineCondition(int mileage) {
+        if (mileage < 20000) return CarCondition.EXCELLENT;
+        if (mileage < 50000) return CarCondition.GOOD;
+        if (mileage < 100000) return CarCondition.FAIR;
+        return CarCondition.NEEDS_SERVICE;
     }
 
     private void displaySummaryStatistics() {
         Set<Car> allCars = carService.getCars();
-        long availableCars = allCars.stream().filter(Car::isAvailability).count();
-        long unavailableCars = allCars.size() - availableCars;
+        long availableCars = allCars.stream()
+                .filter(car -> car.getStatus() == CarStatus.AVAILABLE)
+                .count();
+        long rentedCars = allCars.stream()
+                .filter(car -> car.getStatus() == CarStatus.RENTED)
+                .count();
+        long maintenanceCars = allCars.stream()
+                .filter(car -> car.getStatus() == CarStatus.MAINTENANCE)
+                .count();
 
         System.out.println("Summary Statistics:");
         System.out.println("- Total Cars: " + allCars.size());
         System.out.println("- Available Cars: " + availableCars);
-        System.out.println("- Unavailable Cars: " + unavailableCars);
+        System.out.println("- Rented Cars: " + rentedCars);
+        System.out.println("- In Maintenance: " + maintenanceCars);
 
         // Display cars by brand
         Map<String, Long> carsByBrand = new HashMap<>();

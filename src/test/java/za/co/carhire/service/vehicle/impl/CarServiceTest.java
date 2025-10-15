@@ -7,7 +7,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import za.co.carhire.domain.vehicle.Car;
+import za.co.carhire.domain.vehicle.CarCondition;
+import za.co.carhire.domain.vehicle.CarStatus;
 import za.co.carhire.domain.vehicle.CarType;
+import za.co.carhire.domain.vehicle.VehicleCategory;
 import za.co.carhire.repository.vehicle.ICarRepository;
 
 import java.util.*;
@@ -34,10 +37,14 @@ public class CarServiceTest {
     void setUp() {
         testCarType = new CarType.Builder()
                 .setCarTypeID(1)
-                .setType("Sedan")
-                .setFuelType("Petrol")
-                .setNumberOfWheels(4)
+                .setCategory(za.co.carhire.domain.vehicle.VehicleCategory.SEDAN)
+                .setFuelType(za.co.carhire.domain.vehicle.FuelType.PETROL)
+                .setTransmissionType(za.co.carhire.domain.vehicle.TransmissionType.AUTOMATIC)
                 .setNumberOfSeats(5)
+                .setNumberOfDoors(4)
+                .setAirConditioned(true)
+                .setLuggageCapacity(3)
+                .setDescription("Test sedan for unit tests")
                 .build();
 
         testCar = new Car.Builder()
@@ -45,8 +52,12 @@ public class CarServiceTest {
                 .setModel("Corolla")
                 .setBrand("Toyota")
                 .setYear(2022)
-                .setAvailability(true)
-                .setRentalPrice(500.0)
+                .setLicensePlate("ABC 123 GP")
+                .setVin("TOY22123456789012")
+                .setColor("White")
+                .setMileage(45000)
+                .setStatus(CarStatus.AVAILABLE)
+                .setCondition(CarCondition.GOOD)
                 .setImageData("test-image-data".getBytes())
                 .setImageName("image.jpg")
                 .setImageType("image/jpeg")
@@ -58,8 +69,12 @@ public class CarServiceTest {
                 .setModel("Civic")
                 .setBrand("Honda")
                 .setYear(2023)
-                .setAvailability(false)
-                .setRentalPrice(550.0)
+                .setLicensePlate("DEF 456 GP")
+                .setVin("HON23234567890123")
+                .setColor("Silver")
+                .setMileage(30000)
+                .setStatus(CarStatus.RENTED)
+                .setCondition(CarCondition.GOOD)
                 .build();
     }
 
@@ -127,7 +142,7 @@ public class CarServiceTest {
 
         assertNotNull(foundCar);
         assertNotNull(foundCar.getCarType());
-        assertEquals("Sedan", foundCar.getCarType().getType());
+        assertEquals(VehicleCategory.SEDAN, foundCar.getCarType().getCategory());
         verify(carRepository, times(1)).findById(1);
     }
 
@@ -239,14 +254,14 @@ public class CarServiceTest {
 
         assertNotNull(availableCars);
         assertEquals(1, availableCars.size());
-        assertTrue(availableCars.get(0).isAvailability());
+        assertEquals(CarStatus.AVAILABLE, availableCars.get(0).getStatus());
         assertEquals("Corolla", availableCars.get(0).getModel());
         verify(carRepository, times(1)).findAll();
     }
 
     @Test
     void testGetAvailableCarsNoneAvailable() {
-        testCar.setAvailability(false);
+        testCar.setStatus(CarStatus.RENTED);
         List<Car> allCars = Arrays.asList(testCar, testCar2);
         when(carRepository.findAll()).thenReturn(allCars);
 
@@ -258,23 +273,23 @@ public class CarServiceTest {
     }
 
     @Test
-    void testUpdateAvailabilitySuccess() {
+    void testUpdateStatusSuccess() {
         when(carRepository.findById(1)).thenReturn(Optional.of(testCar));
         when(carRepository.save(any(Car.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
-        Car updatedCar = carService.updateAvailability(1, false);
+        Car updatedCar = carService.updateStatus(1, CarStatus.MAINTENANCE);
 
         assertNotNull(updatedCar);
-        assertFalse(updatedCar.isAvailability());
+        assertEquals(CarStatus.MAINTENANCE, updatedCar.getStatus());
         verify(carRepository, times(1)).findById(1);
         verify(carRepository, times(1)).save(any(Car.class));
     }
 
     @Test
-    void testUpdateAvailabilityCarNotFound() {
+    void testUpdateStatusCarNotFound() {
         when(carRepository.findById(999)).thenReturn(Optional.empty());
 
-        Car updatedCar = carService.updateAvailability(999, false);
+        Car updatedCar = carService.updateStatus(999, CarStatus.MAINTENANCE);
 
         assertNull(updatedCar);
         verify(carRepository, times(1)).findById(999);
@@ -282,40 +297,82 @@ public class CarServiceTest {
     }
 
     @Test
-    void testGetCarsByPriceRange() {
+    void testGetCarsByStatus() {
         List<Car> allCars = Arrays.asList(testCar, testCar2);
         when(carRepository.findAll()).thenReturn(allCars);
 
-        List<Car> carsInRange = carService.getCarsByPriceRange(450.0, 520.0);
+        List<Car> availableCars = carService.getCarsByStatus(CarStatus.AVAILABLE);
 
-        assertNotNull(carsInRange);
-        assertEquals(1, carsInRange.size());
-        assertEquals(500.0, carsInRange.get(0).getRentalPrice());
+        assertNotNull(availableCars);
+        assertEquals(1, availableCars.size());
+        assertEquals(CarStatus.AVAILABLE, availableCars.get(0).getStatus());
         verify(carRepository, times(1)).findAll();
     }
 
     @Test
-    void testGetCarsByPriceRangeInclusive() {
-        List<Car> allCars = Arrays.asList(testCar, testCar2);
-        when(carRepository.findAll()).thenReturn(allCars);
+    void testUpdateMileageSuccess() {
+        when(carRepository.findById(1)).thenReturn(Optional.of(testCar));
+        when(carRepository.save(any(Car.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
-        List<Car> carsInRange = carService.getCarsByPriceRange(500.0, 550.0);
+        Car updatedCar = carService.updateMileage(1, 50000);
 
-        assertNotNull(carsInRange);
-        assertEquals(2, carsInRange.size());
-        verify(carRepository, times(1)).findAll();
+        assertNotNull(updatedCar);
+        assertEquals(50000, updatedCar.getMileage());
+        verify(carRepository, times(1)).findById(1);
+        verify(carRepository, times(1)).save(any(Car.class));
     }
 
     @Test
-    void testGetCarsByPriceRangeNoneFound() {
-        List<Car> allCars = Arrays.asList(testCar, testCar2);
-        when(carRepository.findAll()).thenReturn(allCars);
+    void testUpdateMileageCarNotFound() {
+        when(carRepository.findById(999)).thenReturn(Optional.empty());
 
-        List<Car> carsInRange = carService.getCarsByPriceRange(600.0, 700.0);
+        Car updatedCar = carService.updateMileage(999, 50000);
 
-        assertNotNull(carsInRange);
-        assertTrue(carsInRange.isEmpty());
-        verify(carRepository, times(1)).findAll();
+        assertNull(updatedCar);
+        verify(carRepository, times(1)).findById(999);
+        verify(carRepository, never()).save(any(Car.class));
+    }
+
+    @Test
+    void testGetCarByLicensePlate() {
+        when(carRepository.findByLicensePlate("ABC 123 GP")).thenReturn(Optional.of(testCar));
+
+        Car foundCar = carService.getCarByLicensePlate("ABC 123 GP");
+
+        assertNotNull(foundCar);
+        assertEquals("ABC 123 GP", foundCar.getLicensePlate());
+        verify(carRepository, times(1)).findByLicensePlate("ABC 123 GP");
+    }
+
+    @Test
+    void testGetCarByLicensePlateNotFound() {
+        when(carRepository.findByLicensePlate("XYZ 999 GP")).thenReturn(Optional.empty());
+
+        Car foundCar = carService.getCarByLicensePlate("XYZ 999 GP");
+
+        assertNull(foundCar);
+        verify(carRepository, times(1)).findByLicensePlate("XYZ 999 GP");
+    }
+
+    @Test
+    void testGetCarByVin() {
+        when(carRepository.findByVin("TOY22123456789012")).thenReturn(Optional.of(testCar));
+
+        Car foundCar = carService.getCarByVin("TOY22123456789012");
+
+        assertNotNull(foundCar);
+        assertEquals("TOY22123456789012", foundCar.getVin());
+        verify(carRepository, times(1)).findByVin("TOY22123456789012");
+    }
+
+    @Test
+    void testGetCarByVinNotFound() {
+        when(carRepository.findByVin("INVALID123456789")).thenReturn(Optional.empty());
+
+        Car foundCar = carService.getCarByVin("INVALID123456789");
+
+        assertNull(foundCar);
+        verify(carRepository, times(1)).findByVin("INVALID123456789");
     }
 
     @Test
@@ -387,8 +444,12 @@ public class CarServiceTest {
                 .setModel("Altima")
                 .setBrand("Nissan")
                 .setYear(2024)
-                .setAvailability(true)
-                .setRentalPrice(600.0)
+                .setLicensePlate("GHI 789 GP")
+                .setVin("NIS24345678901234")
+                .setColor("Blue")
+                .setMileage(15000)
+                .setStatus(CarStatus.AVAILABLE)
+                .setCondition(CarCondition.EXCELLENT)
                 .setImageData("altima-image-data".getBytes())
                 .setImageName("altima.jpg")
                 .setImageType("image/jpeg")
@@ -404,6 +465,8 @@ public class CarServiceTest {
         assertEquals("altima.jpg", createdCar.getImageName());
         assertEquals("image/jpeg", createdCar.getImageType());
         assertNotNull(createdCar.getImageData());
+        assertEquals("GHI 789 GP", createdCar.getLicensePlate());
+        assertEquals(15000, createdCar.getMileage());
         assertEquals(testCarType, createdCar.getCarType());
         verify(carRepository, times(1)).save(fullCar);
     }
@@ -417,8 +480,8 @@ public class CarServiceTest {
         Car updatedData = new Car.Builder()
                 .copy(originalCar)
                 .setModel("Updated Model")
-                .setRentalPrice(750.0)
-                .setAvailability(false)
+                .setMileage(55000)
+                .setStatus(CarStatus.MAINTENANCE)
                 .build();
 
         when(carRepository.existsById(1)).thenReturn(true);
@@ -428,8 +491,8 @@ public class CarServiceTest {
 
         assertNotNull(updatedCar);
         assertEquals("Updated Model", updatedCar.getModel());
-        assertEquals(750.0, updatedCar.getRentalPrice());
-        assertFalse(updatedCar.isAvailability());
+        assertEquals(55000, updatedCar.getMileage());
+        assertEquals(CarStatus.MAINTENANCE, updatedCar.getStatus());
         verify(carRepository, times(1)).save(updatedData);
     }
 }

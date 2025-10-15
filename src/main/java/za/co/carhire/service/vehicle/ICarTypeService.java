@@ -1,6 +1,7 @@
 package za.co.carhire.service.vehicle;
 
 import za.co.carhire.domain.vehicle.CarType;
+import za.co.carhire.domain.vehicle.FuelType;
 import za.co.carhire.service.IService;
 
 /*
@@ -15,7 +16,7 @@ public interface ICarTypeService extends IService <CarType, Integer> {
 
     Set<CarType> getCarTypes();
 
-    List<CarType> getCarTypesByFuelType(String fuelType);
+    List<CarType> getCarTypesByFuelType(FuelType fuelType);
 
     CarType create(CarType carType);
     CarType read(int carTypeID);

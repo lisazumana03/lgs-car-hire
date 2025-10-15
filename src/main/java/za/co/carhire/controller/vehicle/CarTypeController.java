@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import za.co.carhire.domain.vehicle.CarType;
+import za.co.carhire.domain.vehicle.FuelType;
 import za.co.carhire.dto.vehicle.CarTypeDTO;
 import za.co.carhire.mapper.vehicle.CarTypeMapper;
 import za.co.carhire.service.vehicle.ICarTypeService;
@@ -73,10 +74,15 @@ public class CarTypeController {
 
     @GetMapping("/fuel/{fuelType}")
     public ResponseEntity<List<CarTypeDTO>> getByFuelType(@PathVariable String fuelType) {
-        List<CarType> carTypes = carTypeService.getCarTypesByFuelType(fuelType);
-        List<CarTypeDTO> carTypeDtos = carTypes.stream()
-                .map(CarTypeMapper::toDTO)
-                .collect(Collectors.toList());
-        return new ResponseEntity<>(carTypeDtos, HttpStatus.OK);
+        try {
+            FuelType fuelTypeEnum = FuelType.valueOf(fuelType.toUpperCase());
+            List<CarType> carTypes = carTypeService.getCarTypesByFuelType(fuelTypeEnum);
+            List<CarTypeDTO> carTypeDtos = carTypes.stream()
+                    .map(CarTypeMapper::toDTO)
+                    .collect(Collectors.toList());
+            return new ResponseEntity<>(carTypeDtos, HttpStatus.OK);
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
     }
 }

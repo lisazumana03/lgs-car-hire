@@ -7,6 +7,7 @@ import java.io.Serializable;
  * Author: Imtiyaaz Waggie 219374759
  * Date: 28/08/2025
  * Updated: 31/08/2025 - Added image URL support
+ * Updated: 15/10/2025 - Refactored to match improved Car entity
  */
 public class CarDTO implements Serializable {
 
@@ -14,47 +15,40 @@ public class CarDTO implements Serializable {
     private String model;
     private String brand;
     private int year;
-    private boolean availability;
-    private double rentalPrice;
+    private String licensePlate;
+    private String vin;
+    private String color;
+    private int mileage;
+    private String status;
+    private String condition;
+    private Integer currentLocationID;
+    private String currentLocationName;
     private byte[] imageData;
     private String imageBase64;
     private String imageName;
     private String imageType;
 
     private Integer carTypeID;
-    private String carTypeName;
+    private String carTypeCategory;
     private String carTypeFuelType;
-    private Integer carTypeNumberOfWheels;
+    private String carTypeTransmissionType;
     private Integer carTypeNumberOfSeats;
+    private Integer carTypeNumberOfDoors;
+    private Boolean carTypeAirConditioned;
+    private Integer carTypeLuggageCapacity;
+    private String carTypeDescription;
 
     public CarDTO() {
     }
 
     public CarDTO(int carID, String model, String brand, int year,
-            boolean availability, double rentalPrice) {
+            String licensePlate, String status) {
         this.carID = carID;
         this.model = model;
         this.brand = brand;
         this.year = year;
-        this.availability = availability;
-        this.rentalPrice = rentalPrice;
-    }
-
-    public CarDTO(int carID, String model, String brand, int year,
-            boolean availability, double rentalPrice, String imageBase64,
-            String imageName, String imageType,
-            Integer carTypeID, String carTypeName) {
-        this.carID = carID;
-        this.model = model;
-        this.brand = brand;
-        this.year = year;
-        this.availability = availability;
-        this.rentalPrice = rentalPrice;
-        this.imageBase64 = imageBase64;
-        this.imageName = imageName;
-        this.imageType = imageType;
-        this.carTypeID = carTypeID;
-        this.carTypeName = carTypeName;
+        this.licensePlate = licensePlate;
+        this.status = status;
     }
 
     public static class Builder {
@@ -62,17 +56,27 @@ public class CarDTO implements Serializable {
         private String model;
         private String brand;
         private int year;
-        private boolean availability;
-        private double rentalPrice;
+        private String licensePlate;
+        private String vin;
+        private String color;
+        private int mileage;
+        private String status;
+        private String condition;
+        private Integer currentLocationID;
+        private String currentLocationName;
         private byte[] imageData;
         private String imageBase64;
         private String imageName;
         private String imageType;
         private Integer carTypeID;
-        private String carTypeName;
+        private String carTypeCategory;
         private String carTypeFuelType;
-        private Integer carTypeNumberOfWheels;
+        private String carTypeTransmissionType;
         private Integer carTypeNumberOfSeats;
+        private Integer carTypeNumberOfDoors;
+        private Boolean carTypeAirConditioned;
+        private Integer carTypeLuggageCapacity;
+        private String carTypeDescription;
 
         public Builder setCarID(int carID) {
             this.carID = carID;
@@ -94,13 +98,43 @@ public class CarDTO implements Serializable {
             return this;
         }
 
-        public Builder setAvailability(boolean availability) {
-            this.availability = availability;
+        public Builder setLicensePlate(String licensePlate) {
+            this.licensePlate = licensePlate;
             return this;
         }
 
-        public Builder setRentalPrice(double rentalPrice) {
-            this.rentalPrice = rentalPrice;
+        public Builder setVin(String vin) {
+            this.vin = vin;
+            return this;
+        }
+
+        public Builder setColor(String color) {
+            this.color = color;
+            return this;
+        }
+
+        public Builder setMileage(int mileage) {
+            this.mileage = mileage;
+            return this;
+        }
+
+        public Builder setStatus(String status) {
+            this.status = status;
+            return this;
+        }
+
+        public Builder setCondition(String condition) {
+            this.condition = condition;
+            return this;
+        }
+
+        public Builder setCurrentLocationID(Integer currentLocationID) {
+            this.currentLocationID = currentLocationID;
+            return this;
+        }
+
+        public Builder setCurrentLocationName(String currentLocationName) {
+            this.currentLocationName = currentLocationName;
             return this;
         }
 
@@ -129,8 +163,8 @@ public class CarDTO implements Serializable {
             return this;
         }
 
-        public Builder setCarTypeName(String carTypeName) {
-            this.carTypeName = carTypeName;
+        public Builder setCarTypeCategory(String carTypeCategory) {
+            this.carTypeCategory = carTypeCategory;
             return this;
         }
 
@@ -139,13 +173,33 @@ public class CarDTO implements Serializable {
             return this;
         }
 
-        public Builder setCarTypeNumberOfWheels(Integer carTypeNumberOfWheels) {
-            this.carTypeNumberOfWheels = carTypeNumberOfWheels;
+        public Builder setCarTypeTransmissionType(String carTypeTransmissionType) {
+            this.carTypeTransmissionType = carTypeTransmissionType;
             return this;
         }
 
         public Builder setCarTypeNumberOfSeats(Integer carTypeNumberOfSeats) {
             this.carTypeNumberOfSeats = carTypeNumberOfSeats;
+            return this;
+        }
+
+        public Builder setCarTypeNumberOfDoors(Integer carTypeNumberOfDoors) {
+            this.carTypeNumberOfDoors = carTypeNumberOfDoors;
+            return this;
+        }
+
+        public Builder setCarTypeAirConditioned(Boolean carTypeAirConditioned) {
+            this.carTypeAirConditioned = carTypeAirConditioned;
+            return this;
+        }
+
+        public Builder setCarTypeLuggageCapacity(Integer carTypeLuggageCapacity) {
+            this.carTypeLuggageCapacity = carTypeLuggageCapacity;
+            return this;
+        }
+
+        public Builder setCarTypeDescription(String carTypeDescription) {
+            this.carTypeDescription = carTypeDescription;
             return this;
         }
 
@@ -155,17 +209,27 @@ public class CarDTO implements Serializable {
             dto.model = this.model;
             dto.brand = this.brand;
             dto.year = this.year;
-            dto.availability = this.availability;
-            dto.rentalPrice = this.rentalPrice;
+            dto.licensePlate = this.licensePlate;
+            dto.vin = this.vin;
+            dto.color = this.color;
+            dto.mileage = this.mileage;
+            dto.status = this.status;
+            dto.condition = this.condition;
+            dto.currentLocationID = this.currentLocationID;
+            dto.currentLocationName = this.currentLocationName;
             dto.imageData = this.imageData;
             dto.imageBase64 = this.imageBase64;
             dto.imageName = this.imageName;
             dto.imageType = this.imageType;
             dto.carTypeID = this.carTypeID;
-            dto.carTypeName = this.carTypeName;
+            dto.carTypeCategory = this.carTypeCategory;
             dto.carTypeFuelType = this.carTypeFuelType;
-            dto.carTypeNumberOfWheels = this.carTypeNumberOfWheels;
+            dto.carTypeTransmissionType = this.carTypeTransmissionType;
             dto.carTypeNumberOfSeats = this.carTypeNumberOfSeats;
+            dto.carTypeNumberOfDoors = this.carTypeNumberOfDoors;
+            dto.carTypeAirConditioned = this.carTypeAirConditioned;
+            dto.carTypeLuggageCapacity = this.carTypeLuggageCapacity;
+            dto.carTypeDescription = this.carTypeDescription;
             return dto;
         }
     }
@@ -202,20 +266,68 @@ public class CarDTO implements Serializable {
         this.year = year;
     }
 
-    public boolean isAvailability() {
-        return availability;
+    public String getLicensePlate() {
+        return licensePlate;
     }
 
-    public void setAvailability(boolean availability) {
-        this.availability = availability;
+    public void setLicensePlate(String licensePlate) {
+        this.licensePlate = licensePlate;
     }
 
-    public double getRentalPrice() {
-        return rentalPrice;
+    public String getVin() {
+        return vin;
     }
 
-    public void setRentalPrice(double rentalPrice) {
-        this.rentalPrice = rentalPrice;
+    public void setVin(String vin) {
+        this.vin = vin;
+    }
+
+    public String getColor() {
+        return color;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
+    }
+
+    public int getMileage() {
+        return mileage;
+    }
+
+    public void setMileage(int mileage) {
+        this.mileage = mileage;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public String getCondition() {
+        return condition;
+    }
+
+    public void setCondition(String condition) {
+        this.condition = condition;
+    }
+
+    public Integer getCurrentLocationID() {
+        return currentLocationID;
+    }
+
+    public void setCurrentLocationID(Integer currentLocationID) {
+        this.currentLocationID = currentLocationID;
+    }
+
+    public String getCurrentLocationName() {
+        return currentLocationName;
+    }
+
+    public void setCurrentLocationName(String currentLocationName) {
+        this.currentLocationName = currentLocationName;
     }
 
     public byte[] getImageData() {
@@ -258,12 +370,12 @@ public class CarDTO implements Serializable {
         this.carTypeID = carTypeID;
     }
 
-    public String getCarTypeName() {
-        return carTypeName;
+    public String getCarTypeCategory() {
+        return carTypeCategory;
     }
 
-    public void setCarTypeName(String carTypeName) {
-        this.carTypeName = carTypeName;
+    public void setCarTypeCategory(String carTypeCategory) {
+        this.carTypeCategory = carTypeCategory;
     }
 
     public String getCarTypeFuelType() {
@@ -274,12 +386,12 @@ public class CarDTO implements Serializable {
         this.carTypeFuelType = carTypeFuelType;
     }
 
-    public Integer getCarTypeNumberOfWheels() {
-        return carTypeNumberOfWheels;
+    public String getCarTypeTransmissionType() {
+        return carTypeTransmissionType;
     }
 
-    public void setCarTypeNumberOfWheels(Integer carTypeNumberOfWheels) {
-        this.carTypeNumberOfWheels = carTypeNumberOfWheels;
+    public void setCarTypeTransmissionType(String carTypeTransmissionType) {
+        this.carTypeTransmissionType = carTypeTransmissionType;
     }
 
     public Integer getCarTypeNumberOfSeats() {
@@ -290,6 +402,38 @@ public class CarDTO implements Serializable {
         this.carTypeNumberOfSeats = carTypeNumberOfSeats;
     }
 
+    public Integer getCarTypeNumberOfDoors() {
+        return carTypeNumberOfDoors;
+    }
+
+    public void setCarTypeNumberOfDoors(Integer carTypeNumberOfDoors) {
+        this.carTypeNumberOfDoors = carTypeNumberOfDoors;
+    }
+
+    public Boolean getCarTypeAirConditioned() {
+        return carTypeAirConditioned;
+    }
+
+    public void setCarTypeAirConditioned(Boolean carTypeAirConditioned) {
+        this.carTypeAirConditioned = carTypeAirConditioned;
+    }
+
+    public Integer getCarTypeLuggageCapacity() {
+        return carTypeLuggageCapacity;
+    }
+
+    public void setCarTypeLuggageCapacity(Integer carTypeLuggageCapacity) {
+        this.carTypeLuggageCapacity = carTypeLuggageCapacity;
+    }
+
+    public String getCarTypeDescription() {
+        return carTypeDescription;
+    }
+
+    public void setCarTypeDescription(String carTypeDescription) {
+        this.carTypeDescription = carTypeDescription;
+    }
+
     @Override
     public String toString() {
         return "CarDTO{" +
@@ -297,15 +441,25 @@ public class CarDTO implements Serializable {
                 ", model='" + model + '\'' +
                 ", brand='" + brand + '\'' +
                 ", year=" + year +
-                ", availability=" + availability +
-                ", rentalPrice=" + rentalPrice +
+                ", licensePlate='" + licensePlate + '\'' +
+                ", vin='" + vin + '\'' +
+                ", color='" + color + '\'' +
+                ", mileage=" + mileage +
+                ", status='" + status + '\'' +
+                ", condition='" + condition + '\'' +
+                ", currentLocationID=" + currentLocationID +
+                ", currentLocationName='" + currentLocationName + '\'' +
                 ", imageName='" + imageName + '\'' +
                 ", imageType='" + imageType + '\'' +
                 ", carTypeID=" + carTypeID +
-                ", carTypeName='" + carTypeName + '\'' +
+                ", carTypeCategory='" + carTypeCategory + '\'' +
                 ", carTypeFuelType='" + carTypeFuelType + '\'' +
-                ", carTypeNumberOfWheels=" + carTypeNumberOfWheels +
+                ", carTypeTransmissionType='" + carTypeTransmissionType + '\'' +
                 ", carTypeNumberOfSeats=" + carTypeNumberOfSeats +
+                ", carTypeNumberOfDoors=" + carTypeNumberOfDoors +
+                ", carTypeAirConditioned=" + carTypeAirConditioned +
+                ", carTypeLuggageCapacity=" + carTypeLuggageCapacity +
+                ", carTypeDescription='" + carTypeDescription + '\'' +
                 '}';
     }
 }

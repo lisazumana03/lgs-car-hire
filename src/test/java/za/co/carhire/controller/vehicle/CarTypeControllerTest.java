@@ -12,8 +12,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Primary;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import za.co.carhire.domain.vehicle.Car;
-import za.co.carhire.domain.vehicle.CarType;
+import za.co.carhire.domain.vehicle.*;
 import za.co.carhire.dto.vehicle.CarTypeDTO;
 import za.co.carhire.service.vehicle.ICarTypeService;
 
@@ -61,24 +60,33 @@ public class CarTypeControllerTest {
                 .setModel("Corolla")
                 .setBrand("Toyota")
                 .setYear(2022)
-                .setAvailability(true)
-                .setRentalPrice(500.0)
+                .setLicensePlate("ABC 123 GP")
+                .setStatus(CarStatus.AVAILABLE)
+                .setCondition(CarCondition.GOOD)
                 .build();
 
         testCarType = new CarType.Builder()
                 .setCarTypeID(1)
-                .setType("Sedan")
-                .setFuelType("Petrol")
-                .setNumberOfWheels(4)
+                .setCategory(VehicleCategory.SEDAN)
+                .setFuelType(FuelType.PETROL)
+                .setTransmissionType(TransmissionType.AUTOMATIC)
                 .setNumberOfSeats(5)
+                .setNumberOfDoors(4)
+                .setAirConditioned(true)
+                .setLuggageCapacity(3)
+                .setDescription("Comfortable mid-size sedan")
                 .build();
 
         testCarTypeDTO = new CarTypeDTO.Builder()
                 .setCarTypeID(1)
-                .setType("Sedan")
-                .setFuelType("Petrol")
-                .setNumberOfWheels(4)
+                .setCategory("SEDAN")
+                .setFuelType("PETROL")
+                .setTransmissionType("AUTOMATIC")
                 .setNumberOfSeats(5)
+                .setNumberOfDoors(4)
+                .setAirConditioned(true)
+                .setLuggageCapacity(3)
+                .setDescription("Comfortable mid-size sedan")
                 .setCarID(1)
                 .setCarBrandModel("Toyota Corolla")
                 .build();
@@ -93,10 +101,11 @@ public class CarTypeControllerTest {
                         .content(objectMapper.writeValueAsString(testCarTypeDTO)))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.carTypeID").value(1))
-                .andExpect(jsonPath("$.type").value("Sedan"))
-                .andExpect(jsonPath("$.fuelType").value("Petrol"))
-                .andExpect(jsonPath("$.numberOfWheels").value(4))
-                .andExpect(jsonPath("$.numberOfSeats").value(5));
+                .andExpect(jsonPath("$.category").value("SEDAN"))
+                .andExpect(jsonPath("$.fuelType").value("PETROL"))
+                .andExpect(jsonPath("$.transmissionType").value("AUTOMATIC"))
+                .andExpect(jsonPath("$.numberOfSeats").value(5))
+                .andExpect(jsonPath("$.numberOfDoors").value(4));
 
         verify(carTypeService, times(1)).create(any(CarType.class));
     }
@@ -108,8 +117,8 @@ public class CarTypeControllerTest {
         mockMvc.perform(get("/api/cartype/read/1"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.carTypeID").value(1))
-                .andExpect(jsonPath("$.type").value("Sedan"))
-                .andExpect(jsonPath("$.fuelType").value("Petrol"));
+                .andExpect(jsonPath("$.category").value("SEDAN"))
+                .andExpect(jsonPath("$.fuelType").value("PETROL"));
 
         verify(carTypeService, times(1)).read(1);
     }
@@ -126,13 +135,17 @@ public class CarTypeControllerTest {
 
     @Test
     void testUpdateCarType_Success() throws Exception {
-        testCarTypeDTO.setType("SUV");
+        testCarTypeDTO.setCategory("SUV");
         CarType updatedCarType = new CarType.Builder()
                 .setCarTypeID(1)
-                .setType("SUV")
-                .setFuelType("Petrol")
-                .setNumberOfWheels(4)
-                .setNumberOfSeats(5)
+                .setCategory(VehicleCategory.SUV)
+                .setFuelType(FuelType.PETROL)
+                .setTransmissionType(TransmissionType.AUTOMATIC)
+                .setNumberOfSeats(7)
+                .setNumberOfDoors(5)
+                .setAirConditioned(true)
+                .setLuggageCapacity(5)
+                .setDescription("Spacious SUV")
                 .build();
 
         when(carTypeService.read(1)).thenReturn(testCarType);
@@ -142,7 +155,7 @@ public class CarTypeControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(testCarTypeDTO)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.type").value("SUV"));
+                .andExpect(jsonPath("$.category").value("SUV"));
 
         verify(carTypeService, times(1)).read(1);
         verify(carTypeService, times(1)).update(any(CarType.class));
@@ -179,10 +192,14 @@ public class CarTypeControllerTest {
 
         CarType suvType = new CarType.Builder()
                 .setCarTypeID(2)
-                .setType("SUV")
-                .setFuelType("Diesel")
-                .setNumberOfWheels(4)
+                .setCategory(VehicleCategory.SUV)
+                .setFuelType(FuelType.DIESEL)
+                .setTransmissionType(TransmissionType.AUTOMATIC)
                 .setNumberOfSeats(7)
+                .setNumberOfDoors(5)
+                .setAirConditioned(true)
+                .setLuggageCapacity(5)
+                .setDescription("Spacious SUV")
                 .build();
         carTypes.add(suvType);
 
@@ -199,72 +216,87 @@ public class CarTypeControllerTest {
     @Test
     void testGetCarTypesByFuelType() throws Exception {
         List<CarType> petrolTypes = Arrays.asList(testCarType);
-        when(carTypeService.getCarTypesByFuelType("Petrol")).thenReturn(petrolTypes);
+        when(carTypeService.getCarTypesByFuelType(FuelType.PETROL)).thenReturn(petrolTypes);
 
-        mockMvc.perform(get("/api/cartype/fuel/Petrol"))
+        mockMvc.perform(get("/api/cartype/fuel/PETROL"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(1)))
-                .andExpect(jsonPath("$[0].fuelType").value("Petrol"));
+                .andExpect(jsonPath("$[0].fuelType").value("PETROL"));
 
-        verify(carTypeService, times(1)).getCarTypesByFuelType("Petrol");
+        verify(carTypeService, times(1)).getCarTypesByFuelType(FuelType.PETROL);
     }
 
     @Test
     void testGetCarTypesByFuelType_EmptyResult() throws Exception {
-        when(carTypeService.getCarTypesByFuelType("Hydrogen")).thenReturn(new ArrayList<>());
+        when(carTypeService.getCarTypesByFuelType(FuelType.CNG)).thenReturn(new ArrayList<>());
 
-        mockMvc.perform(get("/api/cartype/fuel/Hydrogen"))
+        mockMvc.perform(get("/api/cartype/fuel/CNG"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(0)));
 
-        verify(carTypeService, times(1)).getCarTypesByFuelType("Hydrogen");
+        verify(carTypeService, times(1)).getCarTypesByFuelType(FuelType.CNG);
     }
 
     @Test
     void testGetCarTypesByFuelType_MultipleResults() throws Exception {
         CarType electricType = new CarType.Builder()
                 .setCarTypeID(2)
-                .setType("Electric")
-                .setFuelType("Electric")
-                .setNumberOfWheels(4)
+                .setCategory(VehicleCategory.ELECTRIC)
+                .setFuelType(FuelType.ELECTRIC)
+                .setTransmissionType(TransmissionType.AUTOMATIC)
                 .setNumberOfSeats(5)
+                .setNumberOfDoors(4)
+                .setAirConditioned(true)
+                .setLuggageCapacity(3)
+                .setDescription("Electric vehicle")
                 .build();
 
         CarType hybridElectric = new CarType.Builder()
                 .setCarTypeID(3)
-                .setType("Hybrid")
-                .setFuelType("Electric")
-                .setNumberOfWheels(4)
+                .setCategory(VehicleCategory.HYBRID)
+                .setFuelType(FuelType.HYBRID)
+                .setTransmissionType(TransmissionType.CVT)
                 .setNumberOfSeats(5)
+                .setNumberOfDoors(4)
+                .setAirConditioned(true)
+                .setLuggageCapacity(3)
+                .setDescription("Hybrid vehicle")
                 .build();
 
         List<CarType> electricTypes = Arrays.asList(electricType, hybridElectric);
-        when(carTypeService.getCarTypesByFuelType("Electric")).thenReturn(electricTypes);
+        when(carTypeService.getCarTypesByFuelType(FuelType.ELECTRIC)).thenReturn(electricTypes);
 
-        mockMvc.perform(get("/api/cartype/fuel/Electric"))
+        mockMvc.perform(get("/api/cartype/fuel/ELECTRIC"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$", hasSize(2)))
-                .andExpect(jsonPath("$[*].fuelType", everyItem(equalTo("Electric"))));
+                .andExpect(jsonPath("$", hasSize(2)));
 
-        verify(carTypeService, times(1)).getCarTypesByFuelType("Electric");
+        verify(carTypeService, times(1)).getCarTypesByFuelType(FuelType.ELECTRIC);
     }
 
     @Test
     void testCreateCarType_WithoutCar() throws Exception {
         CarType simpleCarType = new CarType.Builder()
                 .setCarTypeID(10)
-                .setType("Compact")
-                .setFuelType("Hybrid")
-                .setNumberOfWheels(4)
+                .setCategory(VehicleCategory.COMPACT)
+                .setFuelType(FuelType.HYBRID)
+                .setTransmissionType(TransmissionType.AUTOMATIC)
                 .setNumberOfSeats(4)
+                .setNumberOfDoors(4)
+                .setAirConditioned(true)
+                .setLuggageCapacity(2)
+                .setDescription("Compact hybrid")
                 .build();
 
         CarTypeDTO simpleDTO = new CarTypeDTO.Builder()
                 .setCarTypeID(10)
-                .setType("Compact")
-                .setFuelType("Hybrid")
-                .setNumberOfWheels(4)
+                .setCategory("COMPACT")
+                .setFuelType("HYBRID")
+                .setTransmissionType("AUTOMATIC")
                 .setNumberOfSeats(4)
+                .setNumberOfDoors(4)
+                .setAirConditioned(true)
+                .setLuggageCapacity(2)
+                .setDescription("Compact hybrid")
                 .build();
 
         when(carTypeService.create(any(CarType.class))).thenReturn(simpleCarType);
@@ -274,7 +306,7 @@ public class CarTypeControllerTest {
                         .content(objectMapper.writeValueAsString(simpleDTO)))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.carTypeID").value(10))
-                .andExpect(jsonPath("$.type").value("Compact"))
+                .andExpect(jsonPath("$.category").value("COMPACT"))
                 .andExpect(jsonPath("$.carID").doesNotExist());
 
         verify(carTypeService, times(1)).create(any(CarType.class));
@@ -282,13 +314,17 @@ public class CarTypeControllerTest {
 
     @Test
     void testUpdateCarType_ChangeFuelType() throws Exception {
-        testCarTypeDTO.setFuelType("Diesel");
+        testCarTypeDTO.setFuelType("DIESEL");
         CarType updatedCarType = new CarType.Builder()
                 .setCarTypeID(1)
-                .setType("Sedan")
-                .setFuelType("Diesel")
-                .setNumberOfWheels(4)
+                .setCategory(VehicleCategory.SEDAN)
+                .setFuelType(FuelType.DIESEL)
+                .setTransmissionType(TransmissionType.AUTOMATIC)
                 .setNumberOfSeats(5)
+                .setNumberOfDoors(4)
+                .setAirConditioned(true)
+                .setLuggageCapacity(3)
+                .setDescription("Comfortable mid-size sedan")
                 .build();
 
         when(carTypeService.read(1)).thenReturn(testCarType);
@@ -298,8 +334,8 @@ public class CarTypeControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(testCarTypeDTO)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.fuelType").value("Diesel"))
-                .andExpect(jsonPath("$.type").value("Sedan"));
+                .andExpect(jsonPath("$.fuelType").value("DIESEL"))
+                .andExpect(jsonPath("$.category").value("SEDAN"));
 
         verify(carTypeService, times(1)).update(any(CarType.class));
     }

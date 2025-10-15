@@ -12,8 +12,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Primary;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import za.co.carhire.domain.vehicle.Car;
-import za.co.carhire.domain.vehicle.CarType;
+import za.co.carhire.domain.vehicle.*;
 import za.co.carhire.dto.vehicle.CarDTO;
 import za.co.carhire.service.vehicle.ICarService;
 
@@ -58,10 +57,14 @@ public class CarControllerTest {
 
         testCarType = new CarType.Builder()
                 .setCarTypeID(1)
-                .setType("Sedan")
-                .setFuelType("Petrol")
-                .setNumberOfWheels(4)
+                .setCategory(VehicleCategory.SEDAN)
+                .setFuelType(FuelType.PETROL)
+                .setTransmissionType(TransmissionType.AUTOMATIC)
                 .setNumberOfSeats(5)
+                .setNumberOfDoors(4)
+                .setAirConditioned(true)
+                .setLuggageCapacity(3)
+                .setDescription("Test sedan for unit tests")
                 .build();
 
         testCar = new Car.Builder()
@@ -69,8 +72,12 @@ public class CarControllerTest {
                 .setModel("Corolla")
                 .setBrand("Toyota")
                 .setYear(2022)
-                .setAvailability(true)
-                .setRentalPrice(500.0)
+                .setLicensePlate("ABC 123 GP")
+                .setVin("TOY22123456789012")
+                .setColor("White")
+                .setMileage(45000)
+                .setStatus(CarStatus.AVAILABLE)
+                .setCondition(CarCondition.GOOD)
                 .setImageData("test-image-data".getBytes())
                 .setImageName("image.jpg")
                 .setImageType("image/jpeg")
@@ -82,16 +89,24 @@ public class CarControllerTest {
                 .setModel("Corolla")
                 .setBrand("Toyota")
                 .setYear(2022)
-                .setAvailability(true)
-                .setRentalPrice(500.0)
+                .setLicensePlate("ABC 123 GP")
+                .setVin("TOY22123456789012")
+                .setColor("White")
+                .setMileage(45000)
+                .setStatus("AVAILABLE")
+                .setCondition("GOOD")
                 .setImageBase64("dGVzdC1pbWFnZS1kYXRh")
                 .setImageName("image.jpg")
                 .setImageType("image/jpeg")
                 .setCarTypeID(1)
-                .setCarTypeName("Sedan")
-                .setCarTypeFuelType("Petrol")
-                .setCarTypeNumberOfWheels(4)
+                .setCarTypeCategory("SEDAN")
+                .setCarTypeFuelType("PETROL")
+                .setCarTypeTransmissionType("AUTOMATIC")
                 .setCarTypeNumberOfSeats(5)
+                .setCarTypeNumberOfDoors(4)
+                .setCarTypeAirConditioned(true)
+                .setCarTypeLuggageCapacity(3)
+                .setCarTypeDescription("Test sedan for unit tests")
                 .build();
     }
 
@@ -107,8 +122,8 @@ public class CarControllerTest {
                 .andExpect(jsonPath("$.model").value("Corolla"))
                 .andExpect(jsonPath("$.brand").value("Toyota"))
                 .andExpect(jsonPath("$.year").value(2022))
-                .andExpect(jsonPath("$.availability").value(true))
-                .andExpect(jsonPath("$.rentalPrice").value(500.0));
+                .andExpect(jsonPath("$.licensePlate").value("ABC 123 GP"))
+                .andExpect(jsonPath("$.status").value("AVAILABLE"));
 
         verify(carService, times(1)).create(any(Car.class));
     }
@@ -190,8 +205,9 @@ public class CarControllerTest {
                 .setModel("Civic")
                 .setBrand("Honda")
                 .setYear(2023)
-                .setAvailability(true)
-                .setRentalPrice(550.0)
+                .setLicensePlate("DEF 456 GP")
+                .setStatus(CarStatus.AVAILABLE)
+                .setCondition(CarCondition.GOOD)
                 .build();
         cars.add(car2);
 
@@ -226,48 +242,114 @@ public class CarControllerTest {
         mockMvc.perform(get("/api/car/available"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(1)))
-                .andExpect(jsonPath("$[0].availability").value(true));
+                .andExpect(jsonPath("$[0].status").value("AVAILABLE"));
 
         verify(carService, times(1)).getAvailableCars();
     }
 
     @Test
-    void testUpdateAvailability_Success() throws Exception {
-        testCar.setAvailability(false);
-        when(carService.updateAvailability(1, false)).thenReturn(testCar);
+    void testUpdateStatus_Success() throws Exception {
+        testCar.setStatus(CarStatus.MAINTENANCE);
+        when(carService.updateStatus(1, CarStatus.MAINTENANCE)).thenReturn(testCar);
 
-        mockMvc.perform(put("/api/car/availability/1")
-                        .param("available", "false"))
+        mockMvc.perform(put("/api/car/status/1")
+                        .param("status", "MAINTENANCE"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.availability").value(false));
+                .andExpect(jsonPath("$.status").value("MAINTENANCE"));
 
-        verify(carService, times(1)).updateAvailability(1, false);
+        verify(carService, times(1)).updateStatus(1, CarStatus.MAINTENANCE);
     }
 
     @Test
-    void testUpdateAvailability_NotFound() throws Exception {
-        when(carService.updateAvailability(999, false)).thenReturn(null);
+    void testUpdateStatus_NotFound() throws Exception {
+        when(carService.updateStatus(999, CarStatus.MAINTENANCE)).thenReturn(null);
 
-        mockMvc.perform(put("/api/car/availability/999")
-                        .param("available", "false"))
+        mockMvc.perform(put("/api/car/status/999")
+                        .param("status", "MAINTENANCE"))
                 .andExpect(status().isNotFound());
 
-        verify(carService, times(1)).updateAvailability(999, false);
+        verify(carService, times(1)).updateStatus(999, CarStatus.MAINTENANCE);
     }
 
     @Test
-    void testGetCarsByPriceRange() throws Exception {
-        List<Car> carsInRange = Arrays.asList(testCar);
-        when(carService.getCarsByPriceRange(400.0, 600.0)).thenReturn(carsInRange);
+    void testUpdateMileage_Success() throws Exception {
+        testCar.setMileage(55000);
+        when(carService.updateMileage(1, 55000)).thenReturn(testCar);
 
-        mockMvc.perform(get("/api/car/price-range")
-                        .param("minPrice", "400.0")
-                        .param("maxPrice", "600.0"))
+        mockMvc.perform(put("/api/car/mileage/1")
+                        .param("mileage", "55000"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.mileage").value(55000));
+
+        verify(carService, times(1)).updateMileage(1, 55000);
+    }
+
+    @Test
+    void testUpdateMileage_NotFound() throws Exception {
+        when(carService.updateMileage(999, 55000)).thenReturn(null);
+
+        mockMvc.perform(put("/api/car/mileage/999")
+                        .param("mileage", "55000"))
+                .andExpect(status().isNotFound());
+
+        verify(carService, times(1)).updateMileage(999, 55000);
+    }
+
+    @Test
+    void testGetCarsByStatus() throws Exception {
+        List<Car> availableCars = Arrays.asList(testCar);
+        when(carService.getCarsByStatus(CarStatus.AVAILABLE)).thenReturn(availableCars);
+
+        mockMvc.perform(get("/api/car/status/AVAILABLE"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(1)))
-                .andExpect(jsonPath("$[0].rentalPrice").value(500.0));
+                .andExpect(jsonPath("$[0].status").value("AVAILABLE"));
 
-        verify(carService, times(1)).getCarsByPriceRange(400.0, 600.0);
+        verify(carService, times(1)).getCarsByStatus(CarStatus.AVAILABLE);
+    }
+
+    @Test
+    void testGetCarByLicensePlate_Found() throws Exception {
+        when(carService.getCarByLicensePlate("ABC 123 GP")).thenReturn(testCar);
+
+        mockMvc.perform(get("/api/car/license-plate/ABC 123 GP"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.licensePlate").value("ABC 123 GP"))
+                .andExpect(jsonPath("$.model").value("Corolla"));
+
+        verify(carService, times(1)).getCarByLicensePlate("ABC 123 GP");
+    }
+
+    @Test
+    void testGetCarByLicensePlate_NotFound() throws Exception {
+        when(carService.getCarByLicensePlate("XYZ 999 GP")).thenReturn(null);
+
+        mockMvc.perform(get("/api/car/license-plate/XYZ 999 GP"))
+                .andExpect(status().isNotFound());
+
+        verify(carService, times(1)).getCarByLicensePlate("XYZ 999 GP");
+    }
+
+    @Test
+    void testGetCarByVin_Found() throws Exception {
+        when(carService.getCarByVin("TOY22123456789012")).thenReturn(testCar);
+
+        mockMvc.perform(get("/api/car/vin/TOY22123456789012"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.vin").value("TOY22123456789012"))
+                .andExpect(jsonPath("$.model").value("Corolla"));
+
+        verify(carService, times(1)).getCarByVin("TOY22123456789012");
+    }
+
+    @Test
+    void testGetCarByVin_NotFound() throws Exception {
+        when(carService.getCarByVin("INVALID123456789")).thenReturn(null);
+
+        mockMvc.perform(get("/api/car/vin/INVALID123456789"))
+                .andExpect(status().isNotFound());
+
+        verify(carService, times(1)).getCarByVin("INVALID123456789");
     }
 
     @Test
@@ -284,16 +366,14 @@ public class CarControllerTest {
     }
 
     @Test
-    void testGetCarsByPriceRange_EmptyResult() throws Exception {
-        when(carService.getCarsByPriceRange(1000.0, 2000.0)).thenReturn(new ArrayList<>());
+    void testGetCarsByYear_EmptyResult() throws Exception {
+        when(carService.getCarsByYear(2020)).thenReturn(new ArrayList<>());
 
-        mockMvc.perform(get("/api/car/price-range")
-                        .param("minPrice", "1000.0")
-                        .param("maxPrice", "2000.0"))
+        mockMvc.perform(get("/api/car/year/2020"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(0)));
 
-        verify(carService, times(1)).getCarsByPriceRange(1000.0, 2000.0);
+        verify(carService, times(1)).getCarsByYear(2020);
     }
 
     @Test
@@ -303,8 +383,9 @@ public class CarControllerTest {
                 .setModel("Civic")
                 .setBrand("Honda")
                 .setYear(2023)
-                .setAvailability(true)
-                .setRentalPrice(550.0)
+                .setLicensePlate("DEF 456 GP")
+                .setStatus(CarStatus.AVAILABLE)
+                .setCondition(CarCondition.GOOD)
                 .build();
 
         List<Car> availableCars = Arrays.asList(testCar, car2);
@@ -313,7 +394,7 @@ public class CarControllerTest {
         mockMvc.perform(get("/api/car/available"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(2)))
-                .andExpect(jsonPath("$[*].availability", everyItem(equalTo(true))));
+                .andExpect(jsonPath("$[*].status", everyItem(equalTo("AVAILABLE"))));
 
         verify(carService, times(1)).getAvailableCars();
     }
