@@ -4,8 +4,6 @@ package za.co.carhire.factory.vehicle;
 //date:10/05/2025 //
 // Updated: 31/08/2025 - Added image URL support
 
-import za.co.carhire.domain.reservation.Insurance;
-import za.co.carhire.domain.reservation.Booking;
 import za.co.carhire.domain.vehicle.Car;
 import za.co.carhire.domain.vehicle.CarType;
 
@@ -39,7 +37,7 @@ public class CarFactory {
 
     public static Car createCompleteCar(int carID, String model, String brand, int year,
                                         boolean availability, double rentalPrice,
-                                        CarType carType, Insurance insurance, Booking booking) {
+                                        CarType carType) {
         return new Car.Builder()
                 .setCarID(carID)
                 .setModel(model)
@@ -48,15 +46,13 @@ public class CarFactory {
                 .setAvailability(availability)
                 .setRentalPrice(rentalPrice)
                 .setCarType(carType)
-                .setInsurance(insurance)
-                .setBooking(booking)
                 .build();
     }
 
     public static Car createCompleteCarWithImage(int carID, String model, String brand, int year,
                                                  boolean availability, double rentalPrice,
                                                  byte[] imageData, String imageName, String imageType,
-                                                 CarType carType, Insurance insurance, Booking booking) {
+                                                 CarType carType) {
         return new Car.Builder()
                 .setCarID(carID)
                 .setModel(model)
@@ -68,8 +64,6 @@ public class CarFactory {
                 .setImageName(imageName)
                 .setImageType(imageType)
                 .setCarType(carType)
-                .setInsurance(insurance)
-                .setBooking(booking)
                 .build();
     }
 
@@ -103,37 +97,6 @@ public class CarFactory {
                 .build();
     }
 
-    public static Car createCarWithInsurance(int carID, String model, String brand, int year,
-                                             double rentalPrice, CarType carType, Insurance insurance) {
-        return new Car.Builder()
-                .setCarID(carID)
-                .setModel(model)
-                .setBrand(brand)
-                .setYear(year)
-                .setRentalPrice(rentalPrice)
-                .setCarType(carType)
-                .setInsurance(insurance)
-                .setAvailability(true)
-                .build();
-    }
-
-    public static Car createCarWithInsuranceAndImage(int carID, String model, String brand, int year,
-                                                     double rentalPrice, byte[] imageData, String imageName, String imageType,
-                                                     CarType carType, Insurance insurance) {
-        return new Car.Builder()
-                .setCarID(carID)
-                .setModel(model)
-                .setBrand(brand)
-                .setYear(year)
-                .setRentalPrice(rentalPrice)
-                .setImageData(imageData)
-                .setImageName(imageName)
-                .setImageType(imageType)
-                .setCarType(carType)
-                .setInsurance(insurance)
-                .setAvailability(true)
-                .build();
-    }
 
     public static Car createCarCopy(Car originalCar, int newCarID) {
         return new Car.Builder()

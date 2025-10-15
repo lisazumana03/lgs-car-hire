@@ -27,9 +27,6 @@ public class CarDTO implements Serializable {
     private Integer carTypeNumberOfWheels;
     private Integer carTypeNumberOfSeats;
 
-    private Integer insuranceID;
-    private Integer bookingID;
-
     public CarDTO() {
     }
 
@@ -46,8 +43,7 @@ public class CarDTO implements Serializable {
     public CarDTO(int carID, String model, String brand, int year,
             boolean availability, double rentalPrice, String imageBase64,
             String imageName, String imageType,
-            Integer carTypeID, String carTypeName,
-            Integer insuranceID, Integer bookingID) {
+            Integer carTypeID, String carTypeName) {
         this.carID = carID;
         this.model = model;
         this.brand = brand;
@@ -59,8 +55,6 @@ public class CarDTO implements Serializable {
         this.imageType = imageType;
         this.carTypeID = carTypeID;
         this.carTypeName = carTypeName;
-        this.insuranceID = insuranceID;
-        this.bookingID = bookingID;
     }
 
     public static class Builder {
@@ -79,8 +73,6 @@ public class CarDTO implements Serializable {
         private String carTypeFuelType;
         private Integer carTypeNumberOfWheels;
         private Integer carTypeNumberOfSeats;
-        private Integer insuranceID;
-        private Integer bookingID;
 
         public Builder setCarID(int carID) {
             this.carID = carID;
@@ -157,16 +149,6 @@ public class CarDTO implements Serializable {
             return this;
         }
 
-        public Builder setInsuranceID(Integer insuranceID) {
-            this.insuranceID = insuranceID;
-            return this;
-        }
-
-        public Builder setBookingID(Integer bookingID) {
-            this.bookingID = bookingID;
-            return this;
-        }
-
         public CarDTO build() {
             CarDTO dto = new CarDTO();
             dto.carID = this.carID;
@@ -184,8 +166,6 @@ public class CarDTO implements Serializable {
             dto.carTypeFuelType = this.carTypeFuelType;
             dto.carTypeNumberOfWheels = this.carTypeNumberOfWheels;
             dto.carTypeNumberOfSeats = this.carTypeNumberOfSeats;
-            dto.insuranceID = this.insuranceID;
-            dto.bookingID = this.bookingID;
             return dto;
         }
     }
@@ -310,22 +290,6 @@ public class CarDTO implements Serializable {
         this.carTypeNumberOfSeats = carTypeNumberOfSeats;
     }
 
-    public Integer getInsuranceID() {
-        return insuranceID;
-    }
-
-    public void setInsuranceID(Integer insuranceID) {
-        this.insuranceID = insuranceID;
-    }
-
-    public Integer getBookingID() {
-        return bookingID;
-    }
-
-    public void setBookingID(Integer bookingID) {
-        this.bookingID = bookingID;
-    }
-
     @Override
     public String toString() {
         return "CarDTO{" +
@@ -342,8 +306,6 @@ public class CarDTO implements Serializable {
                 ", carTypeFuelType='" + carTypeFuelType + '\'' +
                 ", carTypeNumberOfWheels=" + carTypeNumberOfWheels +
                 ", carTypeNumberOfSeats=" + carTypeNumberOfSeats +
-                ", insuranceID=" + insuranceID +
-                ", bookingID=" + bookingID +
                 '}';
     }
 }

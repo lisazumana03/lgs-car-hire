@@ -24,7 +24,12 @@ public class Booking implements Serializable {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
-    @OneToMany(mappedBy = "booking")// showing that one booking can be made for many cars
+    @ManyToMany
+    @JoinTable(
+        name = "booking_car",
+        joinColumns = @JoinColumn(name = "booking_id"),
+        inverseJoinColumns = @JoinColumn(name = "car_id")
+    )
     private List<Car> cars;
     private LocalDateTime bookingDateAndTime;
     private LocalDateTime startDate;

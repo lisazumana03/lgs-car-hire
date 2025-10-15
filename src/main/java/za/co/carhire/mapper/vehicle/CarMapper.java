@@ -67,14 +67,6 @@ public class CarMapper {
                     .setCarTypeNumberOfSeats(carType.getNumberOfSeats());
         }
 
-        if (car.getInsurance() != null) {
-            builder.setInsuranceID(car.getInsurance().getInsuranceID());
-        }
-
-        if (car.getBooking() != null) {
-            builder.setBookingID(car.getBooking().getBookingID());
-        }
-
         return builder.build();
     }
 
