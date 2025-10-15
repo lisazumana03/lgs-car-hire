@@ -10,11 +10,13 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import za.co.carhire.domain.authentication.Role;
 import za.co.carhire.domain.authentication.User;
+import za.co.carhire.dto.AuthResponse;
 import za.co.carhire.dto.LoginRequest;
 import za.co.carhire.dto.SignUpRequest;
 import za.co.carhire.dto.UserDTO;
 import za.co.carhire.factory.authentication.UserFactory;
 import za.co.carhire.mapper.UserMapper;
+import za.co.carhire.security.JwtTokenProvider;
 import za.co.carhire.service.authentication.UserService;
 
 import java.util.List;
@@ -44,6 +46,9 @@ public class UserController {
 
   @Autowired
   private AuthenticationManager authenticationManager;
+
+  @Autowired
+  private JwtTokenProvider jwtTokenProvider;
 
   @PostMapping("/create")
   public UserDTO createUser(@RequestBody final UserDTO userDTO) {
@@ -75,7 +80,7 @@ public class UserController {
   }
 
   @PostMapping("/login")
-  public ResponseEntity<UserDTO> login(@RequestBody LoginRequest loginDetails) {
+  public ResponseEntity<AuthResponse> login(@RequestBody LoginRequest loginDetails) {
     try {
       Authentication authentication = authenticationManager.authenticate(
           new UsernamePasswordAuthenticationToken(
@@ -84,9 +89,18 @@ public class UserController {
           )
       );
 
+      String jwt = jwtTokenProvider.generateToken(authentication);
+
       User user = service.findByEmail(loginDetails.getEmail());
       if (user != null) {
-        return ResponseEntity.ok(mapper.toDTO(user));
+        AuthResponse authResponse = new AuthResponse(
+            jwt,
+            user.getUserId(),
+            user.getEmail(),
+            user.getName(),
+            user.getRole()
+        );
+        return ResponseEntity.ok(authResponse);
       }
       return ResponseEntity.status(404).build();
 
