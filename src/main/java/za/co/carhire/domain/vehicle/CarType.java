@@ -12,8 +12,6 @@ public class CarType implements Serializable {
     @Column(name = "car_typeid")
     private int carTypeID;
 
-    // Removed circular reference to Car - Car owns this relationship
-
     @Column(name = "type")
     private String type;
 
@@ -77,6 +75,15 @@ public class CarType implements Serializable {
             return this;
         }
 
+        public Builder copy(CarType carType) {
+            this.carTypeID = carType.getCarTypeID();
+            this.type = carType.getType();
+            this.fuelType = carType.getFuelType();
+            this.numberOfWheels = carType.getNumberOfWheels();
+            this.numberOfSeats = carType.getNumberOfSeats();
+            return this;
+        }
+
         public CarType build() {
             return new CarType(this);
         }
@@ -89,8 +96,6 @@ public class CarType implements Serializable {
     public void setCarTypeID(int carTypeID) {
         this.carTypeID = carTypeID;
     }
-
-    // Removed Car getter/setter to avoid circular dependency
 
     public String getType() {
         return type;
@@ -122,12 +127,6 @@ public class CarType implements Serializable {
 
     public void setNumberOfSeats(int numberOfSeats) {
         this.numberOfSeats = numberOfSeats;
-    }
-
-    public void addCarDescription(String description) {
-    }
-
-    public void updateCarDescription(String description, boolean update) {
     }
 
     @Override

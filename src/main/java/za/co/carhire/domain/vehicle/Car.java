@@ -4,9 +4,6 @@ package za.co.carhire.domain.vehicle;
 //date:10/05/2025 //
 // Updated: 31/08/2025 - Added image URL support
 
-import za.co.carhire.domain.reservation.Insurance;
-import za.co.carhire.domain.reservation.Booking;
-
 import jakarta.persistence.*;
 import java.io.Serializable;
 
@@ -44,15 +41,7 @@ public class Car implements Serializable {
     @Column(name = "image_type")
     private String imageType;
 
-    @ManyToOne
-    @JoinColumn(name = "booking_id")
-    private Booking booking;
-
-    @OneToOne
-    @JoinColumn(name = "insurance_id")
-    private Insurance insurance;
-
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "car_typeid")
     private CarType carType;
 
@@ -70,8 +59,6 @@ public class Car implements Serializable {
         this.imageName = builder.imageName;
         this.imageType = builder.imageType;
         this.carType = builder.carType;
-        this.insurance = builder.insurance;
-        this.booking = builder.booking;
     }
 
     public int getCarID() {
@@ -107,10 +94,6 @@ public class Car implements Serializable {
     }
 
     public boolean isAvailability() {
-        return availability;
-    }
-
-    public Boolean getAvailability() {
         return availability;
     }
 
@@ -158,30 +141,6 @@ public class Car implements Serializable {
         this.carType = carType;
     }
 
-    public Insurance getInsurance() {
-        return insurance;
-    }
-
-    public void setInsurance(Insurance insurance) {
-        this.insurance = insurance;
-    }
-
-    public Booking getBooking() {
-        return booking;
-    }
-
-    public void setBooking(Booking booking) {
-        this.booking = booking;
-    }
-
-    public boolean checkAvailability() {
-        return this.availability;
-    }
-
-    public void updateAvailability(boolean status) {
-        this.availability = status;
-    }
-
     @Override
     public String toString() {
         return "Car{" +
@@ -195,8 +154,6 @@ public class Car implements Serializable {
                 ", imageType='" + imageType + '\'' +
                 ", hasImage=" + (imageData != null && imageData.length > 0) +
                 ", carType=" + (carType != null ? carType.getCarTypeID() : "null") +
-                ", insurance=" + (insurance != null ? insurance.getInsuranceID() : "null") +
-                ", booking=" + (booking != null ? booking.getBookingID() : "null") +
                 '}';
     }
 
@@ -211,8 +168,6 @@ public class Car implements Serializable {
         private String imageName;
         private String imageType;
         private CarType carType;
-        private Insurance insurance;
-        private Booking booking;
 
         public Builder setCarID(int carID) {
             this.carID = carID;
@@ -264,16 +219,6 @@ public class Car implements Serializable {
             return this;
         }
 
-        public Builder setInsurance(Insurance insurance) {
-            this.insurance = insurance;
-            return this;
-        }
-
-        public Builder setBooking(Booking booking) {
-            this.booking = booking;
-            return this;
-        }
-
         public Builder copy(Car car) {
             this.carID = car.getCarID();
             this.model = car.getModel();
@@ -285,8 +230,6 @@ public class Car implements Serializable {
             this.imageName = car.getImageName();
             this.imageType = car.getImageType();
             this.carType = car.getCarType();
-            this.insurance = car.getInsurance();
-            this.booking = car.getBooking();
             return this;
         }
 
