@@ -44,38 +44,24 @@ public class BookingService implements IBookingService {
         Location dropOffLocation = booking.getDropOffLocation();
         boolean needsRebuild = false;
 
-        // If pickupLocation has name but no ID, look it up or create it
-        if (pickupLocation != null &&
-                pickupLocation.getLocationID() == 0 &&
-                pickupLocation.getLocationName() != null) {
-            final String pickupName = pickupLocation.getLocationName();
-            pickupLocation = locationRepository
-                    .findByLocationName(pickupName)
-                    .orElseGet(() -> {
-                        // Create new location if it doesn't exist
-                        Location newLocation = new Location.Builder()
-                                .setLocationName(pickupName)
-                                .build();
-                        return locationRepository.save(newLocation);
-                    });
-            needsRebuild = true;
+        // Handle pickup location
+        if (pickupLocation != null) {
+            if (pickupLocation.getLocationID() == 0) {
+                // New location from Google Maps - create it
+                pickupLocation = handleMapLocation(pickupLocation);
+                needsRebuild = true;
+            }
+            // If locationID exists, use the existing location (already set)
         }
 
-        // If dropOffLocation has name but no ID, look it up or create it
-        if (dropOffLocation != null &&
-                dropOffLocation.getLocationID() == 0 &&
-                dropOffLocation.getLocationName() != null) {
-            final String dropOffName = dropOffLocation.getLocationName();
-            dropOffLocation = locationRepository
-                    .findByLocationName(dropOffName)
-                    .orElseGet(() -> {
-                        // Create new location if it doesn't exist
-                        Location newLocation = new Location.Builder()
-                                .setLocationName(dropOffName)
-                                .build();
-                        return locationRepository.save(newLocation);
-                    });
-            needsRebuild = true;
+        // Handle dropoff location
+        if (dropOffLocation != null) {
+            if (dropOffLocation.getLocationID() == 0) {
+                // New location from Google Maps - create it
+                dropOffLocation = handleMapLocation(dropOffLocation);
+                needsRebuild = true;
+            }
+            // If locationID exists, use the existing location (already set)
         }
 
         // Rebuild booking with resolved locations if needed
@@ -88,6 +74,33 @@ public class BookingService implements IBookingService {
         }
 
         return booking;
+    }
+
+    /**
+     * Handle location from Google Maps - create new location in database
+     * @param location Location object with Google Maps data
+     * @return Saved location with generated ID
+     */
+    private Location handleMapLocation(Location location) {
+        System.out.println("Creating new location from map: " + location.getLocationName());
+        
+        // Create new location with all the details from Google Maps
+        Location newLocation = new Location.Builder()
+                .setLocationName(location.getLocationName())
+                .setStreetName(location.getStreetName())
+                .setStreetNumber(location.getStreetNumber())
+                .setCity(location.getCityOrTown())
+                .setProvinceOrState(location.getProvinceOrState())
+                .setCountry(location.getCountry())
+                .setPostalCode(location.getPostalCode())
+                .setLatitude(location.getLatitude())
+                .setLongitude(location.getLongitude())
+                .setFullAddress(location.getFullAddress())
+                .build();
+        
+        Location savedLocation = locationRepository.save(newLocation);
+        System.out.println("Location saved with ID: " + savedLocation.getLocationID());
+        return savedLocation;
     }
 
     @Override

@@ -10,7 +10,7 @@ import java.util.Date;
 public class InsuranceFactory {
 
   public static Insurance createInsurance(int insuranceID, Date insuranceStartDate, double insuranceCost,
-      String insuranceProvider, String status, long policyNumber, String mechanic) {
+      String insuranceProvider, String status, String policyNumber, String mechanic) {
     if (insuranceID < 0 || insuranceID > 100000) {
       return null;
     }
@@ -26,7 +26,7 @@ public class InsuranceFactory {
     if (status == null || status.isEmpty()) {
       return null;
     }
-    if (policyNumber < 0) {
+    if (policyNumber == null || policyNumber.isEmpty()) {
       return null;
     }
     if (mechanic == null || mechanic.isEmpty()) {

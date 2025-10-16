@@ -16,10 +16,8 @@ import za.co.carhire.service.reservation.impl.PaymentService;
 
 import java.util.Map;
 
-@CrossOrigin(origins = { "http://localhost:3046", "http://127.0.0.1:3046" })
 @RestController
-@RequestMapping("/payment")
-@CrossOrigin(origins = {"http://localhost:5173", "http://localhost:5173"})
+@CrossOrigin(origins = { "http://localhost:5173", "http://localhost:5173" })
 @RequestMapping("/api/payment")
 public class PaymentController {
     @Autowired
@@ -32,8 +30,7 @@ public class PaymentController {
             Payment payment = paymentService.createPayment(
                     request.getBookingId(),
                     request.getAmount(),
-                    request.getPaymentMethod()
-            );
+                    request.getPaymentMethod());
             return new ResponseEntity<>(payment, HttpStatus.CREATED);
         } catch (Exception e) {
             System.err.println("Error creating payment: " + e.getMessage());
@@ -41,7 +38,6 @@ public class PaymentController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-
 
     @PostMapping("/create")
     public ResponseEntity<Payment> create(@RequestBody Payment payment) {
@@ -71,10 +67,29 @@ public class PaymentController {
     }
 
     @PutMapping("/update-status/{id}/{status}")
-    public ResponseEntity<Payment> updateStatus(
+    public ResponseEntity<?> updateStatus(
             @PathVariable int id,
             @PathVariable PaymentStatus status) {
-        return new ResponseEntity<>(paymentService.updatePaymentStatus(id, status), HttpStatus.OK);
+        try {
+            System.out.println("Received request to update payment " + id + " to status " + status);
+            Payment updatedPayment = paymentService.updatePaymentStatus(id, status);
+            if (updatedPayment != null) {
+                // Return a simple response to avoid serialization issues with lazy-loaded
+                // relationships
+                return ResponseEntity.ok().body(Map.of(
+                        "paymentID", updatedPayment.getPaymentID(),
+                        "paymentStatus", updatedPayment.getPaymentStatus().toString(),
+                        "amount", updatedPayment.getAmount(),
+                        "message", "Payment status updated successfully"));
+            } else {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+        } catch (Exception e) {
+            System.err.println("Error updating payment status: " + e.getMessage());
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(Map.of("error", e.getMessage()));
+        }
     }
 
     @DeleteMapping("/delete/{id}")

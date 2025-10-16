@@ -12,9 +12,7 @@ import za.co.carhire.service.vehicle.ICarService;
 
 import java.io.IOException;
 
-/**
- * SIMPLIFIED VERSION - Only essential code
- */
+
 @RestController
 @RequestMapping("/api/car/image")
 @CrossOrigin(origins = {"http://localhost:5173", "http://127.0.0.1:5173"})

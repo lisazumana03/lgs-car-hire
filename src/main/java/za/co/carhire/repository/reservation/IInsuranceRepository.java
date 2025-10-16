@@ -13,6 +13,7 @@ import java.util.List;
 
 @Repository
 public interface IInsuranceRepository extends JpaRepository<Insurance, Integer> {
-    Insurance findByPolicyNumber(long policyNumber);
+    Insurance findByPolicyNumber(String policyNumber);
+
     List<Insurance> findByStatus(String status);
 }

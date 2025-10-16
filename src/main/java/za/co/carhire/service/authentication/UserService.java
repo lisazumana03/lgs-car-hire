@@ -1,7 +1,8 @@
 package za.co.carhire.service.authentication;
-/* NotificationController.java
 
-     Notification reservation/Controller class
+/* UserService.java
+
+     User Service Interface
 
      Author: Bonga Velem
 
@@ -9,23 +10,28 @@ package za.co.carhire.service.authentication;
 
      */
 import za.co.carhire.domain.authentication.User;
+import za.co.carhire.dto.authenticationDTO.LoginRequestDTO;
+import za.co.carhire.dto.authenticationDTO.SignUpRequestDTO;
+import za.co.carhire.dto.authenticationDTO.UserDTO;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface UserService {
-    User save(User user);
 
-    User read(Integer userId);
+    List<UserDTO> listUsers();
 
-    User update(User user);
+    UserDTO registerUser(SignUpRequestDTO registerDTO);
 
-    void delete(Integer userId);
+    Optional<UserDTO> loginUser(LoginRequestDTO loginDTO);
 
-    List<User> findAll();
+    Optional<UserDTO> getUserProfile(Integer userId);
 
-    List<User> findByIdNumber(Long idNumber);
+    UserDTO updateUserProfile(Integer userId, UserDTO updateDTO);
 
-    // New methods for login and registration
-    User findByEmailAndPassword(String email, String password);
+    void deleteUser(Integer userId);
+
+    // Internal method for getting User entity (for relationships)
+    User getUserEntity(Integer userId);
 
 }

@@ -27,7 +27,7 @@ class PaymentControllerTest {
     @Autowired
     private TestRestTemplate restTemplate;
 
-    private final String baseUrl = "http://localhost:3045/payment";
+    private final String baseUrl = "/api/payment";
     private static int createdPaymentId;
     private static int createdBookingId;
 

@@ -32,10 +32,10 @@ public class Booking implements Serializable {
     @OneToOne(mappedBy = "booking", cascade = CascadeType.ALL)
     private Payment payment;
     @ManyToOne
-    @JoinColumn(name = "pickup_location_id")
+    @JoinColumn(name = "pickup_location_id", nullable = true)
     private Location pickupLocation;
     @ManyToOne
-    @JoinColumn(name = "dropoff_location_id")
+    @JoinColumn(name = "dropoff_location_id", nullable = true)
     private Location dropOffLocation;
     @Enumerated(EnumType.STRING)
     private BookingStatus bookingStatus;

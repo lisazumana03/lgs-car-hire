@@ -40,8 +40,12 @@ class InvoiceFactoryTest {
         void generateValidInvoice() {
                 Invoice invoice = InvoiceFactory.generateInvoice(paidPayment, validBooking);
                 assertNotNull(invoice);
+                // Total amount should match payment amount
                 assertEquals(575.00, invoice.getTotalAmount());
                 assertEquals(validBooking.getEndDate(), invoice.getDueDate());
+                // Verify subtotal and tax are calculated correctly from payment amount
+                assertEquals(500.00, invoice.getSubTotal(), 0.01); // 575 / 1.15 = 500
+                assertEquals(75.00, invoice.getTaxAmount(), 0.01); // 575 - 500 = 75
         }
 
         @Test
@@ -56,7 +60,7 @@ class InvoiceFactoryTest {
 
         @Test
         void calculateCorrectSubtotal() {
-                // 2 cars for 3 days: (500 + 300) * 3 = 2400
+                // Create payment with total amount 2760.00 (includes tax)
                 Booking booking = new Booking.Builder()
                                 .setCar(List.of(
                                                 new Car.Builder().setRentalPrice(500.00).build(),
@@ -65,21 +69,39 @@ class InvoiceFactoryTest {
                                 .setEndDate(threeDaysLater)
                                 .build();
 
-                Invoice invoice = InvoiceFactory.generateInvoice(paidPayment, booking);
-                assertEquals(2400.00, invoice.getSubTotal());
-                assertEquals(2760.00, invoice.getTotalAmount()); // 2400 + 15%
+                Payment payment = new Payment.Builder()
+                                .setPaymentID(3)
+                                .setBooking(booking)
+                                .setPaymentMethod(PaymentMethod.EFT)
+                                .setAmount(2760.00) // Total with tax
+                                .build();
+
+                Invoice invoice = InvoiceFactory.generateInvoice(payment, booking);
+                // Subtotal is calculated as: totalAmount / 1.15
+                assertEquals(2400.00, invoice.getSubTotal(), 0.01); // 2760 / 1.15 = 2400
+                assertEquals(360.00, invoice.getTaxAmount(), 0.01); // 2760 - 2400 = 360
+                assertEquals(2760.00, invoice.getTotalAmount()); // Matches payment amount
         }
 
         @Test
         void handleMinimumOneDayCharge() {
-                // Same-day return
+                // Same-day return - invoice now uses payment amount
                 Booking booking = new Booking.Builder()
                                 .setCar(List.of(testCar))
                                 .setStartDate(now)
                                 .setEndDate(now) // Same day
                                 .build();
 
-                Invoice invoice = InvoiceFactory.generateInvoice(paidPayment, booking);
-                assertEquals(500.00, invoice.getSubTotal()); // Still charged for 1 day
+                // Payment amount is what determines invoice amounts now
+                Payment payment = new Payment.Builder()
+                                .setPaymentID(4)
+                                .setBooking(booking)
+                                .setPaymentMethod(PaymentMethod.EFT)
+                                .setAmount(575.00) // Payment amount with tax
+                                .build();
+
+                Invoice invoice = InvoiceFactory.generateInvoice(payment, booking);
+                assertEquals(500.00, invoice.getSubTotal(), 0.01); // 575 / 1.15 = 500
+                assertEquals(575.00, invoice.getTotalAmount()); // Matches payment amount
         }
 }

@@ -1,4 +1,5 @@
 package za.co.carhire.domain.authentication;
+
 /* User.java
 
      User domain/authentication class
@@ -16,28 +17,33 @@ import java.time.LocalDate;
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "user_id")
     private Integer userId;
 
     @Column(nullable = false, unique = true)
     private Long idNumber;
 
-    @Column(nullable = false)
-    private String name;
+    @Column(name = "first_name", nullable = false)
+    private String firstName;
 
-    @Column(nullable = false)
+    @Column(name = "last_name", nullable = false)
+    private String lastName;
+
+    @Column(name = "email", nullable = false)
     private String email;
 
-    @Column(nullable = false)
+    @Column(name = "date_of_birth", nullable = false)
     private LocalDate dateOfBirth;
 
-    @Column(nullable = false)
+    @Column(name = "phone_number", nullable = false)
     private String phoneNumber;
 
-    @Column(nullable = false)
+    @Column(name = "password", nullable = false)
     private String password;
 
     @Column
-    private String licenseNumber;
+    @Enumerated(EnumType.STRING)
+    private Role role;
 
     public User() {
     }
@@ -45,76 +51,49 @@ public class User {
     public User(Builder builder) {
         this.userId = builder.userId;
         this.idNumber = builder.idNumber;
-        this.name = builder.name;
+        this.firstName = builder.firstName;
+        this.lastName = builder.lastName;
         this.email = builder.email;
         this.dateOfBirth = builder.dateOfBirth;
         this.phoneNumber = builder.phoneNumber;
         this.password = builder.password;
-        this.licenseNumber = builder.licenseNumber;
+        this.role = builder.role;
     }
 
     public Integer getUserId() {
         return userId;
     }
 
-    public void setUserId(Integer userId) {
-        this.userId = userId;
-    }
-
     public Long getIdNumber() {
         return idNumber;
     }
 
-    public void setIdNumber(Long idNumber) {
-        this.idNumber = idNumber;
+    public String getFirstName() {
+        return firstName;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
+    public String getLastName() {
+        return lastName;
     }
 
     public String getEmail() {
         return email;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
     public LocalDate getDateOfBirth() {
         return dateOfBirth;
-    }
-
-    public void setDateOfBirth(LocalDate dateOfBirth) {
-        this.dateOfBirth = dateOfBirth;
     }
 
     public String getPhoneNumber() {
         return phoneNumber;
     }
 
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
-    }
-
     public String getPassword() {
         return password;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getLicenseNumber() {
-        return licenseNumber;
-    }
-
-    public void setLicenseNumber(String licenseNumber) {
-        this.licenseNumber = licenseNumber;
+    public Role getRole() {
+        return role;
     }
 
     @Override
@@ -122,24 +101,25 @@ public class User {
         return "User{" +
                 "userId=" + userId +
                 ", idNumber=" + idNumber +
-                ", name='" + name + '\'' +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
                 ", email='" + email + '\'' +
                 ", dateOfBirth=" + dateOfBirth +
                 ", phoneNumber='" + phoneNumber + '\'' +
-                ", password='" + password + '\'' +
-                ", licenseNumber='" + licenseNumber + '\'' +
+                ", role=" + role +
                 '}';
     }
 
-    public static class Builder{
+    public static class Builder {
         private Integer userId;
         private Long idNumber;
-        private String name;
+        private String firstName;
+        private String lastName;
         private String email;
         private LocalDate dateOfBirth;
         private String phoneNumber;
         private String password;
-        private String licenseNumber;
+        private Role role;
 
         public Builder setUserId(Integer userId) {
             this.userId = userId;
@@ -151,8 +131,13 @@ public class User {
             return this;
         }
 
-        public Builder setName(String name) {
-            this.name = name;
+        public Builder setFirstName(String firstName) {
+            this.firstName = firstName;
+            return this;
+        }
+
+        public Builder setLastName(String lastName) {
+            this.lastName = lastName;
             return this;
         }
 
@@ -176,24 +161,25 @@ public class User {
             return this;
         }
 
-        public Builder setLicenseNumber(String licenseNumber) {
-            this.licenseNumber = licenseNumber;
+        public Builder setRole(Role role) {
+            this.role = role;
             return this;
         }
 
-        public Builder copy(User user){
-            this.userId =  user.userId;
+        public Builder copy(User user) {
+            this.userId = user.userId;
             this.idNumber = user.idNumber;
-            this.name = user.name;
+            this.firstName = user.firstName;
+            this.lastName = user.lastName;
             this.email = user.email;
             this.dateOfBirth = user.dateOfBirth;
             this.phoneNumber = user.phoneNumber;
             this.password = user.password;
-            this.licenseNumber = user.licenseNumber;
+            this.role = user.role;
             return this;
         }
 
-        public User build(){
+        public User build() {
             return new User(this);
         }
     }

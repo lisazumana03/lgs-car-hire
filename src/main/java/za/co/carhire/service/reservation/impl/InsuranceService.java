@@ -23,7 +23,6 @@ import java.util.stream.Collectors;
 @Service
 public class InsuranceService implements IInsuranceService {
 
-
     private IInsuranceRepository insuranceRepository;
 
     private ICarService carService;

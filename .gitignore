@@ -41,3 +41,6 @@ resources/application.properties
 
 ### src ##
 !**CLEANED_FILES_SUMMARY.md
+sample_data.sql
+data.sql
+*.log

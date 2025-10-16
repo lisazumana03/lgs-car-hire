@@ -11,6 +11,7 @@ import za.co.carhire.domain.vehicle.Car;
 
 import java.io.Serializable;
 import java.util.Date;
+
 @Entity
 @Table(name = "Insurance")
 public class Insurance implements Serializable {
@@ -32,7 +33,7 @@ public class Insurance implements Serializable {
     private String status;
     // e.g., Active, Expired
     @Column(name = "policy_number")
-    private long policyNumber;
+    private String policyNumber;
 
     @Column(name = "mechanic")
     private String mechanic;
@@ -78,14 +79,13 @@ public class Insurance implements Serializable {
         return status;
     }
 
-    public long getPolicyNumber() {
+    public String getPolicyNumber() {
         return policyNumber;
     }
 
     public String getMechanic() {
         return mechanic;
     }
-
 
     public Car getCar() {
         return car;
@@ -116,7 +116,7 @@ public class Insurance implements Serializable {
 
         private String status;
         // e.g., Active, Expired
-        private long policyNumber;
+        private String policyNumber;
 
         private String mechanic;
 
@@ -147,7 +147,7 @@ public class Insurance implements Serializable {
             return this;
         }
 
-        public Builder setPolicyNumber(long policyNumber) {
+        public Builder setPolicyNumber(String policyNumber) {
             this.policyNumber = policyNumber;
             return this;
         }
