@@ -70,9 +70,15 @@ public class MaintenanceService implements IMaintenanceService {
         Maintenance updated = new Maintenance.Builder()
                 .copy(existing.get())
                 .setMaintenanceDate(dto.maintenanceDate())
+                .setServiceType(dto.serviceType())
                 .setDescription(dto.description())
                 .setCost(dto.cost())
+                .setMileageAtService(dto.mileageAtService())
+                .setNextServiceDate(dto.nextServiceDate())
+                .setNextServiceMileage(dto.nextServiceMileage())
                 .setMechanicName(dto.mechanicName())
+                .setStatus(dto.status())
+                .setNotes(dto.notes())
                 .setCar(car)
                 .build();
 

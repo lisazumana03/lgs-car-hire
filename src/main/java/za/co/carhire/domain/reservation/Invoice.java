@@ -9,6 +9,8 @@ import java.time.LocalDateTime;
  * Invoice POJO class
  * Sanele Zondi (221602011)
  * Due Date: 11/05/2025
+ * Updated: Payment now has proper cascade configuration
+ *          Invoice will be automatically deleted when Payment is deleted
  * */
 
 @Entity

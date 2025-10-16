@@ -3,6 +3,7 @@ package za.co.carhire.repository.reservation;
 /* IPaymentRepository.java
  * Sanele Zondi (221602011)
  * Due Date: 25/05/2025
+ * Updated: Migrated from Stripe to PayFast
  * */
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -15,6 +16,9 @@ import java.util.Optional;
 @Repository
 public interface IPaymentRepository extends JpaRepository<Payment, Integer> {
     List<Payment> findByBooking(Booking booking);
-    List<Payment> findByPaymentMethod(String paymentMethod);
+    List<Payment> findByPaymentMethod(PaymentMethod paymentMethod);
     Optional<Payment> findById(int paymentID);
+    Optional<Payment> findByPayfastPaymentId(String payfastPaymentId);
+    Optional<Payment> findByBooking_BookingID(int bookingId);
+    List<Payment> findByPaymentStatus(PaymentStatus paymentStatus);
 }

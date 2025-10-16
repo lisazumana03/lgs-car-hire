@@ -7,7 +7,12 @@ package za.co.carhire.domain.vehicle;
 
 import jakarta.persistence.*;
 import za.co.carhire.domain.reservation.Location;
+import za.co.carhire.domain.reservation.Maintenance;
+import za.co.carhire.domain.feedback.Review;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "car")
@@ -64,6 +69,14 @@ public class Car implements Serializable {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "car_typeid")
     private CarType carType;
+
+    @OneToMany(mappedBy = "car", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @JsonIgnore
+    private List<Review> reviews = new ArrayList<>();
+
+    @OneToMany(mappedBy = "car", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @JsonIgnore
+    private List<Maintenance> maintenanceRecords = new ArrayList<>();
 
     public Car() {
     }
@@ -204,6 +217,42 @@ public class Car implements Serializable {
 
     public void setCarType(CarType carType) {
         this.carType = carType;
+    }
+
+    public List<Review> getReviews() {
+        return reviews;
+    }
+
+    public void setReviews(List<Review> reviews) {
+        this.reviews = reviews;
+    }
+
+    public List<Maintenance> getMaintenanceRecords() {
+        return maintenanceRecords;
+    }
+
+    public void setMaintenanceRecords(List<Maintenance> maintenanceRecords) {
+        this.maintenanceRecords = maintenanceRecords;
+    }
+
+    // Helper methods to manage bidirectional relationship for reviews
+    public void addReview(Review review) {
+        reviews.add(review);
+        review.setCar(this);
+    }
+
+    public void removeReview(Review review) {
+        reviews.remove(review);
+        review.setCar(null);
+    }
+
+    // Helper methods to manage bidirectional relationship for maintenance
+    public void addMaintenanceRecord(Maintenance maintenance) {
+        maintenanceRecords.add(maintenance);
+    }
+
+    public void removeMaintenanceRecord(Maintenance maintenance) {
+        maintenanceRecords.remove(maintenance);
     }
 
     @Override

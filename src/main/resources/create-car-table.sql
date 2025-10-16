@@ -9,7 +9,7 @@ SET FOREIGN_KEY_CHECKS = 0;
 DROP TABLE IF EXISTS support_ticket;
 DROP TABLE IF EXISTS notifications;
 DROP TABLE IF EXISTS review;
-DROP TABLE IF EXISTS maintenance;
+DROP TABLE IF EXISTS Maintenance;
 DROP TABLE IF EXISTS invoices;
 DROP TABLE IF EXISTS payments;
 DROP TABLE IF EXISTS booking;
@@ -138,14 +138,30 @@ CREATE TABLE booking (
     CONSTRAINT fk_booking_insurance FOREIGN KEY (insurance_id) REFERENCES insurance(insuranceid)
 );
 
--- Payments table
+-- Payments table (PayFast integration - South African payment gateway)
 CREATE TABLE payments (
     paymentid INT AUTO_INCREMENT PRIMARY KEY,
     booking_id INT NOT NULL UNIQUE,
     amount DOUBLE NOT NULL,
     payment_method VARCHAR(50) NOT NULL,
     payment_status VARCHAR(50) NOT NULL,
-    CONSTRAINT fk_payment_booking FOREIGN KEY (booking_id) REFERENCES booking(bookingid)
+    transaction_reference VARCHAR(255),
+    payment_date TIMESTAMP,
+    currency VARCHAR(3) DEFAULT 'ZAR',
+    -- PayFast specific fields
+    payfast_payment_id VARCHAR(255) UNIQUE,
+    payfast_transaction_id VARCHAR(255),
+    merchant_id VARCHAR(255),
+    -- Failure tracking
+    failure_reason VARCHAR(500),
+    -- Refund fields
+    refund_amount DOUBLE,
+    refund_date TIMESTAMP,
+    refund_reason VARCHAR(500),
+    CONSTRAINT fk_payment_booking FOREIGN KEY (booking_id) REFERENCES booking(bookingid),
+    INDEX idx_payments_payfast_id (payfast_payment_id),
+    INDEX idx_payments_status (payment_status),
+    INDEX idx_payments_date (payment_date)
 );
 
 -- Invoices table
@@ -164,24 +180,37 @@ CREATE TABLE invoices (
 );
 
 -- Maintenance table
-CREATE TABLE maintenance (
+CREATE TABLE Maintenance (
     maintenanceid INT AUTO_INCREMENT PRIMARY KEY,
-    car_id INT,
+    car_id INT NOT NULL,
     maintenance_date DATE NOT NULL,
+    service_type VARCHAR(50) NOT NULL,
     description TEXT NOT NULL,
-    cost DOUBLE,
+    cost DOUBLE NOT NULL,
+    mileage_at_service INT NOT NULL,
+    next_service_date DATE,
+    next_service_mileage INT,
     mechanic_name VARCHAR(255) NOT NULL,
-    CONSTRAINT fk_maintenance_car FOREIGN KEY (car_id) REFERENCES car(carid)
+    status VARCHAR(50) NOT NULL,
+    notes TEXT,
+    CONSTRAINT fk_maintenance_car FOREIGN KEY (car_id) REFERENCES car(carid) ON DELETE CASCADE
 );
 
--- Review table
+-- Review table (enhanced with user and booking relationships)
 CREATE TABLE review (
-    reviewid INT AUTO_INCREMENT PRIMARY KEY,
-    car_id INT,
-    full_name VARCHAR(255),
-    rating INT,
+    review_id INT AUTO_INCREMENT PRIMARY KEY,
+    car_id INT NOT NULL,
+    user_id INT NOT NULL,
+    booking_id INT,
+    rating INT NOT NULL,
+    title VARCHAR(255),
     comment TEXT,
-    CONSTRAINT fk_review_car FOREIGN KEY (car_id) REFERENCES car(carid)
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    is_verified BOOLEAN DEFAULT FALSE,
+    CONSTRAINT fk_review_car FOREIGN KEY (car_id) REFERENCES car(carid) ON DELETE CASCADE,
+    CONSTRAINT fk_review_user FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE,
+    CONSTRAINT fk_review_booking FOREIGN KEY (booking_id) REFERENCES booking(bookingid) ON DELETE SET NULL
 );
 
 -- Notifications table
@@ -194,11 +223,39 @@ CREATE TABLE notifications (
     CONSTRAINT fk_notification_user FOREIGN KEY (user_id) REFERENCES users(user_id)
 );
 
--- Support Ticket table
+-- Support Ticket table (enhanced)
 CREATE TABLE support_ticket (
-    ticketid INT AUTO_INCREMENT PRIMARY KEY,
-    user_id INT,
-    subject VARCHAR(255),
-    description TEXT,
-    CONSTRAINT fk_ticket_user FOREIGN KEY (user_id) REFERENCES users(user_id)
+    ticket_id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    booking_id INT,
+    car_id INT,
+    assigned_to INT,
+    subject VARCHAR(255) NOT NULL,
+    description TEXT NOT NULL,
+    status VARCHAR(50) NOT NULL DEFAULT 'OPEN',
+    priority VARCHAR(50) NOT NULL DEFAULT 'MEDIUM',
+    category VARCHAR(50) NOT NULL,
+    contact_email VARCHAR(255),
+    contact_phone VARCHAR(50),
+    resolution TEXT,
+    internal_notes TEXT,
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    resolved_at DATETIME,
+    closed_at DATETIME,
+    first_response_at DATETIME,
+    satisfaction_rating INT,
+    satisfaction_comment VARCHAR(500),
+    CONSTRAINT fk_ticket_user FOREIGN KEY (user_id)
+        REFERENCES users(user_id) ON DELETE CASCADE,
+    CONSTRAINT fk_ticket_booking FOREIGN KEY (booking_id)
+        REFERENCES booking(bookingid) ON DELETE SET NULL,
+    CONSTRAINT fk_ticket_car FOREIGN KEY (car_id)
+        REFERENCES car(carid) ON DELETE SET NULL,
+    CONSTRAINT fk_ticket_assigned FOREIGN KEY (assigned_to)
+        REFERENCES users(user_id) ON DELETE SET NULL,
+    INDEX idx_status (status),
+    INDEX idx_priority (priority),
+    INDEX idx_created_at (created_at),
+    INDEX idx_user_id (user_id)
 );

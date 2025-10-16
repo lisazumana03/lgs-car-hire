@@ -34,7 +34,7 @@ public class Booking implements Serializable {
     private LocalDateTime bookingDateAndTime;
     private LocalDateTime startDate;
     private LocalDateTime endDate;
-    @OneToOne(mappedBy = "booking", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @OneToOne(mappedBy = "booking", cascade = CascadeType.ALL, orphanRemoval = true)
     private Payment payment;
     @ManyToOne
     @JoinColumn(name = "pickup_location_id")
