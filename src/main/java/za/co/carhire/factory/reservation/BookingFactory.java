@@ -13,17 +13,16 @@ import za.co.carhire.domain.vehicle.Car;
 import za.co.carhire.util.Helper;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 public class BookingFactory {
-    public static Booking createBooking(int bookingID, User user, List<Car>cars, LocalDateTime bookingDateAndTime, LocalDateTime startDate, LocalDateTime endDate, Location pickupLocation, Location dropOffLocation, BookingStatus bookingStatus){
+    public static Booking createBooking(int bookingID, User user, Car car, LocalDateTime bookingDateAndTime, LocalDateTime startDate, LocalDateTime endDate, Location pickupLocation, Location dropOffLocation, BookingStatus bookingStatus){
         if(Helper.isNullOrEmpty(bookingStatus)){
             bookingStatus = BookingStatus.PENDING;
         }
         return new Booking.Builder()
                 .setBookingID(bookingID)
                 .setUser(user)
-                .setCar(cars)
+                .setCar(car)
                 .setBookingDateAndTime(bookingDateAndTime)
                 .setStartDate(startDate)
                 .setEndDate(endDate)

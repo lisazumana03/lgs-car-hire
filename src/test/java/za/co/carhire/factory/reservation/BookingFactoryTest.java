@@ -9,8 +9,6 @@ import za.co.carhire.domain.reservation.Location;
 import za.co.carhire.domain.vehicle.Car;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -27,14 +25,11 @@ class BookingFactoryTest {
         int bookingID = 15;
         User user = new User();
 
-        List<Car> cars = new ArrayList<>();
         Car car = new Car.Builder()
                 .setCarID(12)
                 .setModel("Benz")
-                .setAvailability(true)
-                .setRentalPrice(4500.00)
+                .setBrand("Mercedes")
                 .build();
-        cars.add(car);
 
         LocalDateTime bookingDateAndTime = LocalDateTime.now();
 
@@ -46,7 +41,7 @@ class BookingFactoryTest {
 
         BookingStatus bookingStatus = BookingStatus.PENDING;
 
-        Booking booking = BookingFactory.createBooking(bookingID, user, cars, bookingDateAndTime, startDate, endDate, pickupLocation, dropOffLocation, bookingStatus);
+        Booking booking = BookingFactory.createBooking(bookingID, user, car, bookingDateAndTime, startDate, endDate, pickupLocation, dropOffLocation, bookingStatus);
 
         System.out.println(booking);
         assertNotNull(booking);

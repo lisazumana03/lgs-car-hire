@@ -11,6 +11,7 @@ import za.co.carhire.domain.authentication.User;
 import za.co.carhire.domain.reservation.Booking;
 import za.co.carhire.service.authentication.UserService;
 import za.co.carhire.service.reservation.impl.BookingService;
+import za.co.carhire.util.DateTimeUtil;
 
 /**
  * Lisakhanya Zumana (230864821)
@@ -32,14 +33,33 @@ public class BookingController {
      * Automatically fetches User if only userId is provided
      */
     @PostMapping("/create")
-    public ResponseEntity<Booking> create(@RequestBody Booking booking) {
+    public ResponseEntity<?> create(@RequestBody Booking booking) {
         try {
+            if (booking.getCar() == null) {
+                return ResponseEntity.badRequest().body("Car is required");
+            }
+            if (booking.getStartDate() == null) {
+                return ResponseEntity.badRequest().body("Start date is required");
+            }
+            if (booking.getEndDate() == null) {
+                return ResponseEntity.badRequest().body("End date is required");
+            }
+            if (booking.getStartDate().isAfter(booking.getEndDate())) {
+                return ResponseEntity.badRequest().body("Start date must be before end date");
+            }
+            if (DateTimeUtil.isPast(booking.getStartDate())) {
+                return ResponseEntity.badRequest().body("Start date cannot be in the past");
+            }
+            if (booking.getUser() == null) {
+                return ResponseEntity.badRequest().body("User is required");
+            }
+
             // If booking has a user with only userId set, fetch the full user and rebuild
             // with Builder
             if (booking.getUser() != null && booking.getUser().getUserId() != null) {
                 User fullUser = userService.read(booking.getUser().getUserId());
                 if (fullUser == null) {
-                    return ResponseEntity.badRequest().build();
+                    return ResponseEntity.badRequest().body("User not found");
                 }
 
                 // Rebuild booking with the full user using Builder pattern
@@ -51,10 +71,15 @@ public class BookingController {
 
             Booking createdBooking = bookingService.create(booking);
             return new ResponseEntity<>(createdBooking, HttpStatus.CREATED);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        } catch (IllegalStateException e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
         } catch (Exception e) {
             System.err.println("Error creating booking: " + e.getMessage());
             e.printStackTrace();
-            throw e;
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("An error occurred while creating the booking");
         }
     }
 

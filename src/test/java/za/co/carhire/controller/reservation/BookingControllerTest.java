@@ -21,8 +21,6 @@ import za.co.carhire.factory.reservation.BookingFactory;
 import za.co.carhire.service.reservation.impl.BookingService;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -49,7 +47,13 @@ class BookingControllerTest {
         User user = new User.Builder()
                 .setUserId(4)
                 .build();
-        List<Car> cars = new ArrayList<>();
+
+        Car car = new Car.Builder()
+                .setCarID(1)
+                .setModel("Corolla")
+                .setBrand("Toyota")
+                .build();
+
         LocalDateTime bookingDateAndTime = LocalDateTime.of(2025, 5, 25, 10, 0);
         LocalDateTime startDate = LocalDateTime.of(2025, 5, 25, 10, 30);
         LocalDateTime endDate = LocalDateTime.of(2025, 5, 25, 11, 0);
@@ -69,7 +73,7 @@ class BookingControllerTest {
 
         BookingStatus bookingStatus = BookingStatus.PENDING;
 
-        booking = BookingFactory.createBooking(bookingID, user, cars, bookingDateAndTime, startDate, endDate, pickUpLocation, dropOffLocation, bookingStatus);
+        booking = BookingFactory.createBooking(bookingID, user, car, bookingDateAndTime, startDate, endDate, pickUpLocation, dropOffLocation, bookingStatus);
     }
 
     @Test

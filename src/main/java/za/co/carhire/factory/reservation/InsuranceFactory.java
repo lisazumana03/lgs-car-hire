@@ -1,45 +1,122 @@
 /*
  * Sibulele Gift Nohamba (220374686)
  * Date: 18/05/2025
+ * Updated: 2025-10-16 - Completely rewritten to match new Insurance entity structure
  * */
 package za.co.carhire.factory.reservation;
 
+import za.co.carhire.domain.reservation.CoverageType;
 import za.co.carhire.domain.reservation.Insurance;
-import java.util.Date;
+
+import java.time.LocalDateTime;
 
 public class InsuranceFactory {
 
-  public static Insurance createInsurance(int insuranceID, Date insuranceStartDate, double insuranceCost,
-      String insuranceProvider, String status, long policyNumber, String mechanic) {
-    if (insuranceID < 0 || insuranceID > 100000) {
-      return null;
+    public static Insurance createInsurance(
+            int insuranceID,
+            LocalDateTime insuranceStartDate,
+            LocalDateTime insuranceEndDate,
+            double insuranceCost,
+            String insuranceProvider,
+            CoverageType coverageType,
+            double deductible,
+            String policyNumber,
+            boolean isActive) {
+
+        if (insuranceID < 0) {
+            throw new IllegalArgumentException("Insurance ID cannot be negative");
+        }
+        if (insuranceStartDate == null) {
+            throw new IllegalArgumentException("Insurance start date is required");
+        }
+        if (insuranceCost < 0) {
+            throw new IllegalArgumentException("Insurance cost cannot be negative");
+        }
+        if (insuranceProvider == null || insuranceProvider.trim().isEmpty()) {
+            throw new IllegalArgumentException("Insurance provider is required");
+        }
+        if (coverageType == null) {
+            throw new IllegalArgumentException("Coverage type is required");
+        }
+        if (deductible < 0) {
+            throw new IllegalArgumentException("Deductible cannot be negative");
+        }
+        if (policyNumber == null || policyNumber.trim().isEmpty()) {
+            throw new IllegalArgumentException("Policy number is required");
+        }
+
+        return new Insurance.Builder()
+                .setInsuranceID(insuranceID)
+                .setInsuranceStartDate(insuranceStartDate)
+                .setInsuranceEndDate(insuranceEndDate)
+                .setInsuranceCost(insuranceCost)
+                .setInsuranceProvider(insuranceProvider)
+                .setCoverageType(coverageType)
+                .setDeductible(deductible)
+                .setPolicyNumber(policyNumber)
+                .setActive(isActive)
+                .build();
     }
-    if (insuranceStartDate == null) {
-      return null;
+
+    public static Insurance createBasicInsurance(
+            String insuranceProvider,
+            double insuranceCost,
+            double deductible,
+            String policyNumber,
+            LocalDateTime startDate,
+            LocalDateTime endDate) {
+
+        return createInsurance(
+                0,  // ID will be auto-generated
+                startDate,
+                endDate,
+                insuranceCost,
+                insuranceProvider,
+                CoverageType.BASIC,
+                deductible,
+                policyNumber,
+                true  // Active by default
+        );
     }
-    if (insuranceCost < 0) {
-      return null;
+
+    public static Insurance createPremiumInsurance(
+            String insuranceProvider,
+            double insuranceCost,
+            double deductible,
+            String policyNumber,
+            LocalDateTime startDate,
+            LocalDateTime endDate) {
+
+        return createInsurance(
+                0,  // ID will be auto-generated
+                startDate,
+                endDate,
+                insuranceCost,
+                insuranceProvider,
+                CoverageType.PREMIUM,
+                deductible,
+                policyNumber,
+                true  // Active by default
+        );
     }
-    if (insuranceProvider == null || insuranceProvider.isEmpty()) {
-      return null;
+
+    public static Insurance createComprehensiveInsurance(
+            String insuranceProvider,
+            double insuranceCost,
+            String policyNumber,
+            LocalDateTime startDate,
+            LocalDateTime endDate) {
+
+        return createInsurance(
+                0,  // ID will be auto-generated
+                startDate,
+                endDate,
+                insuranceCost,
+                insuranceProvider,
+                CoverageType.COMPREHENSIVE,
+                0.0,  // No deductible for comprehensive
+                policyNumber,
+                true  // Active by default
+        );
     }
-    if (status == null || status.isEmpty()) {
-      return null;
-    }
-    if (policyNumber < 0) {
-      return null;
-    }
-    if (mechanic == null || mechanic.isEmpty()) {
-      return null;
-    }
-    return new Insurance.Builder()
-        .setInsuranceID(insuranceID)
-        .setInsuranceStartDate(insuranceStartDate)
-        .setInsuranceCost(insuranceCost)
-        .setInsuranceProvider(insuranceProvider)
-        .setStatus(status)
-        .setPolicyNumber(policyNumber)
-        .setMechanic(mechanic)
-        .build();
-  }
 }

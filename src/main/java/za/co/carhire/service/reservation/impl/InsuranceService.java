@@ -3,66 +3,59 @@ package za.co.carhire.service.reservation.impl;
 Sibulele Gift Nohamba
 220374686
 Date: 24/05/2025
+Updated: 2025-10-16 - Completely rewritten to match new Insurance entity structure
  */
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import za.co.carhire.domain.reservation.Insurance;
-import za.co.carhire.domain.vehicle.Car;
 import za.co.carhire.dto.InsuranceDTO;
 import za.co.carhire.mapper.InsuranceMapper;
 import za.co.carhire.repository.reservation.IInsuranceRepository;
-import za.co.carhire.repository.vehicle.ICarRepository;
 import za.co.carhire.service.reservation.IInsuranceService;
-import za.co.carhire.service.vehicle.ICarService;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
 public class InsuranceService implements IInsuranceService {
 
-
-    private IInsuranceRepository insuranceRepository;
-
-    private ICarService carService;
+    private final IInsuranceRepository insuranceRepository;
 
     @Autowired
-    public InsuranceService(IInsuranceRepository insuranceRepository, ICarService carService) {
-        this.carService = carService;
+    public InsuranceService(IInsuranceRepository insuranceRepository) {
         this.insuranceRepository = insuranceRepository;
-
     }
 
     @Override
     public InsuranceDTO createInsurance(InsuranceDTO insuranceDTO) {
-        // Convert DTO to domain entity
-        Insurance createdInsurance = InsuranceMapper.fromDTO(insuranceDTO);
-
-        // Set car reference if provided
-        if (insuranceDTO.car() != null && insuranceDTO.car() > 0) {
-            Car car = carService.read(insuranceDTO.car()); // this throws if not found
-            createdInsurance = new Insurance.Builder()
-                    .setInsuranceID(insuranceDTO.insuranceID())
-                    .setInsuranceStartDate(insuranceDTO.insuranceStartDate())
-                    .setInsuranceCost(insuranceDTO.insuranceCost())
-                    .setInsuranceProvider(insuranceDTO.insuranceProvider())
-                    .setStatus(insuranceDTO.status())
-                    .setPolicyNumber(insuranceDTO.policyNumber())
-                    .setMechanic(insuranceDTO.mechanic())
-                    .setCar(car)
-                    .build();
+        if (insuranceDTO == null) {
+            throw new IllegalArgumentException("Insurance DTO cannot be null");
         }
 
-        Insurance saved = insuranceRepository.save(createdInsurance);
+        // Validate required fields
+        if (insuranceDTO.insuranceProvider() == null || insuranceDTO.insuranceProvider().isEmpty()) {
+            throw new IllegalArgumentException("Insurance provider is required");
+        }
+        if (insuranceDTO.coverageType() == null) {
+            throw new IllegalArgumentException("Coverage type is required");
+        }
+        if (insuranceDTO.insuranceCost() < 0) {
+            throw new IllegalArgumentException("Insurance cost cannot be negative");
+        }
+
+        // Convert DTO to entity
+        Insurance insurance = InsuranceMapper.fromDTO(insuranceDTO);
+
+        // Save and return
+        Insurance saved = insuranceRepository.save(insurance);
         return InsuranceMapper.toDTO(saved);
     }
 
     @Override
     public InsuranceDTO getInsuranceById(int id) {
         Insurance insurance = insuranceRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Insurance not found: " + id));
+                .orElseThrow(() -> new IllegalArgumentException("Insurance not found with ID: " + id));
         return InsuranceMapper.toDTO(insurance);
     }
 
@@ -75,36 +68,26 @@ public class InsuranceService implements IInsuranceService {
 
     @Override
     public InsuranceDTO updateInsurance(int id, InsuranceDTO insuranceDTO) {
-        Insurance existing = insuranceRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Insurance not found: " + id));
+        if (insuranceDTO == null) {
+            throw new IllegalArgumentException("Insurance DTO cannot be null");
+        }
 
-        // Update with new data
+        // Check if exists
+        Insurance existing = insuranceRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Insurance not found with ID: " + id));
+
+        // Update with new data using Builder
         Insurance updated = new Insurance.Builder()
-                .setInsuranceID(id)
+                .setInsuranceID(id)  // Keep same ID
                 .setInsuranceStartDate(insuranceDTO.insuranceStartDate())
+                .setInsuranceEndDate(insuranceDTO.insuranceEndDate())
                 .setInsuranceCost(insuranceDTO.insuranceCost())
                 .setInsuranceProvider(insuranceDTO.insuranceProvider())
-                .setStatus(insuranceDTO.status())
+                .setCoverageType(insuranceDTO.coverageType())
+                .setDeductible(insuranceDTO.deductible())
                 .setPolicyNumber(insuranceDTO.policyNumber())
-                .setMechanic(insuranceDTO.mechanic())
+                .setActive(insuranceDTO.isActive())
                 .build();
-
-        // Set car reference if provided
-        if (insuranceDTO.car() != null && insuranceDTO.car() > 0) {
-            Optional<Car> car = Optional.ofNullable(carService.read(insuranceDTO.car()));
-            if (car.isPresent()) {
-                updated = new Insurance.Builder()
-                        .setInsuranceID(id)
-                        .setInsuranceStartDate(insuranceDTO.insuranceStartDate())
-                        .setInsuranceCost(insuranceDTO.insuranceCost())
-                        .setInsuranceProvider(insuranceDTO.insuranceProvider())
-                        .setStatus(insuranceDTO.status())
-                        .setPolicyNumber(insuranceDTO.policyNumber())
-                        .setMechanic(insuranceDTO.mechanic())
-                        .setCar(car.get())
-                        .build();
-            }
-        }
 
         Insurance saved = insuranceRepository.save(updated);
         return InsuranceMapper.toDTO(saved);
@@ -113,9 +96,8 @@ public class InsuranceService implements IInsuranceService {
     @Override
     public void deleteInsurance(int id) {
         if (!insuranceRepository.existsById(id)) {
-            throw new IllegalArgumentException("Insurance not found: " + id);
+            throw new IllegalArgumentException("Insurance not found with ID: " + id);
         }
         insuranceRepository.deleteById(id);
     }
-
 }

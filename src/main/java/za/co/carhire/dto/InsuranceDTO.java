@@ -1,16 +1,18 @@
 package za.co.carhire.dto;
 
-import java.util.Date;
+import za.co.carhire.domain.reservation.CoverageType;
+import java.time.LocalDateTime;
 
 public record InsuranceDTO(
         int insuranceID,
-        Date insuranceStartDate,
+        LocalDateTime insuranceStartDate,
+        LocalDateTime insuranceEndDate,
         double insuranceCost,
         String insuranceProvider,
-        String status,
-        long policyNumber,
-        String mechanic,
-        Integer car
+        CoverageType coverageType,
+        double deductible,
+        String policyNumber,
+        boolean isActive
 ) {
 
 }
