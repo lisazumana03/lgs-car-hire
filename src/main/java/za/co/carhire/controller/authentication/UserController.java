@@ -1,17 +1,15 @@
 package za.co.carhire.controller.authentication;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import za.co.carhire.domain.authentication.User;
-import za.co.carhire.dto.LoginRequest;
-import za.co.carhire.dto.SignUpRequest;
-import za.co.carhire.dto.UserDTO;
-import za.co.carhire.factory.authentication.UserFactory;
-import za.co.carhire.mapper.UserMapper;
+import za.co.carhire.dto.authenticationDTO.LoginRequestDTO;
+import za.co.carhire.dto.authenticationDTO.SignUpRequestDTO;
+import za.co.carhire.dto.authenticationDTO.UserDTO;
 import za.co.carhire.service.authentication.UserService;
 
 import java.util.List;
+import java.util.Optional;
 
 /* UserController.java
 
@@ -28,94 +26,44 @@ import java.util.List;
 public class UserController {
 
   @Autowired
-  private UserService service;
+  private UserService userService;
 
-  @Autowired
-  private UserMapper mapper;
 
-  @PostMapping("/create")
-  public UserDTO createUser(@RequestBody final UserDTO userDTO) {
-    User user = mapper.toDomain(userDTO);
-    User createdUser = service.save(user);
-    return mapper.toDTO(createdUser);
+  // List all users
+  @GetMapping
+  public List<UserDTO> listUsers() {
+    return userService.listUsers();
   }
 
-  @PostMapping("/signup")
-  public UserDTO signUp(@RequestBody final SignUpRequest signUpRequest) {
-    User user = new User.Builder()
-        .setIdNumber(signUpRequest.getIdNumber())
-        .setName(signUpRequest.getName())
-        .setEmail(signUpRequest.getEmail())
-        .setDateOfBirth(signUpRequest.getDateOfBirth())
-        .setPhoneNumber(signUpRequest.getPhoneNumber())
-        .setPassword(signUpRequest.getPassword())
-        .setLicenseNumber(signUpRequest.getLicenseNumber())
-        .build();
-
-    User createdUser = service.save(user);
-    return mapper.toDTO(createdUser);
+  // Register a new user
+  @PostMapping("/register")
+  @ResponseStatus(HttpStatus.CREATED)
+  public UserDTO registerUser(@RequestBody SignUpRequestDTO registerDTO) {
+    return userService.registerUser(registerDTO);
   }
 
+  // Login
   @PostMapping("/login")
-  public ResponseEntity<UserDTO> login(@RequestBody LoginRequest loginDetails) {
-    User user = service.findByEmailAndPassword(
-        loginDetails.getEmail(),
-        loginDetails.getPassword());
-    if (user != null) {
-      return ResponseEntity.ok(mapper.toDTO(user));
-    }
-    return ResponseEntity.status(404).build();
+  public Optional<UserDTO> loginUser(@RequestBody LoginRequestDTO loginDTO) {
+    return userService.loginUser(loginDTO);
   }
 
-  @GetMapping("/{id}")
-  public ResponseEntity<UserDTO> read(@PathVariable Integer id) {
-    User user = service.read(id);
-    if (user != null) {
-      return ResponseEntity.ok(mapper.toDTO(user));
-    }
-    return ResponseEntity.notFound().build();
+  // Get user profile
+  @GetMapping("/{userId}")
+  public Optional<UserDTO> getProfile(@PathVariable Integer userId) {
+    return userService.getUserProfile(userId);
   }
 
-  @PutMapping("/{id}")
-  public ResponseEntity<UserDTO> update(@PathVariable Integer id, @RequestBody UserDTO userDTO) {
-    try {
-      System.out.println("INFO: Updating user with ID: " + id);
-      System.out.println("INFO: Received DTO: " + userDTO);
-
-      User existingUser = service.read(id);
-      if (existingUser == null) {
-        System.err.println("ERROR: User not found with ID: " + id);
-        return ResponseEntity.notFound().build();
-      }
-
-      User user = mapper.toDomain(userDTO);
-      user.setUserId(id);
-
-      // Preserve password from existing user
-      user.setPassword(existingUser.getPassword());
-
-      User updatedUser = service.update(user);
-      System.out.println("SUCCESS: User updated successfully: " + updatedUser.getName());
-      return ResponseEntity.ok(mapper.toDTO(updatedUser));
-    } catch (Exception e) {
-      System.err.println("ERROR: Error updating user: " + e.getMessage());
-      e.printStackTrace();
-      throw e;
-    }
+  // Update user profile
+  @PutMapping("/{userId}")
+  public UserDTO updateProfile(@PathVariable Integer userId, @RequestBody UserDTO updateDTO) {
+    return userService.updateUserProfile(userId, updateDTO);
   }
 
-  @DeleteMapping("/{id}")
-  public ResponseEntity<Void> delete(@PathVariable Integer id) {
-    if (service.read(id) != null) {
-      service.delete(id);
-      return ResponseEntity.ok().build();
-    }
-    return ResponseEntity.notFound().build();
-  }
-
-  @GetMapping("/all")
-  public List<UserDTO> getAll() {
-    List<User> users = service.findAll();
-    return mapper.toDTOList(users);
+  // Delete user
+  @DeleteMapping("/{userId}")
+  @ResponseStatus(HttpStatus.NO_CONTENT)
+  public void deleteUser(@PathVariable Integer userId) {
+    userService.deleteUser(userId);
   }
 }

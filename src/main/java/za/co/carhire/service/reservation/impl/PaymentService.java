@@ -68,7 +68,8 @@ public class PaymentService implements IPaymentService {
         }
 
         Payment savedPayment = paymentRepository.save(payment);
-        System.out.println("Payment saved with ID: " + savedPayment.getPaymentID() + " Status: " + savedPayment.getPaymentStatus());
+        System.out.println("Payment saved with ID: " + savedPayment.getPaymentID() + " Status: "
+                + savedPayment.getPaymentStatus());
 
         // Update the booking with the payment reference
         if (savedPayment.getBooking() != null) {
@@ -83,7 +84,8 @@ public class PaymentService implements IPaymentService {
                 Invoice invoice = InvoiceFactory.generateInvoice(savedPayment, booking);
                 if (invoice != null) {
                     Invoice savedInvoice = invoiceService.create(invoice);
-                    System.out.println("Invoice generated with ID: " + savedInvoice.getInvoiceID() + " Status: " + savedInvoice.getStatus());
+                    System.out.println("Invoice generated with ID: " + savedInvoice.getInvoiceID() + " Status: "
+                            + savedInvoice.getStatus());
                 } else {
                     System.out.println("Invoice generation returned null");
                 }
@@ -134,14 +136,34 @@ public class PaymentService implements IPaymentService {
 
     @Transactional
     public Payment updatePaymentStatus(int paymentId, PaymentStatus status) {
-        Optional<Payment> paymentOpt = paymentRepository.findById(paymentId);
-        if (paymentOpt.isEmpty()) {
-            throw new RuntimeException("Payment not found");
-        }
+        try {
+            System.out.println("INFO: Updating payment status - ID: " + paymentId + ", Status: " + status);
 
-        Payment payment = paymentOpt.get();
-        payment.setPaymentStatus(status);
-        return paymentRepository.save(payment);
+            Optional<Payment> paymentOpt = paymentRepository.findById(paymentId);
+            if (paymentOpt.isEmpty()) {
+                System.err.println("ERROR: Payment not found with ID: " + paymentId);
+                throw new RuntimeException("Payment not found");
+            }
+
+            Payment payment = paymentOpt.get();
+            System.out.println("INFO: Current payment status: " + payment.getPaymentStatus());
+
+            // If payment is already in the desired status, just return it
+            if (payment.getPaymentStatus() == status) {
+                System.out.println("INFO: Payment already in status " + status + ", skipping update");
+                return payment;
+            }
+
+            payment.setPaymentStatus(status);
+            Payment updatedPayment = paymentRepository.save(payment);
+
+            System.out.println("SUCCESS: Payment status updated to: " + updatedPayment.getPaymentStatus());
+            return updatedPayment;
+        } catch (Exception e) {
+            System.err.println("ERROR: Failed to update payment status: " + e.getMessage());
+            e.printStackTrace();
+            throw e;
+        }
     }
 
     @Override

@@ -37,7 +37,7 @@ public class BookingController {
             // If booking has a user with only userId set, fetch the full user and rebuild
             // with Builder
             if (booking.getUser() != null && booking.getUser().getUserId() != null) {
-                User fullUser = userService.read(booking.getUser().getUserId());
+                User fullUser = userService.getUserEntity(booking.getUser().getUserId());
                 if (fullUser == null) {
                     return ResponseEntity.badRequest().build();
                 }

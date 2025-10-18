@@ -1,4 +1,5 @@
 package za.co.carhire.controller.reservation;
+
 /*
  * Sibulele Gift Nohamba (220374686)
  * Date: 12/08/2025
@@ -14,8 +15,8 @@ import za.co.carhire.service.reservation.impl.MaintenanceService;
 import java.util.List;
 
 @RestController
-@RequestMapping("/maintenance")
-@CrossOrigin(origins = {"http://localhost:5173", "http://127.0.0.1:5173"})
+@RequestMapping("/api/maintenance")
+@CrossOrigin(origins = { "http://localhost:5173", "http://127.0.0.1:5173" })
 public class MaintenanceController {
 
     @Autowired
@@ -57,5 +58,4 @@ public class MaintenanceController {
         return ResponseEntity.noContent().build();
     }
 
-    
 }

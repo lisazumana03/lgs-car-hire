@@ -1,4 +1,5 @@
 package za.co.carhire.factory.reservation;
+
 /* PaymentFactoryTest.java
  * Sanele Zondi (221602011)
  * Due Date: 18/05/2025
@@ -7,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import za.co.carhire.domain.reservation.Booking;
 import za.co.carhire.domain.reservation.BookingStatus;
 import za.co.carhire.domain.reservation.Payment;
+import za.co.carhire.domain.reservation.PaymentMethod;
 import static org.junit.jupiter.api.Assertions.*;
 
 class PaymentFactoryTest {
@@ -20,7 +22,7 @@ class PaymentFactoryTest {
         Payment payment = PaymentFactory.createPayment(validBooking, 1500.00, "CREDIT CARD");
         assertNotNull(payment);
         assertEquals(1500.00, payment.getAmount());
-        assertEquals("CREDIT CARD", payment.getPaymentMethod());
+        assertEquals(PaymentMethod.CREDIT_CARD, payment.getPaymentMethod());
     }
 
     @Test
@@ -45,6 +47,6 @@ class PaymentFactoryTest {
     void processValidRefund() {
         Payment payment = PaymentFactory.createPayment(validBooking, 2000.00, "EFT");
         Payment refund = PaymentFactory.processRefund(payment);
-        assertEquals("REFUND", refund.getPaymentMethod());
+        assertEquals(PaymentMethod.REFUND, refund.getPaymentMethod());
     }
 }

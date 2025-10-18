@@ -5,7 +5,7 @@ import za.co.carhire.dto.InsuranceDTO;
 
 public class InsuranceMapper {
     // Convert InsuranceDTO to Insurance entity
-    public static InsuranceDTO toDTO(Insurance insurance){
+    public static InsuranceDTO toDTO(Insurance insurance) {
         return new InsuranceDTO(
                 insurance.getInsuranceID(),
                 insurance.getInsuranceStartDate(),
@@ -14,8 +14,7 @@ public class InsuranceMapper {
                 insurance.getStatus(),
                 insurance.getPolicyNumber(),
                 insurance.getMechanic(),
-                insurance.getCar() != null ? insurance.getCar().getCarID() : null
-        );
+                insurance.getCar() != null ? insurance.getCar().getCarID() : null);
 
     }
 

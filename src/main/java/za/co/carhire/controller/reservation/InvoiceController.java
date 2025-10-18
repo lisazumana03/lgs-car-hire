@@ -15,12 +15,10 @@ import za.co.carhire.service.reservation.IPaymentService;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@CrossOrigin(origins = { "http://localhost:3046", "http://127.0.0.1:3046" },
-        allowedHeaders = "*",
-        methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE})
 @RestController
 @RequestMapping("/api/invoice")
-@CrossOrigin(origins = {"http://localhost:5173", "http://localhost:5173"})
+@CrossOrigin(origins = { "http://localhost:5173", "http://127.0.0.1:5173" }, allowedHeaders = "*", methods = {
+        RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE })
 public class InvoiceController {
 
     @Autowired
@@ -28,41 +26,63 @@ public class InvoiceController {
 
     @Autowired
     private IPaymentService paymentService;
-    //invoice creation endpoint
+
+    // invoice creation endpoint
     @PostMapping("/create")
     public ResponseEntity<Invoice> createInvoice(@RequestBody InvoiceCreationRequest request) {
         try {
+            System.out.println("=== CREATE INVOICE START ===");
             System.out.println("Creating invoice for payment: " + request.getPaymentId());
+
+            // Check if invoice already exists for this payment
+            List<Invoice> existingInvoices = invoiceService.getInvoicesByPayment(request.getPaymentId());
+            if (!existingInvoices.isEmpty()) {
+                System.out.println("INFO: Invoice already exists for payment " + request.getPaymentId());
+                Invoice existingInvoice = existingInvoices.get(0);
+                System.out.println("SUCCESS: Returning existing invoice ID: " + existingInvoice.getInvoiceID());
+                System.out.println("=== CREATE INVOICE END ===");
+                return new ResponseEntity<>(existingInvoice, HttpStatus.OK);
+            }
 
             // Get payment using the service
             Payment payment = paymentService.read(request.getPaymentId());
             if (payment == null) {
-                System.out.println("Payment not found: " + request.getPaymentId());
+                System.err.println("ERROR: Payment not found: " + request.getPaymentId());
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             }
+            System.out.println("Payment found - ID: " + payment.getPaymentID() + ", Amount: " + payment.getAmount());
 
             Booking booking = payment.getBooking();
             if (booking == null) {
-                System.out.println("Booking not found for payment: " + request.getPaymentId());
+                System.err.println("ERROR: Booking not found for payment: " + request.getPaymentId());
                 return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
             }
-
-            System.out.println("Found payment: " + payment.getPaymentID() + " and booking: " + booking.getBookingID());
+            System.out.println("Booking found - ID: " + booking.getBookingID());
+            System.out.println("Booking dates - Start: " + booking.getStartDate() + ", End: " + booking.getEndDate());
+            System.out.println("Booking cars: " + (booking.getCar() != null ? booking.getCar().size() : "null"));
 
             // Generate invoice
+            System.out.println("Calling InvoiceFactory.generateInvoice...");
             Invoice invoice = InvoiceFactory.generateInvoice(payment, booking);
 
             if (invoice != null) {
+                System.out.println("Invoice generated successfully");
                 Invoice savedInvoice = invoiceService.create(invoice);
-                System.out.println("Invoice created successfully: " + savedInvoice.getInvoiceID());
+                System.out.println("SUCCESS: Invoice created with ID: " + savedInvoice.getInvoiceID());
+                System.out.println("=== CREATE INVOICE END ===");
                 return new ResponseEntity<>(savedInvoice, HttpStatus.CREATED);
             } else {
-                System.out.println("Invoice creation failed - invalid data");
+                System.err.println("ERROR: InvoiceFactory.generateInvoice returned null");
+                System.err.println("Payment validation - Amount: " + payment.getAmount());
+                System.err.println("Booking validation - StartDate: " + booking.getStartDate() + ", EndDate: "
+                        + booking.getEndDate());
+                System.out.println("=== CREATE INVOICE END ===");
                 return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
             }
         } catch (Exception e) {
-            System.out.println("Error creating invoice: " + e.getMessage());
+            System.err.println("CRITICAL ERROR creating invoice: " + e.getMessage());
             e.printStackTrace();
+            System.out.println("=== CREATE INVOICE END ===");
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -117,7 +137,8 @@ public class InvoiceController {
                             System.out.println("Creating DTO for invoice: " + invoice.getInvoiceID());
                             return new InvoiceDTO(invoice);
                         } catch (Exception e) {
-                            System.err.println("Error creating DTO for invoice " + invoice.getInvoiceID() + ": " + e.getMessage());
+                            System.err.println(
+                                    "Error creating DTO for invoice " + invoice.getInvoiceID() + ": " + e.getMessage());
                             // Create a fallback DTO
                             return createFallbackDTO(invoice);
                         }
@@ -184,8 +205,7 @@ public class InvoiceController {
                         invoice.getStatus(),
                         invoice.getTotalAmount(),
                         invoice.getBooking() != null ? "Present" : "Null",
-                        invoice.getPayment() != null ? "Present" : "Null"
-                );
+                        invoice.getPayment() != null ? "Present" : "Null");
                 System.out.println(debugInfo);
                 return new ResponseEntity<>(debugInfo, HttpStatus.OK);
             } else {
@@ -203,7 +223,12 @@ public class InvoiceController {
     public static class InvoiceCreationRequest {
         private int paymentId;
 
-        public int getPaymentId() { return paymentId; }
-        public void setPaymentId(int paymentId) { this.paymentId = paymentId; }
+        public int getPaymentId() {
+            return paymentId;
+        }
+
+        public void setPaymentId(int paymentId) {
+            this.paymentId = paymentId;
+        }
     }
 }

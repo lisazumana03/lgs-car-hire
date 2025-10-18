@@ -34,6 +34,9 @@ public class Location implements Serializable {
     private String provinceOrState;
     private String country;
     private String postalCode;
+    private Double latitude;
+    private Double longitude;
+    private String fullAddress;
 
     @OneToMany(mappedBy = "pickupLocation")
     @JsonIgnore
@@ -55,6 +58,9 @@ public class Location implements Serializable {
         this.provinceOrState = builder.provinceOrState;
         this.country = builder.country;
         this.postalCode = builder.postalCode;
+        this.latitude = builder.latitude;
+        this.longitude = builder.longitude;
+        this.fullAddress = builder.fullAddress;
         this.pickUpLocations = builder.pickUpLocations;
         this.dropOffLocations = builder.dropOffLocations;
     }
@@ -99,6 +105,18 @@ public class Location implements Serializable {
         return dropOffLocations;
     }
 
+    public Double getLatitude() {
+        return latitude;
+    }
+
+    public Double getLongitude() {
+        return longitude;
+    }
+
+    public String getFullAddress() {
+        return fullAddress;
+    }
+
     @Override
     public String toString() {
         return "Location{" +
@@ -123,6 +141,9 @@ public class Location implements Serializable {
         private String provinceOrState;
         private String country;
         private String postalCode;
+        private Double latitude;
+        private Double longitude;
+        private String fullAddress;
         private List<Booking> pickUpLocations;
         private List<Booking> dropOffLocations;
 
@@ -176,6 +197,21 @@ public class Location implements Serializable {
             return this;
         }
 
+        public Builder setLatitude(Double latitude) {
+            this.latitude = latitude;
+            return this;
+        }
+
+        public Builder setLongitude(Double longitude) {
+            this.longitude = longitude;
+            return this;
+        }
+
+        public Builder setFullAddress(String fullAddress) {
+            this.fullAddress = fullAddress;
+            return this;
+        }
+
         public Builder copy(Location location) {
             this.locationID = location.locationID;
             this.locationName = location.locationName;
@@ -185,6 +221,9 @@ public class Location implements Serializable {
             this.provinceOrState = location.provinceOrState;
             this.country = location.country;
             this.postalCode = location.postalCode;
+            this.latitude = location.latitude;
+            this.longitude = location.longitude;
+            this.fullAddress = location.fullAddress;
             this.pickUpLocations = location.pickUpLocations;
             this.dropOffLocations = location.dropOffLocations;
             return this;
