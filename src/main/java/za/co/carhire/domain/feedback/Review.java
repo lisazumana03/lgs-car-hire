@@ -25,17 +25,17 @@ public class Review implements Serializable {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "car_id", nullable = false)
-    @JsonIgnoreProperties({"reviews", "imageData"})
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler", "reviews", "imageData"})
     protected Car car;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
-    @JsonIgnoreProperties({"password", "idNumber"})
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler", "password", "idNumber"})
     protected User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "booking_id")
-    @JsonIgnoreProperties({"user", "car", "payment"})
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler", "user", "car", "payment"})
     protected Booking booking;
 
     @Column(name = "rating", nullable = false)

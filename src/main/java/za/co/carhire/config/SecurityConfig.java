@@ -70,6 +70,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/car/**", "/api/car-type/**").permitAll() // Allow browsing cars
                         .requestMatchers("/api/location/**").permitAll() // Allow viewing locations
                         .requestMatchers("/api/review/**").permitAll() // Allow viewing reviews
+                        .requestMatchers("/review/**").permitAll() // Allow viewing reviews (alternative path)
                         .requestMatchers("/api/pricing-rule/**").permitAll() // Allow viewing pricing rules
 
                         // Admin-only endpoints
