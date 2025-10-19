@@ -10,11 +10,17 @@ package za.co.carhire.domain.authentication;
 
      */
 import jakarta.persistence.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
 import java.time.LocalDate;
+import java.util.Collection;
+import java.util.List;
 
 @Entity
 @Table(name = "Users")
-public class User {
+public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "user_id")
@@ -88,8 +94,52 @@ public class User {
         return phoneNumber;
     }
 
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of(new SimpleGrantedAuthority("ROLE_" + role.name()));
+    }
+
+    /**
+     * Returns the password used to authenticate the user.
+     *
+     * @return the password
+     */
+    @Override
     public String getPassword() {
         return password;
+    }
+
+    // public String getPassword() {
+    // return password;
+    // }
+
+    @Override
+    public String getUsername() {
+        return email;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+        // UserDetails.super.isAccountNonExpired()
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+        // UserDetails.super.isAccountNonLocked()
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+        // UserDetails.super.isCredentialsNonExpired()
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+        // UserDetails.super.isEnabled()
     }
 
     public Role getRole() {

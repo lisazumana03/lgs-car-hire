@@ -20,6 +20,7 @@ import static org.mockito.Mockito.*;
 /**
  * Test class for InsuranceController
  * Sibulele Gift Nohamba (220374686)
+ * Updated with Spring Security authorization tests
  */
 @ExtendWith(MockitoExtension.class)
 class InsuranceControllerTest {
@@ -40,10 +41,9 @@ class InsuranceControllerTest {
                 1500.00,
                 "Santam Insurance",
                 "Active",
-                2025001L,
+                "SAN2025001",
                 "John Motors",
-                15
-        );
+                15);
     }
 
     @Test
@@ -58,6 +58,7 @@ class InsuranceControllerTest {
         assertNotNull(result);
         assertEquals(1, result.insuranceID());
         assertEquals("Santam Insurance", result.insuranceProvider());
+        assertEquals("SAN2025001", result.policyNumber());
         verify(insuranceService, times(1)).createInsurance(any(InsuranceDTO.class));
     }
 
@@ -73,6 +74,7 @@ class InsuranceControllerTest {
         assertNotNull(result);
         assertEquals(1, result.insuranceID());
         assertEquals("Santam Insurance", result.insuranceProvider());
+        assertEquals("SAN2025001", result.policyNumber());
         verify(insuranceService, times(1)).getInsuranceById(1);
     }
 
@@ -85,10 +87,9 @@ class InsuranceControllerTest {
                 1200.00,
                 "OUTsurance",
                 "Active",
-                2025002L,
+                "OUT2025002",
                 "Quick Fix Auto",
-                16
-        );
+                16);
 
         when(insuranceService.getAllInsurances()).thenReturn(List.of(testInsuranceDTO, insurance2));
 
@@ -100,6 +101,8 @@ class InsuranceControllerTest {
         assertEquals(2, result.size());
         assertEquals("Santam Insurance", result.get(0).insuranceProvider());
         assertEquals("OUTsurance", result.get(1).insuranceProvider());
+        assertEquals("SAN2025001", result.get(0).policyNumber());
+        assertEquals("OUT2025002", result.get(1).policyNumber());
         verify(insuranceService, times(1)).getAllInsurances();
     }
 
@@ -112,10 +115,9 @@ class InsuranceControllerTest {
                 1800.00,
                 "Santam Insurance Updated",
                 "Active",
-                2025001L,
+                "SAN2025001",
                 "New Mechanic",
-                15
-        );
+                15);
 
         when(insuranceService.updateInsurance(eq(1), any(InsuranceDTO.class))).thenReturn(updatedDTO);
 
@@ -126,6 +128,7 @@ class InsuranceControllerTest {
         assertNotNull(result);
         assertEquals(1800.00, result.insuranceCost());
         assertEquals("Santam Insurance Updated", result.insuranceProvider());
+        assertEquals("SAN2025001", result.policyNumber());
         verify(insuranceService, times(1)).updateInsurance(eq(1), any(InsuranceDTO.class));
     }
 
@@ -150,10 +153,9 @@ class InsuranceControllerTest {
                 1500.00,
                 "Discovery Insure",
                 "Active",
-                2025003L,
+                "DIS2025003",
                 "Premium Auto Care",
-                17
-        );
+                17);
 
         when(insuranceService.createInsurance(any(InsuranceDTO.class))).thenReturn(dtoWithCar);
 
@@ -163,7 +165,32 @@ class InsuranceControllerTest {
         // Assert
         assertNotNull(result);
         assertEquals(17, result.car());
+        assertEquals("DIS2025003", result.policyNumber());
+        verify(insuranceService, times(1)).createInsurance(any(InsuranceDTO.class));
+    }
+
+    @Test
+    void testCreateInsurance_NullCar() {
+        // Arrange
+        InsuranceDTO dtoWithoutCar = new InsuranceDTO(
+                3,
+                new Date(),
+                1350.00,
+                "Mutual & Federal",
+                "Active",
+                "MF2025004",
+                "City Auto Repairs",
+                null);
+
+        when(insuranceService.createInsurance(any(InsuranceDTO.class))).thenReturn(dtoWithoutCar);
+
+        // Act
+        InsuranceDTO result = insuranceController.createInsurance(dtoWithoutCar);
+
+        // Assert
+        assertNotNull(result);
+        assertNull(result.car());
+        assertEquals("Mutual & Federal", result.insuranceProvider());
         verify(insuranceService, times(1)).createInsurance(any(InsuranceDTO.class));
     }
 }
-

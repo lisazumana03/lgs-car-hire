@@ -3,6 +3,7 @@ package za.co.carhire.controller.vehicle;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import za.co.carhire.domain.vehicle.Car;
 import za.co.carhire.dto.vehicle.CarDTO;
@@ -25,6 +26,7 @@ public class CarController {
     @Autowired
     private ICarService carService;
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/create")
     public ResponseEntity<CarDTO> create(@RequestBody CarDTO carDto) {
         Car car = CarMapper.toEntity(carDto);
@@ -43,6 +45,7 @@ public class CarController {
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/update")
     public ResponseEntity<CarDTO> update(@RequestBody CarDTO carDto) {
         Car existingCar = carService.read(carDto.getCarID());
@@ -55,6 +58,7 @@ public class CarController {
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<Void> delete(@PathVariable int id) {
         carService.delete(id);
@@ -88,6 +92,7 @@ public class CarController {
         return new ResponseEntity<>(carDtos, HttpStatus.OK);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/availability/{id}")
     public ResponseEntity<CarDTO> updateAvailability(@PathVariable int id, @RequestParam boolean available) {
         Car car = carService.updateAvailability(id, available);

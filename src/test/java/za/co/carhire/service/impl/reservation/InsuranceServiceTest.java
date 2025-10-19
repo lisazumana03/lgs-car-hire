@@ -10,7 +10,6 @@ import za.co.carhire.domain.reservation.Insurance;
 import za.co.carhire.domain.vehicle.Car;
 import za.co.carhire.dto.InsuranceDTO;
 import za.co.carhire.repository.reservation.IInsuranceRepository;
-import za.co.carhire.repository.vehicle.ICarRepository;
 import za.co.carhire.service.reservation.impl.InsuranceService;
 import za.co.carhire.service.vehicle.ICarService;
 
@@ -25,6 +24,7 @@ import static org.mockito.Mockito.*;
 /**
  * Test class for InsuranceService
  * Sibulele Gift Nohamba (220374686)
+ * Updated with correct data types
  */
 @ExtendWith(MockitoExtension.class)
 class InsuranceServiceTest {
@@ -53,7 +53,7 @@ class InsuranceServiceTest {
         testInsurance = new Insurance.Builder()
                 .setInsuranceID(1)
                 .setInsuranceProvider("Santam Insurance")
-                .setPolicyNumber(2025001L)
+                .setPolicyNumber("SAN28923")
                 .setInsuranceStartDate(new Date())
                 .setInsuranceCost(1500.00)
                 .setStatus("Active")
@@ -66,10 +66,9 @@ class InsuranceServiceTest {
                 1500.00,
                 "Santam Insurance",
                 "Active",
-                2025001L,
+                "SAN2025001",
                 "John Motors",
-                null
-        );
+                null);
     }
 
     @Test
@@ -98,6 +97,7 @@ class InsuranceServiceTest {
         assertNotNull(result);
         assertEquals(1, result.insuranceID());
         assertEquals("Santam Insurance", result.insuranceProvider());
+        assertEquals("SAN28923", result.policyNumber());
         verify(insuranceRepository, times(1)).findById(1);
     }
 
@@ -110,6 +110,7 @@ class InsuranceServiceTest {
         assertThrows(IllegalArgumentException.class, () -> {
             insuranceService.getInsuranceById(999);
         });
+        verify(insuranceRepository, times(1)).findById(999);
     }
 
     @Test
@@ -118,7 +119,7 @@ class InsuranceServiceTest {
         Insurance insurance2 = new Insurance.Builder()
                 .setInsuranceID(2)
                 .setInsuranceProvider("OUTsurance")
-                .setPolicyNumber(2025002L)
+                .setPolicyNumber("OUT2025002")
                 .setInsuranceStartDate(new Date())
                 .setInsuranceCost(1200.00)
                 .setStatus("Active")
@@ -133,6 +134,8 @@ class InsuranceServiceTest {
         // Assert
         assertNotNull(result);
         assertEquals(2, result.size());
+        assertEquals("Santam Insurance", result.get(0).insuranceProvider());
+        assertEquals("OUTsurance", result.get(1).insuranceProvider());
         verify(insuranceRepository, times(1)).findAll();
     }
 
@@ -145,15 +148,14 @@ class InsuranceServiceTest {
                 1800.00,
                 "Santam Insurance Updated",
                 "Active",
-                2025001L,
+                "SAN2025001",
                 "New Mechanic",
-                null
-        );
+                null);
 
         Insurance updatedInsurance = new Insurance.Builder()
                 .setInsuranceID(1)
                 .setInsuranceProvider("Santam Insurance Updated")
-                .setPolicyNumber(2025001L)
+                .setPolicyNumber("SAN2025001")
                 .setInsuranceStartDate(updatedDTO.insuranceStartDate())
                 .setInsuranceCost(1800.00)
                 .setStatus("Active")
@@ -170,6 +172,8 @@ class InsuranceServiceTest {
         assertNotNull(result);
         assertEquals(1800.00, result.insuranceCost());
         assertEquals("Santam Insurance Updated", result.insuranceProvider());
+        assertEquals("SAN2025001", result.policyNumber());
+        verify(insuranceRepository, times(1)).findById(1);
         verify(insuranceRepository, times(1)).save(any(Insurance.class));
     }
 
@@ -182,6 +186,7 @@ class InsuranceServiceTest {
         assertThrows(IllegalArgumentException.class, () -> {
             insuranceService.updateInsurance(999, testInsuranceDTO);
         });
+        verify(insuranceRepository, times(1)).findById(999);
     }
 
     @Test
@@ -194,6 +199,7 @@ class InsuranceServiceTest {
         insuranceService.deleteInsurance(1);
 
         // Assert
+        verify(insuranceRepository, times(1)).existsById(1);
         verify(insuranceRepository, times(1)).deleteById(1);
     }
 
@@ -206,6 +212,58 @@ class InsuranceServiceTest {
         assertThrows(IllegalArgumentException.class, () -> {
             insuranceService.deleteInsurance(999);
         });
+        verify(insuranceRepository, times(1)).existsById(999);
+        verify(insuranceRepository, never()).deleteById(anyInt());
+    }
+
+    @Test
+    void testCreateInsurance_WithCar() {
+        // Arrange
+        InsuranceDTO dtoWithCar = new InsuranceDTO(
+                2,
+                new Date(),
+                1700.00,
+                "Discovery Insure",
+                "Active",
+                "DIS2025003",
+                "Premium Auto Care",
+                15);
+
+        Insurance insuranceWithCar = new Insurance.Builder()
+                .setInsuranceID(2)
+                .setInsuranceProvider("Discovery Insure")
+                .setPolicyNumber("DIS2025003")
+                .setInsuranceStartDate(dtoWithCar.insuranceStartDate())
+                .setInsuranceCost(1700.00)
+                .setStatus("Active")
+                .setMechanic("Premium Auto Care")
+                .setCar(testCar)
+                .build();
+
+        when(carService.read(15)).thenReturn(testCar);
+        when(insuranceRepository.save(any(Insurance.class))).thenReturn(insuranceWithCar);
+
+        // Act
+        InsuranceDTO result = insuranceService.createInsurance(dtoWithCar);
+
+        // Assert
+        assertNotNull(result);
+        assertEquals("Discovery Insure", result.insuranceProvider());
+        assertEquals(15, result.car());
+        verify(insuranceRepository, times(1)).save(any(Insurance.class));
+    }
+
+    @Test
+    void testGetAllInsurances_EmptyList() {
+        // Arrange
+        when(insuranceRepository.findAll()).thenReturn(List.of());
+
+        // Act
+        List<InsuranceDTO> result = insuranceService.getAllInsurances();
+
+        // Assert
+        assertNotNull(result);
+        assertTrue(result.isEmpty());
+        verify(insuranceRepository, times(1)).findAll();
     }
 }
-

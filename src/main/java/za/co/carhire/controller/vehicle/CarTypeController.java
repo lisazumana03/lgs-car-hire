@@ -3,6 +3,7 @@ package za.co.carhire.controller.vehicle;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import za.co.carhire.domain.vehicle.CarType;
 import za.co.carhire.dto.vehicle.CarTypeDTO;
@@ -26,6 +27,7 @@ public class CarTypeController {
     @Autowired
     private ICarTypeService carTypeService;
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/create")
     public ResponseEntity<CarTypeDTO> create(@RequestBody CarTypeDTO carTypeDto) {
         CarType carType = CarTypeMapper.toEntity(carTypeDto);
@@ -44,6 +46,7 @@ public class CarTypeController {
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/update")
     public ResponseEntity<CarTypeDTO> update(@RequestBody CarTypeDTO carTypeDto) {
         CarType existingCarType = carTypeService.read(carTypeDto.getCarTypeID());
@@ -56,6 +59,7 @@ public class CarTypeController {
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<Void> delete(@PathVariable int id) {
         carTypeService.delete(id);

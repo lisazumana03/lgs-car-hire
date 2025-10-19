@@ -8,7 +8,7 @@ import za.co.carhire.dto.authenticationDTO.UserDTO;
 @Component
 public class UserMapper {
 
-    // Convert User entity to UserDTO
+    // Convert User entity to UserDTO (excludes password for security)
     public static UserDTO toDTO(User user) {
         return new UserDTO(
                 user.getUserId(),
@@ -18,7 +18,6 @@ public class UserMapper {
                 user.getEmail(),
                 user.getDateOfBirth(),
                 user.getPhoneNumber(),
-                user.getPassword(),
                 user.getRole());
     }
 
