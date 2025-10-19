@@ -3,8 +3,6 @@ package za.co.carhire.controller.authentication;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import za.co.carhire.dto.authenticationDTO.LoginRequestDTO;
-import za.co.carhire.dto.authenticationDTO.SignUpRequestDTO;
 import za.co.carhire.dto.authenticationDTO.UserDTO;
 import za.co.carhire.service.authentication.UserService;
 
@@ -28,25 +26,26 @@ public class UserController {
   @Autowired
   private UserService userService;
 
-
   // List all users
   @GetMapping
   public List<UserDTO> listUsers() {
     return userService.listUsers();
   }
 
-  // Register a new user
-  @PostMapping("/register")
-  @ResponseStatus(HttpStatus.CREATED)
-  public UserDTO registerUser(@RequestBody SignUpRequestDTO registerDTO) {
-    return userService.registerUser(registerDTO);
-  }
+  // Register a new user - NOT NEEDED (Use AuthenticationController instead for
+  // JWT authentication)
+  // @PostMapping("/register")
+  // @ResponseStatus(HttpStatus.CREATED)
+  // public UserDTO registerUser(@RequestBody SignUpRequestDTO registerDTO) {
+  // return userService.registerUser(registerDTO);
+  // }
 
-  // Login
-  @PostMapping("/login")
-  public Optional<UserDTO> loginUser(@RequestBody LoginRequestDTO loginDTO) {
-    return userService.loginUser(loginDTO);
-  }
+  // Login - NOT NEEDED (Use AuthenticationController instead for JWT
+  // authentication)
+  // @PostMapping("/login")
+  // public Optional<UserDTO> loginUser(@RequestBody LoginRequestDTO loginDTO) {
+  // return userService.loginUser(loginDTO);
+  // }
 
   // Get user profile
   @GetMapping("/{userId}")

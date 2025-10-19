@@ -6,6 +6,7 @@ package za.co.carhire.controller.reservation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import za.co.carhire.domain.reservation.Insurance;
 import za.co.carhire.dto.InsuranceDTO;
@@ -27,6 +28,7 @@ public class InsuranceController {
     }
 
     // Create Insurance
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public InsuranceDTO createInsurance(@RequestBody InsuranceDTO insuranceDTO) {
@@ -46,12 +48,14 @@ public class InsuranceController {
     }
 
     // Update Insurance
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")
     public InsuranceDTO updateInsurance(@PathVariable int id, @RequestBody InsuranceDTO insuranceDTO) {
         return insuranceService.updateInsurance(id, insuranceDTO);
     }
 
     // Delete Insurance
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteInsurance(@PathVariable int id) {

@@ -34,4 +34,7 @@ public interface UserService {
     // Internal method for getting User entity (for relationships)
     User getUserEntity(Integer userId);
 
+    // Get User entity by email (for authorization checks)
+    User getUserByEmail(String email);
+
 }

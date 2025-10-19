@@ -166,6 +166,14 @@ public class InvoiceController {
         dto.setIssueDate(invoice.getIssueDate());
         dto.setDueDate(invoice.getDueDate());
         dto.setCarModel("Vehicle");
+        dto.setCustomerName("Customer");
+        dto.setCustomerEmail("customer@email.com");
+        dto.setPickupLocationName("Pickup Location");
+        dto.setPickupLocationAddress("Address not available");
+        if (invoice.getBooking() != null) {
+            dto.setBookingStartDate(invoice.getBooking().getStartDate());
+            dto.setBookingEndDate(invoice.getBooking().getEndDate());
+        }
         return dto;
     }
 

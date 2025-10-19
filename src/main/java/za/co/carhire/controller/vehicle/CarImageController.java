@@ -5,6 +5,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import za.co.carhire.domain.vehicle.Car;
@@ -22,6 +23,8 @@ public class CarImageController {
     private ICarService carService;
 
  //Upload car image
+
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping(value = "/upload/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> uploadCarImage(
             @PathVariable int id,

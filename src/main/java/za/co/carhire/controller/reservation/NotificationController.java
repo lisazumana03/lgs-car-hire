@@ -11,6 +11,7 @@ package za.co.carhire.controller.reservation;
      */
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import za.co.carhire.dto.CreateNotificationDTO;
 import za.co.carhire.dto.NotificationDTO;
@@ -30,6 +31,7 @@ public class NotificationController {
         this.notificationService = notificationService;
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     public ResponseEntity<?> sendNotification(@RequestBody CreateNotificationDTO createDTO) {
         try {

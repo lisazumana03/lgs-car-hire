@@ -7,6 +7,7 @@ package za.co.carhire.controller.reservation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import za.co.carhire.domain.reservation.Maintenance;
 import za.co.carhire.dto.MaintenanceDTO;
@@ -23,6 +24,7 @@ public class MaintenanceController {
     private MaintenanceService maintenanceService;
 
     // Create Maintenance
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/create")
     public ResponseEntity<MaintenanceDTO> create(@RequestBody MaintenanceDTO dto) {
         MaintenanceDTO created = maintenanceService.create(dto);
@@ -45,6 +47,7 @@ public class MaintenanceController {
     }
 
     // Update Maintenance
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/update/{id}")
     public ResponseEntity<MaintenanceDTO> update(@PathVariable int id, @RequestBody MaintenanceDTO dto) {
         MaintenanceDTO updated = maintenanceService.update(id, dto);
@@ -52,6 +55,7 @@ public class MaintenanceController {
     }
 
     // Delete Maintenance
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<Void> delete(@PathVariable int id) {
         maintenanceService.delete(id);

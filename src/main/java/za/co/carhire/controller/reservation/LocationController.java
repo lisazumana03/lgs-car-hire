@@ -10,45 +10,45 @@ import java.util.List;
 import java.util.Set;
 
 /**
-Lisakhanya Zumana (230864821)
-Date: 25/05/2025
+ * Lisakhanya Zumana (230864821)
+ * Date: 25/05/2025
  */
 
 @RestController
 @RequestMapping("/api/location")
-//@CrossOrigin(origins = "*")
+@CrossOrigin(origins = { "http://localhost:5173", "http://127.0.0.1:5173" })
 public class LocationController {
 
     @Autowired
     private LocationService locationService;
 
     @PostMapping("/create")
-    public ResponseEntity<Location> create(@RequestBody Location location){
+    public ResponseEntity<Location> create(@RequestBody Location location) {
         return ResponseEntity.ok(locationService.create(location));
     }
 
     @GetMapping("/read/{id}")
-    public Location read(@PathVariable int id){
+    public Location read(@PathVariable int id) {
         return locationService.read(id);
     }
 
     @PostMapping("/update")
-    public Location update(@RequestBody Location location){
+    public Location update(@RequestBody Location location) {
         return locationService.update(location);
     }
 
     @GetMapping("/all")
-    public ResponseEntity<List<Location>> getAll(){
+    public ResponseEntity<List<Location>> getAll() {
         return ResponseEntity.ok(locationService.getAllLocations());
     }
 
     @GetMapping("/location-set")
-    public ResponseEntity<Set<Location>> readAll(){
+    public ResponseEntity<Set<Location>> readAll() {
         return ResponseEntity.ok(locationService.getLocations());
     }
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<Void> delete(@PathVariable int id){
+    public ResponseEntity<Void> delete(@PathVariable int id) {
         locationService.delete(id);
         return ResponseEntity.noContent().build();
     }

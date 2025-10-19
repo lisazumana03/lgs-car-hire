@@ -1,6 +1,16 @@
 package za.co.carhire.service.authentication.Impl;
 
+/* UserServiceImpl.java
+
+     User service/impl/UserServiceImpl class
+
+     Author: Bonga Velem
+
+     Student Number: 220052379
+
+     */
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import za.co.carhire.domain.authentication.User;
 import za.co.carhire.dto.authenticationDTO.LoginRequestDTO;
@@ -18,10 +28,12 @@ import java.util.stream.Collectors;
 public class UserServiceImpl implements UserService {
 
     private final IUserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public UserServiceImpl(IUserRepository userRepository) {
+    public UserServiceImpl(IUserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
@@ -33,6 +45,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Deprecated // Use AuthenticationService.register() instead for JWT authentication
     public UserDTO registerUser(SignUpRequestDTO registerDTO) {
         // Build User via Builder
         User user = new User.Builder()
@@ -42,7 +55,7 @@ public class UserServiceImpl implements UserService {
                 .setEmail(registerDTO.email())
                 .setDateOfBirth(registerDTO.dateOfBirth())
                 .setPhoneNumber(registerDTO.phoneNumber())
-                .setPassword(registerDTO.password()) // Plain text for now
+                .setPassword(passwordEncoder.encode(registerDTO.password())) // Hash password with BCrypt
                 .setRole(registerDTO.role())
                 .build();
 
@@ -51,14 +64,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Deprecated // Use AuthenticationService.authenticate() instead for JWT authentication
     public Optional<UserDTO> loginUser(LoginRequestDTO loginDTO) {
+        // This method is deprecated - use AuthenticationService for JWT-based
+        // authentication
+        User user = userRepository.findByEmail(loginDTO.email())
+                .orElse(null);
 
-        User user = userRepository.findByEmailAndPasswordAndRole(
-                loginDTO.email(),
-                loginDTO.password(),
-                loginDTO.role());
-
-        if (user != null) {
+        if (user != null && passwordEncoder.matches(loginDTO.password(), user.getPassword())) {
             return Optional.of(UserMapper.toDTO(user));
         }
         return Optional.empty();
@@ -99,5 +112,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public User getUserEntity(Integer userId) {
         return userRepository.findById(userId).orElse(null);
+    }
+
+    @Override
+    public User getUserByEmail(String email) {
+        return userRepository.findByEmail(email).orElse(null);
     }
 }
