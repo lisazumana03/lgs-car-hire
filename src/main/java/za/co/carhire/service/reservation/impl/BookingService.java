@@ -83,7 +83,7 @@ public class BookingService implements IBookingService {
      */
     private Location handleMapLocation(Location location) {
         System.out.println("Creating new location from map: " + location.getLocationName());
-        
+
         // Create new location with all the details from Google Maps
         Location newLocation = new Location.Builder()
                 .setLocationName(location.getLocationName())
@@ -97,7 +97,7 @@ public class BookingService implements IBookingService {
                 .setLongitude(location.getLongitude())
                 .setFullAddress(location.getFullAddress())
                 .build();
-        
+
         Location savedLocation = locationRepository.save(newLocation);
         System.out.println("Location saved with ID: " + savedLocation.getLocationID());
         return savedLocation;
@@ -141,6 +141,28 @@ public class BookingService implements IBookingService {
 
         booking.setBookingStatus(BookingStatus.CANCELLED);
         return bookingRepository.save(booking);
+    }
+
+    public Booking updateBookingStatus(int id, String status) {
+        // Step 1: Find booking by ID
+        Booking existingBooking = bookingRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Booking not found with ID: " + id));
+
+        // Step 2: Convert String -> Enum (case insensitive)
+        BookingStatus newStatus;
+        try {
+            newStatus = BookingStatus.valueOf(status.toUpperCase());
+        } catch (IllegalArgumentException e) {
+            throw new RuntimeException("Invalid booking status: " + status);
+        }
+
+        // Step 3: Use Builder to create updated booking
+        Booking updatedBooking = existingBooking.Builder()
+                .status(newStatus)
+                .build();
+
+        // Step 4: Save and return
+        return bookingRepository.save(updatedBooking);
     }
 
 }
