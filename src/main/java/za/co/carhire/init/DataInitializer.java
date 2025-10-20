@@ -11,6 +11,7 @@ import za.co.carhire.factory.vehicle.CarFactory;
 import za.co.carhire.factory.vehicle.CarTypeFactory;
 import za.co.carhire.service.vehicle.ICarService;
 import za.co.carhire.service.vehicle.ICarTypeService;
+import za.co.carhire.util.ImageDownloader;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -32,6 +33,9 @@ public class DataInitializer implements CommandLineRunner {
 
     @Value("${app.database.init.clear-existing:false}")
     private boolean clearExisting;
+
+    @Value("${app.database.init.download-images:true}")
+    private boolean downloadImages;
 
     @Override
     @Transactional
@@ -190,124 +194,170 @@ public class DataInitializer implements CommandLineRunner {
 
     private Car createAndSaveCar(String model, String brand, int year, double rentalPrice,
                                  boolean available, String imageUrl) {
-        // Note: Image URLs are kept for reference but not stored as we now use BLOB storage
-        // For initial data, you can later add logic to download and convert images to byte arrays
-        Car car = CarFactory.createBasicCar(
-                0, // ID will be auto-generated
-                model,
-                brand,
-                year,
-                rentalPrice
-        );
+        Car car;
+
+        // Download and store image if enabled and URL is provided
+        if (downloadImages && imageUrl != null && !imageUrl.trim().isEmpty()) {
+            System.out.println("Downloading image for " + brand + " " + model + "...");
+
+            byte[] imageData = ImageDownloader.downloadImageWithRetry(imageUrl, 3);
+
+            if (imageData != null) {
+                String imageType = ImageDownloader.getImageType(imageUrl);
+                String imageName = ImageDownloader.getImageName(imageUrl, brand, model);
+
+                car = CarFactory.createBasicCarWithImage(
+                        0, // ID will be auto-generated
+                        model,
+                        brand,
+                        year,
+                        rentalPrice,
+                        imageData,
+                        imageName,
+                        imageType
+                );
+
+                System.out.println("  ✓ Image downloaded successfully (" + imageData.length + " bytes)");
+            } else {
+                // If image download fails, create car without image
+                System.out.println("  ✗ Failed to download image, creating car without image");
+                car = CarFactory.createBasicCar(
+                        0,
+                        model,
+                        brand,
+                        year,
+                        rentalPrice
+                );
+            }
+        } else {
+            // Create car without image if download is disabled or no URL provided
+            car = CarFactory.createBasicCar(
+                    0,
+                    model,
+                    brand,
+                    year,
+                    rentalPrice
+            );
+        }
+
         car.setAvailability(available);
-
-        // TODO: Optionally download image from imageUrl and convert to byte array
-        // For now, images can be uploaded via the API endpoints after initialization
-
         car = carService.create(car);
+
         System.out.println("Created car: " + brand + " " + model + " (" + year + ") - R" + rentalPrice + "/day");
         return car;
     }
 
     private void createCarTypesAndAssociate(Map<String, List<Car>> carsByType) {
-        // Create CarTypes and associate with the first car of each type
-        // Note: Due to the OneToOne relationship where CarType owns the foreign key,
-        // each CarType can only be associated with one car
+        // Create CarTypes and associate with ALL cars of each type
+        // Now using ManyToOne relationship - multiple cars can share the same CarType
 
         if (!carsByType.get("Economy").isEmpty()) {
-            Car firstEconomyCar = carsByType.get("Economy").get(0);
             CarType economy = CarTypeFactory.createEconomy(0);
-            carTypeService.create(economy);
+            economy = carTypeService.create(economy);
 
-            // Update the car with its type
-            firstEconomyCar.setCarType(economy);
-            carService.update(firstEconomyCar);
+            for (Car car : carsByType.get("Economy")) {
+                car.setCarType(economy);
+                carService.update(car);
+            }
         }
 
         if (!carsByType.get("Sedan").isEmpty()) {
-            Car firstSedanCar = carsByType.get("Sedan").get(0);
             CarType sedan = CarTypeFactory.createSedan(0);
-            carTypeService.create(sedan);
+            sedan = carTypeService.create(sedan);
 
-            firstSedanCar.setCarType(sedan);
-            carService.update(firstSedanCar);
+            for (Car car : carsByType.get("Sedan")) {
+                car.setCarType(sedan);
+                carService.update(car);
+            }
         }
 
         if (!carsByType.get("SUV").isEmpty()) {
-            Car firstSuvCar = carsByType.get("SUV").get(0);
             CarType suv = CarTypeFactory.createSUV(0);
-            carTypeService.create(suv);
+            suv = carTypeService.create(suv);
 
-            firstSuvCar.setCarType(suv);
-            carService.update(firstSuvCar);
+            for (Car car : carsByType.get("SUV")) {
+                car.setCarType(suv);
+                carService.update(car);
+            }
         }
 
         if (!carsByType.get("Luxury").isEmpty()) {
-            Car firstLuxuryCar = carsByType.get("Luxury").get(0);
             CarType luxury = CarTypeFactory.createLuxury(0);
-            carTypeService.create(luxury);
+            luxury = carTypeService.create(luxury);
 
-            firstLuxuryCar.setCarType(luxury);
-            carService.update(firstLuxuryCar);
+            for (Car car : carsByType.get("Luxury")) {
+                car.setCarType(luxury);
+                carService.update(car);
+            }
         }
 
         if (!carsByType.get("Sports").isEmpty()) {
-            Car firstSportsCar = carsByType.get("Sports").get(0);
             CarType sports = CarTypeFactory.createSports(0);
-            carTypeService.create(sports);
+            sports = carTypeService.create(sports);
 
-            firstSportsCar.setCarType(sports);
-            carService.update(firstSportsCar);
+            for (Car car : carsByType.get("Sports")) {
+                car.setCarType(sports);
+                carService.update(car);
+            }
         }
 
         if (!carsByType.get("Convertible").isEmpty()) {
-            Car firstConvertibleCar = carsByType.get("Convertible").get(0);
             CarType convertible = CarTypeFactory.createConvertible(0);
-            carTypeService.create(convertible);
+            convertible = carTypeService.create(convertible);
 
-            firstConvertibleCar.setCarType(convertible);
-            carService.update(firstConvertibleCar);
+            for (Car car : carsByType.get("Convertible")) {
+                car.setCarType(convertible);
+                carService.update(car);
+            }
         }
 
         if (!carsByType.get("Minivan").isEmpty()) {
-            Car firstMinivanCar = carsByType.get("Minivan").get(0);
             CarType minivan = CarTypeFactory.createMinivan(0);
-            carTypeService.create(minivan);
+            minivan = carTypeService.create(minivan);
 
-            firstMinivanCar.setCarType(minivan);
-            carService.update(firstMinivanCar);
+            for (Car car : carsByType.get("Minivan")) {
+                car.setCarType(minivan);
+                carService.update(car);
+            }
         }
 
         if (!carsByType.get("Electric").isEmpty()) {
-            Car firstElectricCar = carsByType.get("Electric").get(0);
             CarType electric = CarTypeFactory.createElectric(0);
-            carTypeService.create(electric);
+            electric = carTypeService.create(electric);
 
-            firstElectricCar.setCarType(electric);
-            carService.update(firstElectricCar);
+            for (Car car : carsByType.get("Electric")) {
+                car.setCarType(electric);
+                carService.update(car);
+            }
         }
 
         if (!carsByType.get("Hybrid").isEmpty()) {
-            Car firstHybridCar = carsByType.get("Hybrid").get(0);
             CarType hybrid = CarTypeFactory.createHybrid(0);
-            carTypeService.create(hybrid);
+            hybrid = carTypeService.create(hybrid);
 
-            firstHybridCar.setCarType(hybrid);
-            carService.update(firstHybridCar);
+            for (Car car : carsByType.get("Hybrid")) {
+                car.setCarType(hybrid);
+                carService.update(car);
+            }
         }
 
-        System.out.println("Created and associated car types");
+        System.out.println("Created and associated car types to all cars");
     }
 
     private void displaySummaryStatistics() {
         Set<Car> allCars = carService.getCars();
         long availableCars = allCars.stream().filter(Car::isAvailability).count();
         long unavailableCars = allCars.size() - availableCars;
+        long carsWithImages = allCars.stream()
+                .filter(car -> car.getImageData() != null && car.getImageData().length > 0)
+                .count();
 
         System.out.println("Summary Statistics:");
         System.out.println("- Total Cars: " + allCars.size());
         System.out.println("- Available Cars: " + availableCars);
         System.out.println("- Unavailable Cars: " + unavailableCars);
+        System.out.println("- Cars with Images: " + carsWithImages + " (" +
+                (allCars.size() > 0 ? (carsWithImages * 100 / allCars.size()) : 0) + "%)");
 
         // Display cars by brand
         Map<String, Long> carsByBrand = new HashMap<>();
