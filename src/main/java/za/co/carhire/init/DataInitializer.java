@@ -3,16 +3,21 @@ package za.co.carhire.init;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
+import za.co.carhire.domain.authentication.Role;
+import za.co.carhire.domain.authentication.User;
 import za.co.carhire.domain.vehicle.Car;
 import za.co.carhire.domain.vehicle.CarType;
 import za.co.carhire.factory.vehicle.CarFactory;
 import za.co.carhire.factory.vehicle.CarTypeFactory;
+import za.co.carhire.repository.authentication.IUserRepository;
 import za.co.carhire.service.vehicle.ICarService;
 import za.co.carhire.service.vehicle.ICarTypeService;
 import za.co.carhire.util.ImageDownloader;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -27,6 +32,12 @@ public class DataInitializer implements CommandLineRunner {
 
     @Autowired
     private ICarTypeService carTypeService;
+
+    @Autowired
+    private IUserRepository userRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Value("${app.database.init.enabled:false}")
     private boolean initEnabled;
@@ -70,6 +81,9 @@ public class DataInitializer implements CommandLineRunner {
         System.out.println("Initializing database with sample data...");
         System.out.println("============================================");
 
+        // Create Users
+        createUsers();
+
         // Create Cars first without CarType
         Map<String, List<Car>> carsByType = createCarsWithoutTypes();
 
@@ -79,6 +93,7 @@ public class DataInitializer implements CommandLineRunner {
         System.out.println("============================================");
         System.out.println("Database initialization completed successfully!");
         System.out.println("--------------------------------------------");
+        System.out.println("Created " + userRepository.count() + " users");
         System.out.println("Created " + carService.getCars().size() + " cars");
         System.out.println("Created " + carTypeService.getCarTypes().size() + " car types");
         System.out.println("--------------------------------------------");
@@ -342,6 +357,42 @@ public class DataInitializer implements CommandLineRunner {
         }
 
         System.out.println("Created and associated car types to all cars");
+    }
+
+    private void createUsers() {
+        System.out.println("\n--- Creating Users ---");
+
+        // Create Admin User
+        User admin = new User.Builder()
+                .setIdNumber(9001015800082L)
+                .setFirstName("Admin")
+                .setLastName("User")
+                .setEmail("admin@carhire.co.za")
+                .setDateOfBirth(LocalDate.of(1990, 1, 15))
+                .setPhoneNumber("0211234567")
+                .setPassword(passwordEncoder.encode("admin123"))
+                .setRole(Role.ADMIN)
+                .build();
+
+        admin = userRepository.save(admin);
+        System.out.println("Created admin user: " + admin.getEmail() + " (Role: " + admin.getRole() + ")");
+
+        // Create Customer User
+        User customer = new User.Builder()
+                .setIdNumber(9505201234088L)
+                .setFirstName("John")
+                .setLastName("Doe")
+                .setEmail("customer@example.com")
+                .setDateOfBirth(LocalDate.of(1995, 5, 20))
+                .setPhoneNumber("0829876543")
+                .setPassword(passwordEncoder.encode("customer123"))
+                .setRole(Role.CUSTOMER)
+                .build();
+
+        customer = userRepository.save(customer);
+        System.out.println("Created customer user: " + customer.getEmail() + " (Role: " + customer.getRole() + ")");
+
+        System.out.println("--- Users Created Successfully ---\n");
     }
 
     private void displaySummaryStatistics() {
