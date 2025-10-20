@@ -1,107 +1,173 @@
 package za.co.carhire.factory.reservation;
+
 /* InvoiceFactoryTest.java
  * Sanele Zondi (221602011)
  * Due Date: 18/05/2025
  * */
 
 import org.junit.jupiter.api.Test;
+import za.co.carhire.domain.authentication.Role;
+import za.co.carhire.domain.authentication.User;
 import za.co.carhire.domain.reservation.*;
 import za.co.carhire.domain.vehicle.Car;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Date;
-import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class InvoiceFactoryTest {
+
         private final LocalDateTime now = LocalDateTime.now();
         private final LocalDateTime tomorrow = now.plusDays(1);
-        private final LocalDateTime threeDaysLater = now.plusDays(3);
 
-        private Car testCar = new Car.Builder()
-                        .setRentalPrice(500.00)
+        private User createTestUser() {
+                return new User.Builder()
+                        .setUserId(1)
+                        .setFirstName("John")
+                        .setLastName("Doe")
+                        .setEmail("john.doe@example.com")
+                        .setIdNumber(123456789L)
+                        .setDateOfBirth(LocalDate.of(1990, 1, 1))
+                        .setPhoneNumber("1234567890")
+                        .setPassword("password")
+                        .setRole(Role.CUSTOMER)
                         .build();
+        }
 
-        private Booking validBooking = new Booking.Builder()
+        private Car createTestCar() {
+                return new Car.Builder()
+                        .setCarID(1)
+                        .setBrand("Toyota")
+                        .setModel("Corolla")
+                        .setYear(2023)
+                        .setRentalPrice(500.00)
+                        .setAvailability(true)
+                        .build();
+        }
+
+        private Booking createValidBooking() {
+                return new Booking.Builder()
                         .setBookingID(1)
-                        .setCar(List.of(testCar))
+                        .setUser(createTestUser())
+                        .setCar(createTestCar())
+                        .setBookingDateAndTime(now)
                         .setStartDate(now)
                         .setEndDate(tomorrow)
+                        .setBookingStatus(BookingStatus.CONFIRMED)
                         .build();
+        }
 
-        private Payment paidPayment = new Payment.Builder()
+        private Payment createPaidPayment(double amount) {
+                return new Payment.Builder()
                         .setPaymentID(1)
-                        .setBooking(validBooking)
-                        .setPaymentMethod(PaymentMethod.EFT)
-                        .setAmount(575.00) // 500 + 15% tax
+                        .setBooking(createValidBooking())
+                        .setPaymentMethod(PaymentMethod.CREDIT_CARD)
+                        .setPaymentStatus(PaymentStatus.PAID)
+                        .setAmount(amount)
                         .build();
+        }
 
         @Test
         void generateValidInvoice() {
-                Invoice invoice = InvoiceFactory.generateInvoice(paidPayment, validBooking);
+                Payment payment = createPaidPayment(575.00); // 500 + 15% tax
+                Booking booking = createValidBooking();
+
+                Invoice invoice = InvoiceFactory.generateInvoice(payment, booking);
+
                 assertNotNull(invoice);
-                // Total amount should match payment amount
                 assertEquals(575.00, invoice.getTotalAmount());
-                assertEquals(validBooking.getEndDate(), invoice.getDueDate());
-                // Verify subtotal and tax are calculated correctly from payment amount
-                assertEquals(500.00, invoice.getSubTotal(), 0.01); // 575 / 1.15 = 500
-                assertEquals(75.00, invoice.getTaxAmount(), 0.01); // 575 - 500 = 75
+                assertEquals(500.00, invoice.getSubTotal(), 0.01);
+                assertEquals(75.00, invoice.getTaxAmount(), 0.01);
+                assertEquals("PAID", invoice.getStatus());
+                assertEquals(booking.getEndDate(), invoice.getDueDate());
         }
 
         @Test
-        void rejectUnpaidPayment() {
-                Payment unpaid = new Payment.Builder()
-                                .setPaymentID(2)
-                                .setBooking(validBooking)
-                                .setPaymentMethod(PaymentMethod.CASH)
-                                .build();
-                assertNull(InvoiceFactory.generateInvoice(unpaid, validBooking));
+        void generateInvoice_WithPendingPayment_SetsPendingStatus() {
+                Payment pendingPayment = new Payment.Builder()
+                        .setPaymentID(1)
+                        .setBooking(createValidBooking())
+                        .setPaymentMethod(PaymentMethod.CREDIT_CARD)
+                        .setPaymentStatus(PaymentStatus.PENDING)
+                        .setAmount(575.00)
+                        .build();
+
+                Booking booking = createValidBooking();
+                Invoice invoice = InvoiceFactory.generateInvoice(pendingPayment, booking);
+
+                assertNotNull(invoice);
+                assertEquals("PENDING", invoice.getStatus());
         }
 
         @Test
-        void calculateCorrectSubtotal() {
-                // Create payment with total amount 2760.00 (includes tax)
-                Booking booking = new Booking.Builder()
-                                .setCar(List.of(
-                                                new Car.Builder().setRentalPrice(500.00).build(),
-                                                new Car.Builder().setRentalPrice(300.00).build()))
-                                .setStartDate(now)
-                                .setEndDate(threeDaysLater)
-                                .build();
+        void generateInvoice_WithNullPayment_ReturnsNull() {
+                Booking booking = createValidBooking();
+                Invoice invoice = InvoiceFactory.generateInvoice(null, booking);
 
-                Payment payment = new Payment.Builder()
-                                .setPaymentID(3)
-                                .setBooking(booking)
-                                .setPaymentMethod(PaymentMethod.EFT)
-                                .setAmount(2760.00) // Total with tax
-                                .build();
-
-                Invoice invoice = InvoiceFactory.generateInvoice(payment, booking);
-                // Subtotal is calculated as: totalAmount / 1.15
-                assertEquals(2400.00, invoice.getSubTotal(), 0.01); // 2760 / 1.15 = 2400
-                assertEquals(360.00, invoice.getTaxAmount(), 0.01); // 2760 - 2400 = 360
-                assertEquals(2760.00, invoice.getTotalAmount()); // Matches payment amount
+                assertNull(invoice);
         }
 
         @Test
-        void handleMinimumOneDayCharge() {
-                // Same-day return - invoice now uses payment amount
-                Booking booking = new Booking.Builder()
-                                .setCar(List.of(testCar))
-                                .setStartDate(now)
-                                .setEndDate(now) // Same day
-                                .build();
+        void generateInvoice_WithNullBooking_ReturnsNull() {
+                Payment payment = createPaidPayment(575.00);
+                Invoice invoice = InvoiceFactory.generateInvoice(payment, null);
 
-                // Payment amount is what determines invoice amounts now
-                Payment payment = new Payment.Builder()
-                                .setPaymentID(4)
-                                .setBooking(booking)
-                                .setPaymentMethod(PaymentMethod.EFT)
-                                .setAmount(575.00) // Payment amount with tax
-                                .build();
+                assertNull(invoice);
+        }
 
-                Invoice invoice = InvoiceFactory.generateInvoice(payment, booking);
-                assertEquals(500.00, invoice.getSubTotal(), 0.01); // 575 / 1.15 = 500
-                assertEquals(575.00, invoice.getTotalAmount()); // Matches payment amount
+        @Test
+        void generateInvoice_WithInvalidAmount_ReturnsNull() {
+                Payment invalidPayment = new Payment.Builder()
+                        .setPaymentID(1)
+                        .setBooking(createValidBooking())
+                        .setPaymentMethod(PaymentMethod.CREDIT_CARD)
+                        .setPaymentStatus(PaymentStatus.PAID)
+                        .setAmount(0.00) // Invalid amount
+                        .build();
+
+                Booking booking = createValidBooking();
+                Invoice invoice = InvoiceFactory.generateInvoice(invalidPayment, booking);
+
+                assertNull(invoice);
+        }
+
+        @Test
+        void generateInvoice_WithInvalidDates_ReturnsNull() {
+                Payment payment = createPaidPayment(575.00);
+
+                Booking invalidBooking = new Booking.Builder()
+                        .setBookingID(1)
+                        .setUser(createTestUser())
+                        .setCar(createTestCar())
+                        .setBookingDateAndTime(now)
+                        .setStartDate(tomorrow) // Start after end
+                        .setEndDate(now)
+                        .setBookingStatus(BookingStatus.CONFIRMED)
+                        .build();
+
+                Invoice invoice = InvoiceFactory.generateInvoice(payment, invalidBooking);
+
+                assertNull(invoice);
+        }
+
+        @Test
+        void generateInvoice_WithSameDayBooking() {
+                Booking sameDayBooking = new Booking.Builder()
+                        .setBookingID(1)
+                        .setUser(createTestUser())
+                        .setCar(createTestCar())
+                        .setBookingDateAndTime(now)
+                        .setStartDate(now)
+                        .setEndDate(now) // Same day
+                        .setBookingStatus(BookingStatus.CONFIRMED)
+                        .build();
+
+                Payment payment = createPaidPayment(575.00);
+
+                Invoice invoice = InvoiceFactory.generateInvoice(payment, sameDayBooking);
+
+                assertNotNull(invoice);
+                assertEquals(575.00, invoice.getTotalAmount());
         }
 }

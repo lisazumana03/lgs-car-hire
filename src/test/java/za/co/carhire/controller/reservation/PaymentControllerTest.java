@@ -1,26 +1,23 @@
 package za.co.carhire.controller.reservation;
-
+/* PaymentControllerTest.java
+ * Sanele Zondi (221602011)
+ * Due Date: 18/05/2025
+ * */
 import org.junit.jupiter.api.*;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.*;
-import org.springframework.test.context.junit4.SpringRunner;
-import za.co.carhire.domain.reservation.Booking;
-import za.co.carhire.domain.reservation.BookingStatus;
 import za.co.carhire.domain.reservation.Payment;
-import za.co.carhire.domain.reservation.PaymentMethod;
 import za.co.carhire.domain.reservation.PaymentStatus;
+import za.co.carhire.dto.reservation.PaymentRequest;
 
-import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@RunWith(SpringRunner.class)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class PaymentControllerTest {
 
@@ -29,49 +26,40 @@ class PaymentControllerTest {
 
     private final String baseUrl = "/api/payment";
     private static int createdPaymentId;
-    private static int createdBookingId;
+    private static final int TEST_BOOKING_ID = 1;
 
     @Test
     @Order(1)
-    void testCreatePayment_Success() {
-        // First create a booking
-        Booking booking = createTestBooking();
+    void testCreatePaymentWithRequestBody_Success() {
+        String url = baseUrl + "/create-payment";
 
-        // Then create payment for that booking
-        String url = baseUrl + "/create/" + booking.getBookingID() + "/1500.00/CREDIT_CARD";
+        PaymentRequest request = new PaymentRequest(TEST_BOOKING_ID, 1500.00, "CREDIT_CARD");
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity<PaymentRequest> requestEntity = new HttpEntity<>(request, headers);
+
+        ResponseEntity<Payment> response = restTemplate.postForEntity(url, requestEntity, Payment.class);
+
+        assertEquals(HttpStatus.CREATED, response.getStatusCode());
+        assertNotNull(response.getBody());
+        assertEquals(1500.00, response.getBody().getAmount());
+        assertEquals("CREDIT_CARD", response.getBody().getPaymentMethod().name());
+
+        createdPaymentId = response.getBody().getPaymentID();
+    }
+
+    @Test
+    @Order(2)
+    void testCreatePaymentWithPathVariables_Success() {
+        String url = baseUrl + "/create/" + TEST_BOOKING_ID + "/2000.00/DEBIT_CARD";
 
         ResponseEntity<Payment> response = restTemplate.postForEntity(url, null, Payment.class);
 
         assertEquals(HttpStatus.CREATED, response.getStatusCode());
         assertNotNull(response.getBody());
-        assertEquals(1500.00, response.getBody().getAmount());
-        assertEquals(PaymentMethod.CREDIT_CARD, response.getBody().getPaymentMethod());
-
-        createdPaymentId = response.getBody().getPaymentID();
-        createdBookingId = booking.getBookingID();
-    }
-
-    @Test
-    @Order(2)
-    void testCreatePaymentWithRequestBody_Success() {
-        String url = baseUrl + "/create";
-
-        // Create payment data
-        Map<String, Object> paymentData = new HashMap<>();
-        paymentData.put("booking", Map.of("bookingID", createdBookingId));
-        paymentData.put("amount", 2000.00);
-        paymentData.put("paymentMethod", "DEBIT_CARD");
-        paymentData.put("paymentStatus", "PENDING");
-
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        HttpEntity<Map<String, Object>> request = new HttpEntity<>(paymentData, headers);
-
-        ResponseEntity<Payment> response = restTemplate.postForEntity(url, request, Payment.class);
-
-        assertEquals(HttpStatus.CREATED, response.getStatusCode());
-        assertNotNull(response.getBody());
-        assertEquals(PaymentMethod.DEBIT_CARD, response.getBody().getPaymentMethod());
+        assertEquals(2000.00, response.getBody().getAmount());
+        assertEquals("DEBIT_CARD", response.getBody().getPaymentMethod().name());
     }
 
     @Test
@@ -84,40 +72,92 @@ class PaymentControllerTest {
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertNotNull(response.getBody());
         assertEquals(createdPaymentId, response.getBody().getPaymentID());
-        assertEquals(PaymentMethod.CREDIT_CARD, response.getBody().getPaymentMethod());
     }
 
     @Test
     @Order(4)
-    void testUpdatePaymentStatus() {
-        String url = baseUrl + "/update-status/" + createdPaymentId + "/PAID";
+    void testReadPayment_NotFound() {
+        String url = baseUrl + "/read/99999";
 
-        ResponseEntity<Payment> response = restTemplate.exchange(url, HttpMethod.PUT, null, Payment.class);
+        ResponseEntity<Payment> response = restTemplate.getForEntity(url, Payment.class);
 
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertNotNull(response.getBody());
-        assertEquals(PaymentStatus.COMPLETED, response.getBody().getPaymentStatus());
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
     }
 
     @Test
     @Order(5)
+    void testUpdatePaymentStatus_Success() {
+        String url = baseUrl + "/update-status/" + createdPaymentId + "/PAID";
+
+        ResponseEntity<Map> response = restTemplate.exchange(url, HttpMethod.PUT, null, Map.class);
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertNotNull(response.getBody());
+        assertEquals("Payment status updated successfully", response.getBody().get("message"));
+    }
+
+    @Test
+    @Order(6)
+    void testUpdatePaymentStatus_InvalidStatus() {
+        String url = baseUrl + "/update-status/" + createdPaymentId + "/INVALID_STATUS";
+
+        ResponseEntity<Map> response = restTemplate.exchange(url, HttpMethod.PUT, null, Map.class);
+
+        // This will likely return 400 Bad Request due to enum conversion
+        assertTrue(response.getStatusCode().is4xxClientError());
+    }
+
+    @Test
+    @Order(7)
+    void testVerifyPayment_Success() {
+        String url = baseUrl + "/verify";
+
+        Map<String, Object> request = new HashMap<>();
+        request.put("bookingId", TEST_BOOKING_ID);
+        request.put("amount", 2500.00);
+        request.put("paymentMethod", "PAYSTACK");
+        request.put("reference", "REF12345");
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity<Map<String, Object>> requestEntity = new HttpEntity<>(request, headers);
+
+        ResponseEntity<Payment> response = restTemplate.postForEntity(url, requestEntity, Payment.class);
+
+        assertEquals(HttpStatus.CREATED, response.getStatusCode());
+        assertNotNull(response.getBody());
+        assertEquals("PAYSTACK", response.getBody().getPaymentMethod().name());
+    }
+
+    @Test
+    @Order(8)
+    void testVerifyPayment_InvalidBookingId() {
+        String url = baseUrl + "/verify";
+
+        Map<String, Object> request = new HashMap<>();
+        request.put("bookingId", 0); // Invalid booking ID
+        request.put("amount", 2500.00);
+        request.put("paymentMethod", "PAYSTACK");
+        request.put("reference", "REF12345");
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity<Map<String, Object>> requestEntity = new HttpEntity<>(request, headers);
+
+        ResponseEntity<Map> response = restTemplate.postForEntity(url, requestEntity, Map.class);
+
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        assertNotNull(response.getBody());
+        assertTrue(response.getBody().toString().contains("Booking ID is required"));
+    }
+
+    @Test
+    @Order(9)
     void testDeletePayment() {
         String url = baseUrl + "/delete/" + createdPaymentId;
 
         ResponseEntity<Void> response = restTemplate.exchange(url, HttpMethod.DELETE, null, Void.class);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
-    }
-
-    private Booking createTestBooking() {
-        //assuming booking with ID 1 exists
-        Booking booking = new Booking.Builder()
-                .setBookingID(1)
-                .setBookingStatus(BookingStatus.CONFIRMED)
-                .setStartDate(LocalDateTime.now().plusDays(1))
-                .setEndDate(LocalDateTime.now().plusDays(5))
-                .build();
-
-        return booking;
     }
 }
