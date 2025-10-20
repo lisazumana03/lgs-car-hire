@@ -30,9 +30,7 @@ public class CarService implements ICarService {
         Optional<Car> car = carRepository.findById(id);
         if (car.isPresent()) {
             Car foundCar = car.get();
-            if (foundCar.getCarType() != null) {
-                foundCar.getCarType().getType(); 
-            }
+            initializeCarRelationships(List.of(foundCar));
             return foundCar;
         }
         return null;
@@ -44,9 +42,7 @@ public class CarService implements ICarService {
         Optional<Car> car = carRepository.findById(carID);
         if (car.isPresent()) {
             Car foundCar = car.get();
-            if (foundCar.getCarType() != null) {
-                foundCar.getCarType().getType(); 
-            }
+            initializeCarRelationships(List.of(foundCar));
             return foundCar;
         }
         return null;
@@ -69,11 +65,7 @@ public class CarService implements ICarService {
     @Transactional(readOnly = true)
     public Set<Car> getCars() {
         List<Car> cars = carRepository.findAll();
-        cars.forEach(car -> {
-            if (car.getCarType() != null) {
-                car.getCarType().getType(); 
-            }
-        });
+        initializeCarRelationships(cars);
         return cars.stream().collect(Collectors.toSet());
     }
 
@@ -83,13 +75,7 @@ public class CarService implements ICarService {
         List<Car> cars = carRepository.findAll().stream()
                 .filter(car -> car.getBrand() != null && car.getBrand().equalsIgnoreCase(brand))
                 .collect(Collectors.toList());
-        
-        cars.forEach(car -> {
-            if (car.getCarType() != null) {
-                car.getCarType().getType();
-            }
-        });
-        
+        initializeCarRelationships(cars);
         return cars;
     }
 
@@ -99,13 +85,7 @@ public class CarService implements ICarService {
         List<Car> cars = carRepository.findAll().stream()
                 .filter(Car::isAvailability)
                 .collect(Collectors.toList());
-        
-        cars.forEach(car -> {
-            if (car.getCarType() != null) {
-                car.getCarType().getType();
-            }
-        });
-        
+        initializeCarRelationships(cars);
         return cars;
     }
 
@@ -126,12 +106,7 @@ public class CarService implements ICarService {
         List<Car> cars = carRepository.findAll().stream()
                 .filter(car -> car.getRentalPrice() >= minPrice && car.getRentalPrice() <= maxPrice)
                 .collect(Collectors.toList());
-        cars.forEach(car -> {
-            if (car.getCarType() != null) {
-                car.getCarType().getType();
-            }
-        });
-        
+        initializeCarRelationships(cars);
         return cars;
     }
 
@@ -141,12 +116,24 @@ public class CarService implements ICarService {
         List<Car> cars = carRepository.findAll().stream()
                 .filter(car -> car.getYear() == year)
                 .collect(Collectors.toList());
-        cars.forEach(car -> {
-            if (car.getCarType() != null) {
-                car.getCarType().getType();
-            }
-        });
-        
+        initializeCarRelationships(cars);
         return cars;
+    }
+
+    // Helper method to initialize lazy-loaded relationships
+    private void initializeCarRelationships(List<Car> cars) {
+        for (Car car : cars) {
+            if (car.getCarType() != null) {
+                // Force initialization of car type properties
+                car.getCarType().getType();
+                car.getCarType().getFuelType();
+                car.getCarType().getNumberOfSeats();
+                car.getCarType().getNumberOfWheels();
+            }
+            // Force initialization of insurance if needed
+            if (car.getInsurance() != null) {
+                car.getInsurance().getInsuranceID();
+            }
+        }
     }
 }

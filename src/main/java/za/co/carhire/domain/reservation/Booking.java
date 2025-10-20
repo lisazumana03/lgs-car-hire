@@ -1,10 +1,10 @@
 package za.co.carhire.domain.reservation;
 
 /**
-Booking.java
-Booking POJO class
-Lisakhanya Zumana - 230864821
-Date: 08 May 2025
+ Booking.java
+ Booking POJO class
+ Lisakhanya Zumana - 230864821
+ Date: 08 May 2025
  */
 
 import jakarta.persistence.*;
@@ -24,8 +24,9 @@ public class Booking implements Serializable {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
-    @OneToMany(mappedBy = "booking")// showing that one booking can be made for many cars
-    private List<Car> cars;
+    @ManyToOne
+    @JoinColumn(name = "car_id")
+    private Car car;
     private LocalDateTime bookingDateAndTime;
     private LocalDateTime startDate;
     private LocalDateTime endDate;
@@ -45,7 +46,7 @@ public class Booking implements Serializable {
     private Booking(Builder builder){
         this.bookingID = builder.bookingID;
         this.user = builder.user;
-        this.cars = builder.cars;
+        this.car = builder.car;
         this.bookingDateAndTime = builder.bookingDateAndTime;
         this.startDate = builder.startDate;
         this.endDate = builder.endDate;
@@ -63,8 +64,8 @@ public class Booking implements Serializable {
         return user;
     }
 
-    public List<Car> getCar() {
-        return cars;
+    public Car getCar() {
+        return car;
     }
 
     public LocalDateTime getBookingDateAndTime() {
@@ -106,7 +107,7 @@ public class Booking implements Serializable {
         return "Booking{" +
                 "bookingID=" + bookingID +
                 ", user=" + user +
-                ", car=" + cars +
+                ", car=" + car +
                 ", bookingDateAndTime=" + bookingDateAndTime +
                 ", startDate=" + startDate +
                 ", endDate=" + endDate +
@@ -120,7 +121,7 @@ public class Booking implements Serializable {
     public static class Builder{
         private int bookingID;
         private User user;
-        private List<Car> cars;
+        private Car car;
         private LocalDateTime bookingDateAndTime;
         private LocalDateTime startDate;
         private LocalDateTime endDate;
@@ -137,8 +138,8 @@ public class Booking implements Serializable {
             this.user = user;
             return this;
         }
-        public Builder setCar(List<Car> cars) {
-            this.cars = cars;
+        public Builder setCar(Car car) {
+            this.car = car;
             return this;
         }
         public Builder setBookingDateAndTime(LocalDateTime bookingDateAndTime) {
@@ -174,7 +175,7 @@ public class Booking implements Serializable {
         public Builder copy(Booking booking){
             this.bookingID = booking.getBookingID();
             this.user = booking.getUser();
-            this.cars = booking.getCar();
+            this.car = booking.getCar();
             this.bookingDateAndTime = booking.getBookingDateAndTime();
             this.startDate = booking.getStartDate();
             this.endDate = booking.getEndDate();
@@ -190,5 +191,5 @@ public class Booking implements Serializable {
         }
 
     }
-    
+
 }

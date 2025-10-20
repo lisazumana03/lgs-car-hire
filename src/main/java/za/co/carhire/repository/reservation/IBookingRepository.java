@@ -1,8 +1,8 @@
 package za.co.carhire.repository.reservation;
 
 /**
-Lisakhanya Zumana (230864821)
-Date: 19/05/2025
+ Lisakhanya Zumana (230864821)
+ Date: 19/05/2025
  */
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -19,7 +19,8 @@ public interface IBookingRepository extends JpaRepository<Booking, Integer> {
 
   Optional<Booking> findByDropOffLocation(Location dropOffLocation);
 
-  Optional<Booking> findBookingByCars(Car car);
+  Optional<Booking> findByCar(Car car);
 
   Optional<Booking> findById(int bookingID);
+
 }

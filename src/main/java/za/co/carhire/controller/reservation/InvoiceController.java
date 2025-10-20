@@ -59,7 +59,7 @@ public class InvoiceController {
             }
             System.out.println("Booking found - ID: " + booking.getBookingID());
             System.out.println("Booking dates - Start: " + booking.getStartDate() + ", End: " + booking.getEndDate());
-            System.out.println("Booking cars: " + (booking.getCar() != null ? booking.getCar().size() : "null"));
+            System.out.println("Booking cars: " + (booking.getCar() != null ? booking.getCar().getModel() : "null"));
 
             // Generate invoice
             System.out.println("Calling InvoiceFactory.generateInvoice...");

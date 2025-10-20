@@ -11,13 +11,14 @@ import java.util.Base64;
  * Date: 28/08/2025
  * Updated: 31/08/2025 - Added image URL mapping
  * Updated: [Current Date] - Changed to BLOB storage with Base64 encoding
+ * Updated: [Current Date] - Removed booking reference from Car entity
  */
 public class CarMapper {
 
     /**
      * Convert Car entity to CarDTO WITHOUT image data (lightweight version)
      * Use this for list/search operations to avoid 431 errors
-     * 
+     *
      * @param car the entity to convert
      * @return the DTO representation without Base64 image data
      */
@@ -27,7 +28,7 @@ public class CarMapper {
 
     /**
      * Convert Car entity to CarDTO with optional image data
-     * 
+     *
      * @param car          the entity to convert
      * @param includeImage whether to include Base64 image data
      * @return the DTO representation
@@ -71,16 +72,15 @@ public class CarMapper {
             builder.setInsuranceID(car.getInsurance().getInsuranceID());
         }
 
-        if (car.getBooking() != null) {
-            builder.setBookingID(car.getBooking().getBookingID());
-        }
+        // REMOVED: Booking reference since Car no longer has booking field
+        // The relationship is now owned by Booking entity (booking has car_id)
 
         return builder.build();
     }
 
     /**
      * Convert CarDTO to Car entity with image data decoded from Base64
-     * 
+     *
      * @param dto the DTO to convert
      * @return the entity representation
      */
@@ -115,7 +115,7 @@ public class CarMapper {
 
     /**
      * Update existing Car entity from CarDTO including image data
-     * 
+     *
      * @param existingCar the existing entity to update
      * @param dto         the DTO with new values
      * @return the updated entity
@@ -144,5 +144,27 @@ public class CarMapper {
         }
 
         return existingCar;
+    }
+
+    /**
+     * Convert Car entity to CarDTO for list views (minimal data)
+     *
+     * @param car the entity to convert
+     * @return lightweight DTO for list operations
+     */
+    public static CarDTO toLightweightDTO(Car car) {
+        if (car == null) {
+            return null;
+        }
+
+        return new CarDTO.Builder()
+                .setCarID(car.getCarID())
+                .setModel(car.getModel())
+                .setBrand(car.getBrand())
+                .setYear(car.getYear())
+                .setAvailability(car.isAvailability())
+                .setRentalPrice(car.getRentalPrice())
+                .setCarTypeName(car.getCarType() != null ? car.getCarType().getType() : null)
+                .build();
     }
 }

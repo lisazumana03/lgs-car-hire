@@ -5,16 +5,19 @@ import org.springframework.stereotype.Service;
 import za.co.carhire.domain.reservation.Booking;
 import za.co.carhire.domain.reservation.BookingStatus;
 import za.co.carhire.domain.reservation.Location;
+import za.co.carhire.domain.vehicle.Car;
 import za.co.carhire.repository.reservation.IBookingRepository;
 import za.co.carhire.repository.reservation.ILocationRepository;
+import za.co.carhire.repository.vehicle.ICarRepository;
 import za.co.carhire.service.reservation.IBookingService;
 
 /**
-Lisakhanya Zumana (230864821)
-Date: 24/05/2025
+ Lisakhanya Zumana (230864821)
+ Date: 24/05/2025
  */
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -27,6 +30,9 @@ public class BookingService implements IBookingService {
     @Autowired
     private ILocationRepository locationRepository;
 
+    @Autowired
+    private ICarRepository carRepository;
+
     @Override
     public Set<Booking> getBookings() {
         return bookingRepository.findAll().stream().collect(Collectors.toSet());
@@ -36,8 +42,25 @@ public class BookingService implements IBookingService {
     public Booking create(Booking booking) {
         // Resolve location names to location IDs if needed
         booking = resolveLocations(booking);
-        return bookingRepository.save(booking);
+
+        // SAVE BOOKING FIRST
+        Booking savedBooking = bookingRepository.save(booking);
+
+        // UPDATE CAR AVAILABILITY (NOT DELETE)
+        if (savedBooking.getCar() != null && savedBooking.getCar().getCarID() > 0) {
+            // Get the car from database to ensure we have the latest version
+            Optional<Car> carOpt = carRepository.findById(savedBooking.getCar().getCarID());
+            if (carOpt.isPresent()) {
+                Car car = carOpt.get();
+                car.setAvailability(false); // Mark as unavailable
+                carRepository.save(car); // Update the car's availability
+                System.out.println("Car " + car.getCarID() + " marked as unavailable for booking " + savedBooking.getBookingID());
+            }
+        }
+
+        return savedBooking;
     }
+
 
     private Booking resolveLocations(Booking booking) {
         Location pickupLocation = booking.getPickupLocation();
@@ -127,42 +150,22 @@ public class BookingService implements IBookingService {
 
     @Override
     public Booking cancelBooking(int bookingID) {
-        Booking booking = bookingRepository.findById(bookingID)
-                .orElse(null);
-
+        Booking booking = bookingRepository.findById(bookingID).orElse(null);
         assert booking != null;
-        if (booking.getBookingStatus() == BookingStatus.CANCELLED) {
-            throw new IllegalStateException("You already cancelled this booking!");
-        }
 
-        if (booking.getBookingDateAndTime().isBefore(LocalDateTime.now().plusMinutes(45))) {
-            throw new IllegalStateException("You are too late to cancel this booking!");
+        // MAKE CAR AVAILABLE AGAIN (NOT DELETE)
+        if (booking.getCar() != null && booking.getCar().getCarID() > 0) {
+            Optional<Car> carOpt = carRepository.findById(booking.getCar().getCarID());
+            if (carOpt.isPresent()) {
+                Car car = carOpt.get();
+                car.setAvailability(true); // Mark as available again
+                carRepository.save(car); // Update the car's availability
+                System.out.println("Car " + car.getCarID() + " marked as available (booking cancelled)");
+            }
         }
 
         booking.setBookingStatus(BookingStatus.CANCELLED);
         return bookingRepository.save(booking);
-    }
-
-    public Booking updateBookingStatus(int id, String status) {
-        // Step 1: Find booking by ID
-        Booking existingBooking = bookingRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Booking not found with ID: " + id));
-
-        // Step 2: Convert String -> Enum (case insensitive)
-        BookingStatus newStatus;
-        try {
-            newStatus = BookingStatus.valueOf(status.toUpperCase());
-        } catch (IllegalArgumentException e) {
-            throw new RuntimeException("Invalid booking status: " + status);
-        }
-
-        // Step 3: Use Builder to create updated booking
-        Booking updatedBooking = existingBooking.Builder()
-                .status(newStatus)
-                .build();
-
-        // Step 4: Save and return
-        return bookingRepository.save(updatedBooking);
     }
 
 }

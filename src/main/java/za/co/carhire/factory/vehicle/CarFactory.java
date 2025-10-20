@@ -5,7 +5,6 @@ package za.co.carhire.factory.vehicle;
 // Updated: 31/08/2025 - Added image URL support
 
 import za.co.carhire.domain.reservation.Insurance;
-import za.co.carhire.domain.reservation.Booking;
 import za.co.carhire.domain.vehicle.Car;
 import za.co.carhire.domain.vehicle.CarType;
 
@@ -37,41 +36,8 @@ public class CarFactory {
                 .build();
     }
 
-    public static Car createCompleteCar(int carID, String model, String brand, int year,
-                                        boolean availability, double rentalPrice,
-                                        CarType carType, Insurance insurance, Booking booking) {
-        return new Car.Builder()
-                .setCarID(carID)
-                .setModel(model)
-                .setBrand(brand)
-                .setYear(year)
-                .setAvailability(availability)
-                .setRentalPrice(rentalPrice)
-                .setCarType(carType)
-                .setInsurance(insurance)
-                .setBooking(booking)
-                .build();
-    }
-
-    public static Car createCompleteCarWithImage(int carID, String model, String brand, int year,
-                                                 boolean availability, double rentalPrice,
-                                                 byte[] imageData, String imageName, String imageType,
-                                                 CarType carType, Insurance insurance, Booking booking) {
-        return new Car.Builder()
-                .setCarID(carID)
-                .setModel(model)
-                .setBrand(brand)
-                .setYear(year)
-                .setAvailability(availability)
-                .setRentalPrice(rentalPrice)
-                .setImageData(imageData)
-                .setImageName(imageName)
-                .setImageType(imageType)
-                .setCarType(carType)
-                .setInsurance(insurance)
-                .setBooking(booking)
-                .build();
-    }
+    // REMOVE methods that include Booking parameter since Car no longer has booking field
+    // Remove: createCompleteCar, createCompleteCarWithImage
 
     public static Car createCarWithType(int carID, String model, String brand, int year,
                                         double rentalPrice, CarType carType) {
