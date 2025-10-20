@@ -44,10 +44,6 @@ public class Car implements Serializable {
     @Column(name = "image_type")
     private String imageType;
 
-    @ManyToOne
-    @JoinColumn(name = "booking_id")
-    private Booking booking;
-
     @OneToOne
     @JoinColumn(name = "insurance_id")
     private Insurance insurance;
@@ -71,7 +67,6 @@ public class Car implements Serializable {
         this.imageType = builder.imageType;
         this.carType = builder.carType;
         this.insurance = builder.insurance;
-        this.booking = builder.booking;
     }
 
     public int getCarID() {
@@ -166,14 +161,6 @@ public class Car implements Serializable {
         this.insurance = insurance;
     }
 
-    public Booking getBooking() {
-        return booking;
-    }
-
-    public void setBooking(Booking booking) {
-        this.booking = booking;
-    }
-
     public boolean checkAvailability() {
         return this.availability;
     }
@@ -196,7 +183,6 @@ public class Car implements Serializable {
                 ", hasImage=" + (imageData != null && imageData.length > 0) +
                 ", carType=" + (carType != null ? carType.getCarTypeID() : "null") +
                 ", insurance=" + (insurance != null ? insurance.getInsuranceID() : "null") +
-                ", booking=" + (booking != null ? booking.getBookingID() : "null") +
                 '}';
     }
 
@@ -212,7 +198,6 @@ public class Car implements Serializable {
         private String imageType;
         private CarType carType;
         private Insurance insurance;
-        private Booking booking;
 
         public Builder setCarID(int carID) {
             this.carID = carID;
@@ -269,10 +254,6 @@ public class Car implements Serializable {
             return this;
         }
 
-        public Builder setBooking(Booking booking) {
-            this.booking = booking;
-            return this;
-        }
 
         public Builder copy(Car car) {
             this.carID = car.getCarID();
@@ -286,7 +267,6 @@ public class Car implements Serializable {
             this.imageType = car.getImageType();
             this.carType = car.getCarType();
             this.insurance = car.getInsurance();
-            this.booking = car.getBooking();
             return this;
         }
 

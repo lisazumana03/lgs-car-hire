@@ -1,8 +1,8 @@
 package za.co.carhire.factory.reservation;
 
 /**
-Lisakhanya Zumana (230864821)
-Date: 12 May 2025
+ Lisakhanya Zumana (230864821)
+ Date: 12 May 2025
  */
 
 import za.co.carhire.domain.authentication.User;
@@ -13,18 +13,36 @@ import za.co.carhire.domain.vehicle.Car;
 import za.co.carhire.util.Helper;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 public class BookingFactory {
-    public static Booking createBooking(int bookingID, User user, List<Car>cars, LocalDateTime bookingDateAndTime, LocalDateTime startDate, LocalDateTime endDate, Location pickupLocation, Location dropOffLocation, BookingStatus bookingStatus){
+
+    public static Booking createBooking(int bookingID, User user, Car car, LocalDateTime bookingDateAndTime,
+                                        LocalDateTime startDate, LocalDateTime endDate,
+                                        Location pickupLocation, Location dropOffLocation,
+                                        BookingStatus bookingStatus){
         if(Helper.isNullOrEmpty(bookingStatus)){
             bookingStatus = BookingStatus.PENDING;
         }
         return new Booking.Builder()
                 .setBookingID(bookingID)
                 .setUser(user)
-                .setCar(cars)
+                .setCar(car) // Single car object
                 .setBookingDateAndTime(bookingDateAndTime)
+                .setStartDate(startDate)
+                .setEndDate(endDate)
+                .setPickupLocation(pickupLocation)
+                .setDropOffLocation(dropOffLocation)
+                .setBookingStatus(bookingStatus) // Use the provided status
+                .build();
+    }
+
+    public static Booking createSimpleBooking(User user, Car car, LocalDateTime startDate,
+                                              LocalDateTime endDate, Location pickupLocation,
+                                              Location dropOffLocation) {
+        return new Booking.Builder()
+                .setUser(user)
+                .setCar(car)
+                .setBookingDateAndTime(LocalDateTime.now())
                 .setStartDate(startDate)
                 .setEndDate(endDate)
                 .setPickupLocation(pickupLocation)
@@ -33,27 +51,17 @@ public class BookingFactory {
                 .build();
     }
 
-    public static Booking cancelBooking(int bookingID, User user, LocalDateTime bookingDateAndTime,BookingStatus bookingStatus){
-        if(Helper.isNullOrEmpty(bookingStatus)){
-            return null;
-        }
+    public static Booking cancelBooking(Booking booking) {
         return new Booking.Builder()
-                .setBookingID(bookingID)
-                .setUser(user)
-                .setBookingDateAndTime(bookingDateAndTime)
+                .copy(booking)
                 .setBookingStatus(BookingStatus.CANCELLED)
                 .build();
     }
-    public static Booking confirmBooking(int bookingID, User user, LocalDateTime bookingDateAndTime,BookingStatus bookingStatus){
-        if(Helper.isNullOrEmpty(bookingStatus)){
-            return null;
-        }
+
+    public static Booking confirmBooking(Booking booking) {
         return new Booking.Builder()
-                .setBookingID(bookingID)
-                .setUser(user)
-                .setBookingDateAndTime(bookingDateAndTime)
+                .copy(booking)
                 .setBookingStatus(BookingStatus.CONFIRMED)
                 .build();
     }
-
 }
