@@ -1,3 +1,5 @@
+-- Select the database
+USE lgrentalsdb;
 
 -- Note: Passwords are BCrypt encoded
 -- Admin password: admin123
