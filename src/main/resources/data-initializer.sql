@@ -1,17 +1,6 @@
 -- Select the database
 USE lgrentalsdb;
 
--- Note: Passwords are BCrypt encoded
--- Admin password: admin123
--- Customer password: customer123
-
-INSERT INTO users (user_id, id_number, first_name, last_name, email, date_of_birth, phone_number, password, role)
-VALUES
-(1, 9001015800082, 'Admin', 'User', 'admin@carhire.co.za', '1990-01-15', '0211234567',
- '$2a$10$YourBCryptHashHereForAdmin123', 'ADMIN'),
-(2, 9505201234088, 'John', 'Doe', 'customer@example.com', '1995-05-20', '0829876543',
- '$2a$10$YourBCryptHashHereForCustomer123', 'CUSTOMER');
-
 INSERT INTO car_type (car_typeid, type, fuel_type, number_of_wheels, number_of_seats)
 VALUES
 (1, 'Economy', 'Petrol', 4, 5),
