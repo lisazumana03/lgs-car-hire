@@ -23,6 +23,17 @@ public class ApplicationConfig {
     @Bean
     public UserDetailsService userDetailsService() {
         return username -> userRepository.findByEmail(username)
+                .map(user -> {
+                    // Convert user role to Spring Security authority with ROLE_ prefix
+                    org.springframework.security.core.authority.SimpleGrantedAuthority authority =
+                            new org.springframework.security.core.authority.SimpleGrantedAuthority("ROLE_" + user.getRole());
+
+                    return new org.springframework.security.core.userdetails.User(
+                            user.getEmail(),
+                            user.getPassword(),
+                            java.util.Collections.singletonList(authority)
+                    );
+                })
                 .orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + username));
     }
 

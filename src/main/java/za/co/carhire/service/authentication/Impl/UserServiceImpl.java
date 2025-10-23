@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import za.co.carhire.domain.authentication.User;
 import za.co.carhire.dto.authenticationDTO.LoginRequestDTO;
 import za.co.carhire.dto.authenticationDTO.SignUpRequestDTO;
+import za.co.carhire.dto.authenticationDTO.UpdateUserDTO;
 import za.co.carhire.dto.authenticationDTO.UserDTO;
 import za.co.carhire.mapper.UserMapper;
 import za.co.carhire.repository.authentication.IUserRepository;
@@ -83,11 +84,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDTO updateUserProfile(Integer userId, UserDTO updateDTO) {
+    public UserDTO updateUserProfile(Integer userId, UpdateUserDTO updateDTO) {
         User existing = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("User not found: " + userId));
 
-        // Create a new User with updated fields
+        // Create a new User with updated fields using UpdateUserDTO
         User updated = new User.Builder()
                 .setUserId(existing.getUserId()) // keep same ID
                 .setIdNumber(updateDTO.idNumber())
@@ -106,6 +107,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void deleteUser(Integer userId) {
+        if (!userRepository.existsById(userId)) {
+            throw new IllegalArgumentException("User not found with ID: " + userId);
+        }
         userRepository.deleteById(userId);
     }
 

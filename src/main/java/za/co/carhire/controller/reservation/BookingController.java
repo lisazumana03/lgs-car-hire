@@ -5,10 +5,13 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import za.co.carhire.domain.authentication.User;
 import za.co.carhire.domain.reservation.Booking;
+import za.co.carhire.dto.reservation.BookingDTO;
+import za.co.carhire.dto.reservation.UpdateBookingDTO;
 import za.co.carhire.service.authentication.UserService;
 import za.co.carhire.service.reservation.impl.BookingService;
 
@@ -67,15 +70,34 @@ public class BookingController {
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/update")
-    public ResponseEntity<Booking> update(@RequestBody Booking booking) {
-        Booking updatedBooking = bookingService.update(booking);
-        if (updatedBooking != null) {
-            return new ResponseEntity<>(updatedBooking, HttpStatus.OK);
+    public ResponseEntity<Booking> update(@RequestBody UpdateBookingDTO updateDTO) {
+        try {
+            // Get existing booking
+            Booking existingBooking = bookingService.read(updateDTO.getBookingID());
+            if (existingBooking == null) {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+
+            // Update only the allowed fields
+            Booking updatedBooking = new Booking.Builder()
+                    .copy(existingBooking)
+                    .setStartDate(updateDTO.getStartDate())
+                    .setEndDate(updateDTO.getEndDate())
+                    .setBookingStatus(updateDTO.getBookingStatus())
+                    .build();
+
+            Booking savedBooking = bookingService.update(updatedBooking);
+            return new ResponseEntity<>(savedBooking, HttpStatus.OK);
+        } catch (Exception e) {
+            System.err.println("Error updating booking: " + e.getMessage());
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<Void> delete(@PathVariable int id) {
         bookingService.delete(id);
@@ -95,5 +117,4 @@ public class BookingController {
     public ResponseEntity<List<Booking>> getAll() {
         return ResponseEntity.ok(bookingService.getBookings().stream().toList());
     }
-
 }

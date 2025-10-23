@@ -12,6 +12,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import za.co.carhire.config.AuthenticationService;
 import za.co.carhire.config.JwtAuthenticationFilter;
 import za.co.carhire.domain.authentication.Role;
+import za.co.carhire.dto.authenticationDTO.UpdateUserDTO;
 import za.co.carhire.dto.authenticationDTO.UserDTO;
 import za.co.carhire.service.authentication.Impl.JwtService;
 import za.co.carhire.service.authentication.UserService;
@@ -157,7 +158,7 @@ class UserControllerTest {
         LocalDate.of(1990, 1, 1),
         "0123456789",
         Role.CUSTOMER);
-    when(userService.updateUserProfile(eq(1), any(UserDTO.class))).thenReturn(updateDTO);
+    when(userService.updateUserProfile(eq(1), any(UpdateUserDTO.class))).thenReturn(updateDTO);
 
     // When & Then
     mockMvc.perform(put("/api/users/1")
@@ -177,7 +178,7 @@ class UserControllerTest {
     UserDTO updateDTO = new UserDTO(
         999, 9001015800087L, "Randall", "Savage", "randallupdated@example.com",
         LocalDate.of(1990, 1, 1), "0123456789", Role.CUSTOMER);
-    when(userService.updateUserProfile(eq(999), any(UserDTO.class)))
+    when(userService.updateUserProfile(eq(999), any(UpdateUserDTO.class)))
         .thenThrow(new IllegalArgumentException("User not found: 999"));
 
     // When & Then
