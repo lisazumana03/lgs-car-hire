@@ -2,6 +2,7 @@ package za.co.carhire.controller.reservation;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import za.co.carhire.domain.reservation.Location;
 import za.co.carhire.service.reservation.impl.LocationService;
@@ -22,19 +23,29 @@ public class LocationController {
     @Autowired
     private LocationService locationService;
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/create")
     public ResponseEntity<Location> create(@RequestBody Location location) {
         return ResponseEntity.ok(locationService.create(location));
     }
 
     @GetMapping("/read/{id}")
-    public Location read(@PathVariable int id) {
-        return locationService.read(id);
+    public ResponseEntity<Location> read(@PathVariable int id) {
+        Location location = locationService.read(id);
+        if (location != null) {
+            return ResponseEntity.ok(location);
+        }
+        return ResponseEntity.notFound().build();
     }
 
-    @PostMapping("/update")
-    public Location update(@RequestBody Location location) {
-        return locationService.update(location);
+    @PreAuthorize("hasRole('ADMIN')")
+    @PutMapping("/update")  // Changed from POST to PUT for consistency
+    public ResponseEntity<Location> update(@RequestBody Location location) {
+        Location updated = locationService.update(location);
+        if (updated != null) {
+            return ResponseEntity.ok(updated);
+        }
+        return ResponseEntity.notFound().build();
     }
 
     @GetMapping("/all")
@@ -47,6 +58,7 @@ public class LocationController {
         return ResponseEntity.ok(locationService.getLocations());
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<Void> delete(@PathVariable int id) {
         locationService.delete(id);

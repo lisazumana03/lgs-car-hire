@@ -14,7 +14,11 @@ import za.co.carhire.domain.reservation.PaymentStatus;
 import za.co.carhire.dto.reservation.PaymentRequest;
 import za.co.carhire.service.reservation.impl.PaymentService;
 
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @RestController
 @CrossOrigin(origins = { "http://localhost:5173", "http://localhost:5173" })
@@ -129,6 +133,51 @@ public class PaymentController {
         }
     }
 
+    @GetMapping("/all")
+    public ResponseEntity<List<Map<String, Object>>> getAllPayments() {
+        try {
+            System.out.println("=== PAYMENT CONTROLLER DEBUG ===");
+            Set<Payment> payments = paymentService.getPayments();
+            System.out.println("Payments service returned: " + payments.size() + " payments");
+
+            // Convert to simple Map to avoid serialization issues
+            List<Map<String, Object>> paymentData = payments.stream()
+                    .map(payment -> {
+                        Map<String, Object> data = new HashMap<>();
+                        data.put("paymentID", payment.getPaymentID());
+                        data.put("amount", payment.getAmount());
+                        data.put("paymentMethod", payment.getPaymentMethod() != null ? payment.getPaymentMethod().name() : null);
+                        data.put("paymentStatus", payment.getPaymentStatus() != null ? payment.getPaymentStatus().name() : null);
+
+
+                        // Safely handle booking relationship
+                        if (payment.getBooking() != null) {
+                            data.put("booking", Map.of(
+                                    "bookingID", payment.getBooking().getBookingID()
+                            ));
+
+                            // Safely handle user relationship
+                            if (payment.getBooking().getUser() != null) {
+                                data.put("user", Map.of(
+                                        "firstName", payment.getBooking().getUser().getFirstName(),
+                                        "lastName", payment.getBooking().getUser().getLastName()
+                                ));
+                            }
+                        }
+
+                        return data;
+                    })
+                    .collect(Collectors.toList());
+
+            System.out.println("Returning " + paymentData.size() + " payment records");
+            return ResponseEntity.ok(paymentData);
+        } catch (Exception e) {
+            System.err.println("ERROR in getAllPayments: " + e.getMessage());
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
     // DTO for payment verification
     public record PaymentVerificationRequest(
             int bookingId,
@@ -136,4 +185,6 @@ public class PaymentController {
             String paymentMethod,
             String reference) {
     }
+
+
 }

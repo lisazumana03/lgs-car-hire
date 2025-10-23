@@ -23,15 +23,15 @@ public class MaintenanceController {
     @Autowired
     private MaintenanceService maintenanceService;
 
-    // Create Maintenance
-    @PreAuthorize("hasRole('ADMIN')")
+    // Create Maintenance - Allow both ADMIN and CAR_OWNER
+    @PreAuthorize("hasRole('ADMIN') or hasRole('CAR_OWNER')")
     @PostMapping("/create")
     public ResponseEntity<MaintenanceDTO> create(@RequestBody MaintenanceDTO dto) {
         MaintenanceDTO created = maintenanceService.create(dto);
         return ResponseEntity.ok(created);
     }
 
-    // Read Maintenance by ID
+    // Read Maintenance by ID - Authenticated users
     @GetMapping("/read/{id}")
     public ResponseEntity<MaintenanceDTO> read(@PathVariable int id) {
         return maintenanceService.read(id)
@@ -39,27 +39,26 @@ public class MaintenanceController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    // Get all Maintenances
+    // Get all Maintenances - Authenticated users
     @GetMapping("/all")
     public ResponseEntity<List<MaintenanceDTO>> getAll() {
         List<MaintenanceDTO> all = maintenanceService.getAll();
         return ResponseEntity.ok(all);
     }
 
-    // Update Maintenance
-    @PreAuthorize("hasRole('ADMIN')")
+    // Update Maintenance - Allow both ADMIN and CAR_OWNER
+    @PreAuthorize("hasRole('ADMIN') or hasRole('CAR_OWNER')")
     @PutMapping("/update/{id}")
     public ResponseEntity<MaintenanceDTO> update(@PathVariable int id, @RequestBody MaintenanceDTO dto) {
         MaintenanceDTO updated = maintenanceService.update(id, dto);
         return ResponseEntity.ok(updated);
     }
 
-    // Delete Maintenance
-    @PreAuthorize("hasRole('ADMIN')")
+    // Delete Maintenance - Allow both ADMIN and CAR_OWNER
+    @PreAuthorize("hasRole('ADMIN') or hasRole('CAR_OWNER')")
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<Void> delete(@PathVariable int id) {
         maintenanceService.delete(id);
         return ResponseEntity.noContent().build();
     }
-
 }

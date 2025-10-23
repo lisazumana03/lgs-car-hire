@@ -11,6 +11,8 @@ package za.co.carhire.config;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import za.co.carhire.domain.authentication.User;
@@ -19,11 +21,12 @@ import za.co.carhire.mapper.UserMapper;
 import za.co.carhire.repository.authentication.IUserRepository;
 import za.co.carhire.service.authentication.Impl.JwtService;
 
+import java.util.Collections;
+
 @Service
 @RequiredArgsConstructor
 public class AuthenticationService {
 
-    // These will be injected by @RequiredArgsConstructor (Lombok)
     private final IUserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
@@ -41,24 +44,24 @@ public class AuthenticationService {
                 .setEmail(request.email())
                 .setDateOfBirth(request.dateOfBirth())
                 .setPhoneNumber(request.phoneNumber())
-                .setPassword(passwordEncoder.encode(request.password())) // Encode the password
+                .setPassword(passwordEncoder.encode(request.password()))
                 .setRole(request.role())
                 .build();
 
-        // User is saved to database
         User savedUser = userRepository.save(user);
 
-        // Generate JWT token
-        String jwtToken = jwtService.generateToken(savedUser);
+        // Create Spring Security UserDetails with authorities
+        UserDetails userDetails = createUserDetails(savedUser);
 
-        // This will convert to DTO and return response
+        // Generate JWT token with UserDetails (which includes authorities)
+        String jwtToken = jwtService.generateToken(userDetails);
+
         UserDTO userDTO = UserMapper.toDTO(savedUser);
         return new AuthenticationResponse(jwtToken, userDTO);
     }
 
     public AuthenticationResponse authenticate(LoginRequestDTO request) {
         // Authenticate with Spring Security
-        // This will throw BadCredentialsException if credentials are wrong
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         request.email(),
@@ -68,11 +71,25 @@ public class AuthenticationService {
         User user = userRepository.findByEmail(request.email())
                 .orElseThrow(() -> new IllegalArgumentException("User not found"));
 
-        // Generate JWT token
-        String jwtToken = jwtService.generateToken(user);
+        // Create Spring Security UserDetails with authorities
+        UserDetails userDetails = createUserDetails(user);
 
-        // Convert to DTO and return response
+        // Generate JWT token with UserDetails (which includes authorities)
+        String jwtToken = jwtService.generateToken(userDetails);
+
         UserDTO userDTO = UserMapper.toDTO(user);
         return new AuthenticationResponse(jwtToken, userDTO);
+    }
+
+    // Helper method to convert User to Spring Security UserDetails with authorities
+    private UserDetails createUserDetails(User user) {
+        // Convert user role to Spring Security authority with ROLE_ prefix
+        SimpleGrantedAuthority authority = new SimpleGrantedAuthority("ROLE_" + user.getRole());
+
+        return new org.springframework.security.core.userdetails.User(
+                user.getEmail(),
+                user.getPassword(),
+                Collections.singletonList(authority)
+        );
     }
 }

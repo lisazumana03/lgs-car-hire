@@ -19,7 +19,6 @@ import java.util.List;
 @CrossOrigin(origins = {"http://localhost:5173", "http://127.0.0.1:5173"})
 public class InsuranceController {
 
-
     private final InsuranceService insuranceService;
 
     @Autowired
@@ -27,40 +26,38 @@ public class InsuranceController {
         this.insuranceService = insuranceService;
     }
 
-    // Create Insurance
-    @PreAuthorize("hasRole('ADMIN')")
+    // Create Insurance - Allow both ADMIN and CAR_OWNER
+    @PreAuthorize("hasRole('ADMIN') or hasRole('CAR_OWNER')")
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public InsuranceDTO createInsurance(@RequestBody InsuranceDTO insuranceDTO) {
         return insuranceService.createInsurance(insuranceDTO);
     }
 
-    // Get Insurance by ID
+    // Get Insurance by ID - Authenticated users
     @GetMapping("/{id}")
     public InsuranceDTO getInsuranceById(@PathVariable int id) {
         return insuranceService.getInsuranceById(id);
     }
 
-    // Get all Insurances
+    // Get all Insurances - Authenticated users
     @GetMapping
     public List<InsuranceDTO> getAllInsurances() {
         return insuranceService.getAllInsurances();
     }
 
-    // Update Insurance
-    @PreAuthorize("hasRole('ADMIN')")
+    // Update Insurance - Allow both ADMIN and CAR_OWNER
+    @PreAuthorize("hasRole('ADMIN') or hasRole('CAR_OWNER')")
     @PutMapping("/{id}")
     public InsuranceDTO updateInsurance(@PathVariable int id, @RequestBody InsuranceDTO insuranceDTO) {
         return insuranceService.updateInsurance(id, insuranceDTO);
     }
 
-    // Delete Insurance
-    @PreAuthorize("hasRole('ADMIN')")
+    // Delete Insurance - Allow both ADMIN and CAR_OWNER
+    @PreAuthorize("hasRole('ADMIN') or hasRole('CAR_OWNER')")
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteInsurance(@PathVariable int id) {
         insuranceService.deleteInsurance(id);
     }
-
-    
-    }
+}

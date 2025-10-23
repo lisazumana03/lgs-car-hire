@@ -26,7 +26,7 @@ public class CarController {
     @Autowired
     private ICarService carService;
 
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('CAR_OWNER')")
     @PostMapping("/create")
     public ResponseEntity<CarDTO> create(@RequestBody CarDTO carDto) {
         Car car = CarMapper.toEntity(carDto);
@@ -45,7 +45,7 @@ public class CarController {
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('CAR_OWNER')")
     @PutMapping("/update")
     public ResponseEntity<CarDTO> update(@RequestBody CarDTO carDto) {
         Car existingCar = carService.read(carDto.getCarID());
@@ -58,7 +58,7 @@ public class CarController {
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('CAR_OWNER')")
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<Void> delete(@PathVariable int id) {
         carService.delete(id);
