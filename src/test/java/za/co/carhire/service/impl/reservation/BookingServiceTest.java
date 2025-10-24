@@ -13,11 +13,17 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import za.co.carhire.domain.reservation.Booking;
+import za.co.carhire.domain.reservation.BookingStatus;
+import za.co.carhire.domain.reservation.Location;
+import za.co.carhire.domain.vehicle.Car;
 import za.co.carhire.factory.reservation.BookingFactory;
 import za.co.carhire.repository.reservation.IBookingRepository;
 import za.co.carhire.service.reservation.impl.BookingService;
 
+import java.util.*;
+
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
@@ -29,35 +35,53 @@ class BookingServiceTest {
     @Mock
     private IBookingRepository bookingRepository;
 
-    private Booking booking01;
+    private Booking booking;
+
+    private Car car;
 
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
-        booking01 = BookingFactory.createBooking(booking01.getBookingID(), booking01.getUser(), booking01.getCar(), booking01.getBookingDateAndTime(), booking01.getStartDate(), booking01.getEndDate(), booking01.getPickupLocation(), booking01.getDropOffLocation(), booking01.getBookingStatus());
+        List<Car> cars = new ArrayList<>();
+
+        Booking booking = new Booking.Builder()
+                .setBookingID(4)
+                .setCar(cars)
+                .setBookingStatus(BookingStatus.PENDING)
+                .build();
     }
 
     @Test
     void getBookings() {
+        List<Booking> bookings = Arrays.asList(booking);
+        when(bookingRepository.findAll()).thenReturn(bookings);
+
+        Set<Booking> result = bookingService.getBookings();
+        assertEquals(bookings.size(), result.size());
+        assertTrue(result.containsAll(bookings));
     }
 
     @Test
     void create() {
-        when(bookingRepository.save(booking01)).thenReturn(booking01);
-        assertEquals(booking01, bookingService.create(booking01));
+        when(bookingRepository.save(booking)).thenReturn(booking);
+        assertEquals(booking, bookingService.create(booking));
     }
 
     @Test
     void read() {
-
+        when(bookingRepository.findById(booking.getBookingID())).thenReturn(Optional.of(booking));
+        assertEquals(booking, bookingService.read(booking.getBookingID()));
     }
 
     @Test
     void update() {
+        when(bookingRepository.save(booking)).thenReturn(booking);
+        assertEquals(booking, bookingService.update(booking));
     }
 
     @Test
     void delete() {
-
+        bookingRepository.delete(booking);
+        verify(bookingRepository).delete(booking);
     }
 }
